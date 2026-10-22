@@ -772,7 +772,8 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:'Robo
   <div style="position:absolute;inset:0;background:rgba(0,0,0,.5)"></div>
   <div style="position:relative;z-index:1;width:100%;background:var(--surf);border-radius:20px 20px 0 0;padding:20px">
     <div style="font-size:17px;font-weight:600;color:var(--tp);margin-bottom:4px">Connect GitHub</div>
-    <div style="font-size:13px;color:var(--tt);margin-bottom:16px;line-height:1.5">One-time setup. Create a fine-grained token at <strong>github.com/settings/tokens</strong> with Contents: Read &amp; Write on the body-optimization repo.</div>
+    <div id="gh-modal-msg" style="font-size:13px;color:var(--red);margin-bottom:8px;line-height:1.5;display:none"></div>
+    <div style="font-size:13px;color:var(--tt);margin-bottom:16px;line-height:1.5">One-time setup so Save can back up to <strong>body-optimization-2.0</strong>. At <strong>github.com/settings/tokens</strong>, create a fine-grained token: repository access <strong>Only select repositories → body-optimization-2.0</strong>, permission <strong>Contents: Read and write</strong>. Paste it here.</div>
     <input id="gh-token-input" type="password" placeholder="Paste token here…" style="width:100%;height:44px;padding:0 12px;border:1px solid var(--brd);border-radius:var(--r-md);font-size:15px;color:var(--tp);background:var(--bg);outline:none;font-family:inherit;box-sizing:border-box;margin-bottom:10px">
     <button onclick="confirmGHToken()" style="width:100%;height:48px;border:none;border-radius:var(--r-full);background:var(--pink);color:var(--pink-on);font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;margin-bottom:8px">Save &amp; sync</button>
     <button onclick="closeGHSetup()" style="width:100%;height:44px;border:1px solid var(--brd);border-radius:var(--r-full);background:transparent;font-size:14px;font-weight:500;color:var(--ts);cursor:pointer;font-family:inherit">Cancel</button>
@@ -3973,6 +3974,7 @@ if(window.visualViewport){
 const GH_REPO='lizb-droid/body-optimization-2.0';
 const GH_FILE='app/data/backup.json'; // this repo's backup; the original body-optimization app is never written to
 const GH_API=`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+const GH_OWN_RAW=`https://raw.githubusercontent.com/${GH_REPO}/main/${GH_FILE}`;
 // Seeds history from the original app's public backup (read-only); writes only go to GH_FILE above
 const GH_RAW=`https://raw.githubusercontent.com/lizb-droid/body-optimization/main/app/data/backup.json`;
 
@@ -3984,7 +3986,13 @@ function buildBackup(){
   });
 }
 
-function openGHSetup(){ document.getElementById('gh-modal').classList.add('open'); setTimeout(()=>document.getElementById('gh-token-input').focus(),100); }
+function openGHSetup(msg){
+  const m=document.getElementById('gh-modal-msg');
+  m.textContent=msg||''; m.style.display=msg?'block':'none';
+  document.getElementById('gh-token-input').value='';
+  document.getElementById('gh-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('gh-token-input').focus(),100);
+}
 function closeGHSetup(){ document.getElementById('gh-modal').classList.remove('open'); }
 
 async function confirmGHToken(){
@@ -4017,18 +4025,32 @@ async function pushToGitHub(token){
     });
     if(putR.ok){
       if(btn){btn.textContent='Saved ✓';btn.disabled=false;setTimeout(()=>{btn.textContent=orig;},2500);}
+    } else if(putR.status===401||putR.status===403||putR.status===404){
+      // The token is expired, or can't write to this repository (e.g. the original app's token)
+      try{localStorage.removeItem('betalizghtoken');}catch(e){}
+      if(btn){btn.textContent=orig;btn.disabled=false;}
+      openGHSetup(putR.status===401
+        ?'That GitHub token has expired or was revoked. Paste a new one.'
+        :"That GitHub token can't save to body-optimization-2.0. Create one with access to this repository (steps below).");
     } else {
-      if(putR.status===401) localStorage.removeItem('betalizghtoken');
       if(btn){btn.textContent='Error';btn.disabled=false;setTimeout(()=>{btn.textContent=orig;},3000);}
+      alertSave(`GitHub said ${putR.status}. Your data is still on this phone; try Save again in a minute.`);
     }
   } catch(e){
     if(btn){btn.textContent='Error';btn.disabled=false;setTimeout(()=>{btn.textContent=orig;},3000);}
+    alertSave("Couldn't reach GitHub. Check your connection; your data is still on this phone.");
   }
 }
 
+function alertSave(msg){
+  const b=document.getElementById('import-banner'), t=document.getElementById('import-banner-text');
+  if(!b||!t) return; t.textContent=msg; b.classList.add('show'); setTimeout(()=>b.classList.remove('show'),6000);
+}
 async function tryLoadFromGitHub(){
   try{
-    const r=await fetch(GH_RAW+'?t='+Date.now());
+    // This repository's own backup first (what Save writes); the original app's backup otherwise
+    let r=await fetch(GH_OWN_RAW+'?t='+Date.now());
+    if(!r.ok) r=await fetch(GH_RAW+'?t='+Date.now());
     if(!r.ok) return;
     const data=await r.json();
     if(!data.exported) return;
