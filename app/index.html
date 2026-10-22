@@ -62,7 +62,6 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:mani
 .hm-titles{min-width:0}
 .hm-title{display:flex;align-items:center;gap:8px;font-size:28px;font-weight:600;color:#fff;letter-spacing:-.5px}
 .hm-titles .hdr-date{font-size:13px;color:#777;margin-top:2px}
-.beta-tag{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--pink-on);background:var(--pink);padding:3px 8px;border-radius:var(--r-full)}
 #week-tabs{position:relative;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px 0 12px;-webkit-overflow-scrolling:touch}
 #week-tabs::-webkit-scrollbar{display:none}
 .wk-panel{flex:0 0 100%;display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:0 10px;scroll-snap-align:start;scroll-snap-stop:always}
@@ -640,7 +639,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:mani
     <div id="hdr-normal">
       <div class="hm-top">
         <div class="hm-titles">
-          <div class="hm-title"><span id="hdr-title">Workout</span><span class="beta-tag">Beta</span></div>
+          <div class="hm-title"><span id="hdr-title">Workout</span></div>
           <div class="hdr-date" id="hdr-date"></div>
         </div>
         <button id="gh-save-btn" class="nav-btn" style="padding:8px 16px" onclick="saveToGitHub()">Save</button>
