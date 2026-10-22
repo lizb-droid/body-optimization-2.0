@@ -2882,28 +2882,40 @@ function csHash(text){
 }
 function csNorm(t){ return String(t||'').replace(/\s+/g,' ').trim(); }
 const gsAudio=typeof Audio!=='undefined'?new Audio():null;
-let gsQueue=[], gsQueueId=0;
-function gsSay(text){ if(G&&G.audio==='coach') gsSpeak(text); }
-// Speak one line, or a list of lines one after another
-function gsSpeak(text){
-  gsHush();
-  gsQueue=(Array.isArray(text)?text:[text]).map(csNorm).filter(Boolean);
-  const id=++gsQueueId;
-  const next=()=>{ if(id!==gsQueueId||!gsQueue.length) return; gsSpeakOne(gsQueue.shift(),next); };
-  next();
+// One line at a time, with a short breath between lines. Lines queued for a step
+// you've already moved past are skipped so the coach never falls behind.
+const GS_GAP_MS=450;
+let gsQ=[], gsBusy=false, gsLineId=0;
+function gsSay(text){ if(G&&G.audio==='coach') gsEnqueue(text,G.idx); }
+// Lines not tied to a step (finish, "Coach on") play in order too
+function gsSpeak(text){ (Array.isArray(text)?text:[text]).forEach(t=>gsEnqueue(t)); }
+function gsEnqueue(text,step){
+  const t=csNorm(text); if(!t) return;
+  gsQ.push({text:t,step});
+  if(!gsBusy) gsNextLine();
+}
+function gsNextLine(){
+  while(gsQ.length&&gsQ[0].step!==undefined&&!(G&&G.idx===gsQ[0].step)) gsQ.shift();
+  if(!gsQ.length){ gsBusy=false; return; }
+  gsBusy=true;
+  const it=gsQ.shift(), id=++gsLineId;
+  gsSpeakOne(it.text,()=>{ if(id!==gsLineId) return; setTimeout(()=>{ if(id===gsLineId) gsNextLine(); },GS_GAP_MS); });
 }
 function gsSpeakOne(text,done){
-  const h=csHash(text), embedded=window.COACH_AUDIO&&window.COACH_AUDIO[h];
+  const h=csHash(text), embedded=window.COACH_AUDIO&&window.COACH_AUDIO[h], id=gsLineId;
+  let finished=false;
+  const finish=()=>{ if(finished) return; finished=true; done&&done(); };
   if(gsAudio&&(embedded||!window.COACH_AUDIO)){
+    // Fall back to the phone's voice only if this clip really can't play (not when it was replaced or paused)
     let fellBack=false;
-    const fallback=()=>{ if(fellBack) return; fellBack=true; gsSpeakTTS(text,done); };
-    gsAudio.onended=()=>done&&done();
-    gsAudio.onerror=fallback;
+    const fallback=e=>{ if(fellBack||id!==gsLineId||(e&&e.name==='AbortError')) return; fellBack=true; gsSpeakTTS(text,finish); };
+    gsAudio.onended=finish;
+    gsAudio.onerror=()=>fallback();
     gsAudio.src=embedded||`audio/coach/${h}.mp3`;
     const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(fallback);
     return;
   }
-  gsSpeakTTS(text,done);
+  gsSpeakTTS(text,finish);
 }
 function gsSpeakTTS(text,done){
   if(!('speechSynthesis' in window)){ done&&done(); return; }
@@ -2915,7 +2927,7 @@ function gsSpeakTTS(text,done){
   }catch(e){ done&&done(); }
 }
 function gsHush(){
-  gsQueue=[]; gsQueueId++;
+  gsQ=[]; gsLineId++; gsBusy=false;
   try{ if(gsAudio){ gsAudio.onended=gsAudio.onerror=null; gsAudio.pause(); } }catch(e){}
   try{ speechSynthesis.cancel(); }catch(e){}
 }
@@ -2981,7 +2993,7 @@ function gsTick(){
   // One chime at 10 seconds left (skipped on steps too short for it to mean anything)
   if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsChime(); if(st.say10) setTimeout(()=>gsSay(st.say10),550); }
   if(st.halfSay&&left<=st.dur*500&&left>11000&&G.halfAt!==G.idx){ G.halfAt=G.idx; gsSay(st.halfSay); }
-  if(st.talk&&st.dur*1000-left>=6500&&G.talkAt!==G.idx){ G.talkAt=G.idx; gsSay(st.talk); }
+  if(st.talk&&st.dur*1000-left>=1000&&G.talkAt!==G.idx){ G.talkAt=G.idx; gsSay(st.talk); }
   gsRenderTime();
 }
 
@@ -2993,6 +3005,7 @@ function gsTogglePause(){
 }
 
 function gsJump(to){
+  gsHush();   // you moved on purpose: drop what she was saying
   gsCommitLog(true);
   if(to>=G.steps.length){ gsFinish(); return; }
   G.idx=Math.max(0,to); G.steps[G.idx].extra=0;
