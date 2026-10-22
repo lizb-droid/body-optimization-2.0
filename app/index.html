@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0f0f0f">
@@ -14,7 +14,7 @@
 <script src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:#0f0f0f;font-family:'Roboto','Helvetica Neue',sans-serif}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;background:#0f0f0f;font-family:'Roboto','Helvetica Neue',sans-serif}
 :root{
   --pink:#FF9BD7;--pink-on:#5c1038;--pink-m:rgba(255,155,215,.15);
   --ind:#4D5FFF;--ind-on:#1a2580;--ind-m:#eef0ff;--ind-b:#c5caff;
@@ -4110,6 +4110,10 @@ function confirmMacroLog(){
     alert('Could not read that — make sure you paste the full JSON snippet from Claude.');
   }
 }
+
+// The app stays at its normal size: no pinch zoom (Safari ignores user-scalable=no)
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('touchmove',e=>{ if(e.touches.length>1) e.preventDefault(); },{passive:false});
 
 // ─────────────────────────────────────────────
 // INIT
