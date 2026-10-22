@@ -14,7 +14,7 @@
 <script src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:'Roboto','Helvetica Neue',sans-serif}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:#0f0f0f;font-family:'Roboto','Helvetica Neue',sans-serif}
 :root{
   --pink:#FF9BD7;--pink-on:#5c1038;--pink-m:rgba(255,155,215,.15);
   --ind:#4D5FFF;--ind-on:#1a2580;--ind-m:#eef0ff;--ind-b:#c5caff;
@@ -27,7 +27,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:'Robo
 }
 
 /* ── Layout shell ── */
-#app{display:flex;flex-direction:column;height:100%;background:var(--dk0)}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--dk0)}
 #header{flex-shrink:0;background:var(--dk0);padding:env(safe-area-inset-top) 0 0}
 #content{flex:1;overflow:hidden;position:relative}
 .tab-panel{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none}
