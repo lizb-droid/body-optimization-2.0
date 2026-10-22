@@ -1702,8 +1702,9 @@ function woSections(day){
     }
   });
   // Section times come from the session timer itself, so the overview matches what you'll do
-  const timed=gsBuild(day,true).secs;
+  const all=gsBuild(day,true).secs, briefSec=all.find(x=>x.kind==='brief'), timed=all.filter(x=>x.kind!=='brief');
   secs.forEach((x,i)=>{ const d=timed[i]&&timed[i].dur; if(d) x.sub=x.sub?`${x.sub} · ${fmtDur(d)}`:fmtDur(d); });
+  if(briefSec) secs.unshift({title:'Before we start',kind:'brief',sub:fmtDur(briefSec.dur),rows:[]});
   return secs;
 }
 
@@ -2427,15 +2428,232 @@ function gsDurSpoken(sec){
   return `${m} minute${m>1?'s':''}${r?' '+r:''}`;
 }
 
+// ── Coach script (app/COACH-SCRIPT.md, copied in by tools/sync-coach-script.py) ──
+/* COACH_SCRIPT:BEGIN */
+const COACH_SCRIPT={
+ "before we start": {
+  "Space check": "Set up your space. Bar, plates, bench, dumbbells. Water within reach.",
+  "Fuel check": "Pre-workout fuel in? Training fasted costs you. Eat first if you haven't.",
+  "Body check": "Quick scan. Anything sharp? Any pelvic floor pressure? Tell me now, we adjust.",
+  "Mindset": "This is week {week} of the plan. Trust it. Let's go."
+ },
+ "session briefing": {
+  "Lower A, glutes": "Lower A. Glutes first. Today is heavy. Back Squat, then Hip Thrust. Set the rack so the bar sits at mid-chest. Bench ready for thrusts, pad on the bar. Brace on every rep: big breath into your belly, ribs down, glutes tight. Any pelvic floor pressure or leaking? Stop that movement. Let's build.",
+  "Upper A, chest and back": "Upper A. Chest and back. Bench and row carry the day. Set the bench and bar before the clock starts. Shoulders down and back on every press. Pull the shoulder blades together before every row. Band pull-aparts first, wake up the back of the shoulders.",
+  "Lower B, quads and hamstrings": "Lower B. Quads and hamstrings. Thrusters first, so build into them with lighter sets. Heels on plates for the cyclist squat. GHD and sliders within reach. Brace hard and drive through the whole foot. Quality over speed.",
+  "Upper B, shoulders and chest": "Upper B. Shoulders and chest. Push press is the star. Clear your overhead space. Ribs down, glutes tight, no leaning back. Everything overhead stays stacked. Band pull-aparts before we press.",
+  "Full body, pull and glutes": "Saturday. Full body. Pull first, then glutes. Row, pullover, then a light hip thrust. Keep the thrust easy. Your legs ran yesterday. Flat back, brace, own the tempo.",
+  "Trail run (if guided)": "Friday. Trail run. Zone 2. Walk the climbs, run the flats and downhills. Conversation pace, always. Quads sore from Wednesday? Walk the downs. Saturday needs your legs.",
+  "Deload week (adds to the briefing)": "Deload week. Lighter on purpose. Same weights as last week. Fewer sets. Stop with reps in the tank. This is where the fatigue clears and the next block hits harder."
+ },
+ "start and finish": {
+  "Session starts": "{session}. {minutes} minutes. Earn it.",
+  "Session complete (rotate)": [
+   "Done. {minutes} minutes. That's the plan working.",
+   "Session complete. {minutes} minutes. Log it, then eat within thirty minutes.",
+   "That's it. {minutes} minutes. Protein and carbs now, hydrate, then go live your day."
+  ]
+ },
+ "section preview": {
+  "Section intro": "{section}.",
+  "Each strength lift": "{exercise}. {sets} sets of {reps}. {setup} {cue}",
+  "Each superset movement": "{exercise}. {rounds} rounds of {reps}. {setup}",
+  "Each warm-up movement": "{exercise}. {seconds} seconds.",
+  "Each finisher movement": "{exercise}, {reps}."
+ },
+ "warm-up": {
+  "Each move": "{exercise}. {seconds} seconds. Easy and smooth.",
+  "Each-side move": "{exercise}, {side} side. {seconds} seconds. Easy and smooth."
+ },
+ "strength sets": {
+  "First set": [
+   "Set 1. {reps}. Brace. Make it clean.",
+   "Set 1. {reps}. Breathe in, ribs down, go.",
+   "Set 1. {reps}. Move it with intent."
+  ],
+  "Middle sets": [
+   "Set {set}. Reset your brace. Go.",
+   "Set {set}. Same quality as set 1. Go.",
+   "Set {set}. Own it."
+  ],
+  "Last set": [
+   "Last set. Leave nothing. {reps}.",
+   "Last set. Brace and finish strong. {reps}.",
+   "Last set. Make it the best one."
+  ],
+  "Rest": "Rest, {rest}. Set {set} next.",
+  "Rest (mid-lift coaching, use occasionally)": [
+   "Shake it out. Breathe slow. Nothing to rush.",
+   "Check your setup. Same position every set.",
+   "How did that feel? Log your weight."
+  ],
+  "Rest before the last set": "Rest, {rest}. Last set next. Make it count.",
+  "Extra line on the very first rest": "Log your weight. Breathe.",
+  "Set up for the next lift": "Next up, {exercise}. {sets} sets of {reps}. {setup} {cue} Get set up."
+ },
+ "supersets": {
+  "First round": "Round 1. {exercise}, {reps}. Go.",
+  "Middle rounds": "Round {round}. {exercise}, {reps}. Stay tight.",
+  "Last round": "Last round. {exercise}, {reps}. Finish it.",
+  "Second exercise in the round": "{exercise}, {reps}. Go.",
+  "Switch between exercises": "Switch. {exercise}.",
+  "Rest between rounds": "Rest, {rest}. Round {round} next.",
+  "Effort reminder (last round of accessories, occasionally)": "Last round. Stop one or two reps shy of failure."
+ },
+ "finisher": {
+  "Interval, first round": "Round 1 of {rounds}. Go!",
+  "Interval, middle rounds": "Round {round}. Keep it moving!",
+  "Interval, last round": "Last round. Empty the tank!",
+  "AMRAP / for time": "Go! Finish strong.",
+  "Halfway (long finishers)": "Halfway there. Keep moving."
+ },
+ "timer": {
+  "10 seconds left (rest)": "10 seconds. Get ready.",
+  "10 seconds left (set up)": "10 seconds."
+ },
+ "setup lines": {
+  "Arnold Press": "Sit tall, ribs down. Dumbbells at your chest, palms facing you.",
+  "Band Pull-Apart": "Hold the band at chest height. Arms straight.",
+  "Barbell Back Squat": "Bar at mid-chest in the rack. Hands tight, bar on your upper back. Big breath into your belly, ribs down, glutes tight.",
+  "Barbell Bench Press": "Eyes under the bar. Shoulder blades pinched and down. Feet planted.",
+  "Barbell Bent Over Row": "Hinge to about 45 degrees. Flat back. Brace like someone's about to poke your stomach.",
+  "Barbell Cyclist Squat": "Heels on plates. Bar in the front rack, elbows high. Big breath, ribs down.",
+  "Barbell Hip Thrust": "Upper back on the bench, pad on the bar. Feet flat, chin tucked. Ribs down.",
+  "Bird Dog": "Hands under shoulders, knees under hips. Neutral spine.",
+  "Bulgarian Split Squat": "Back foot on the bench, front foot a long step out. Dumbbells at your sides.",
+  "Chest-Supported DB Row": "Incline bench, chest on the pad. Let the arms hang.",
+  "DB Floor Press": "Lie on the floor, knees bent. Elbows will touch down at the bottom.",
+  "DB High Pull": "Dumbbells in front of your thighs. Soft knees, tall chest.",
+  "DB Lateral Raise": "Slight bend in the elbow. Ribs down. Stay tall, no leaning.",
+  "DB Pullover": "Lie along the bench, one dumbbell held over your chest. Ribs down.",
+  "DB Rear Delt Fly": "Hinge forward, flat back. Dumbbells hang under your shoulders.",
+  "DB Row tripod": "One hand and one knee braced. Flat back, hips square.",
+  "DB Shoulder Press": "Sit or stand tall. Dumbbells at shoulder height. Ribs down, glutes tight.",
+  "DB Snatch": "Dumbbell between your feet. Hips back, chest up.",
+  "DB Squeeze Press": "Lie back, dumbbells together over your chest. Press them into each other.",
+  "DB Thrusters": "Dumbbells at your shoulders. Feet shoulder width. Brace first.",
+  "DB Z Press": "Sit on the floor, legs straight. Tall spine. Dumbbells at your shoulders.",
+  "Deficit Reverse Lunge": "Front foot on a plate. Dumbbells at your sides. Stand tall.",
+  "Dips": "Set your station. Shoulders down. Slight lean forward for chest.",
+  "Farmer Carry": "Heavy dumbbells at your sides. Stand tall, ribs stacked.",
+  "GHD Hip Extension": "Hips just past the pad. Feet locked. Start with a neutral spine.",
+  "Incline DB Curl": "Bench at about 60 degrees. Arms hang straight down.",
+  "KB Swing": "Bell a foot in front of you. Hips back. Flat back.",
+  "Lateral Lunge": "Wide stance, toes forward. Dumbbell held at your chest.",
+  "Overhead Tricep Extension": "One dumbbell, both hands, overhead. Ribs down.",
+  "Pallof Hold": "Band anchored at chest height. Stand sideways, feet wide. Hold the band at your chest.",
+  "Push Press + Push Jerk": "Clear your overhead space. Bar in the rack position. Ribs down, glutes tight.",
+  "Push-up": "Hands under shoulders. Body in one line.",
+  "Row": "Feet strapped in. Sit tall. Handle in both hands.",
+  "Seated Rear Delt Fly": "Sit tall, chest on your thighs. Dumbbells under your knees.",
+  "Single-leg DB RDL": "Dumbbell in the hand opposite your standing leg. Soft knee. Tall chest.",
+  "Slider Hamstring Curl": "Lie on your back. Heels on sliders or towels. Hips up.",
+  "Spider Curl": "Chest on an incline bench. Arms hang straight down.",
+  "Suitcase Carry": "One dumbbell at your side. Stand tall, ribs stacked.",
+  "Thrusters": "Bar in the front rack, elbows high. Feet shoulder width. Brace first.",
+  "Turkish Get-Up": "Lie on your back. Arm straight up. Eyes on the hand.",
+  "Walking Lunge": "Dumbbells at your sides. Tall chest. Long steps.",
+  "Weighted Copenhagen Plank": "Top foot on the bench. Forearm down. Hips high.",
+  "Weighted Dead Bug": "Flat on your back. Ribs down, low back glued to the floor. Light dumbbell in the extended arm."
+ },
+ "exercise cues": {
+  "Arnold Press": "Rotate smoothly. Palms face you at the bottom, forward at the top.",
+  "Band Pull-Apart": "Squeeze the shoulder blades. No shrugging.",
+  "Barbell Back Squat": "Knees track over toes. Drive the floor away. Heaviest lower-body lift, so take the full rest.",
+  "Barbell Bench Press": "Bar to the lower chest. Elbows about 45 degrees. Drive through the feet.",
+  "Barbell Bent Over Row": "Row to the lower ribs. Squeeze the blades. Chest stays up.",
+  "Barbell Cyclist Squat": "Upright torso. Knees forward. Elbows up. Different angle from Monday's squat.",
+  "Barbell Hip Thrust": "Squeeze and hold two seconds at the top. Ribs down. Your number one movement.",
+  "Bird Dog": "Opposite arm and leg. Hips level. Slow and controlled.",
+  "Bulgarian Split Squat": "Drop straight down. Front heel stays planted. Drive through it.",
+  "Chest-Supported DB Row": "Elbows to the hips. Squeeze the lats. Zero lower back involvement.",
+  "DB Floor Press": "Elbows touch down, then press. Chest-dominant, no bench needed.",
+  "DB High Pull": "Pull to the chin, elbows high. Controlled tempo. No need to explode.",
+  "DB Lateral Raise": "Lead with the elbows. Stop at shoulder height. No swinging.",
+  "DB Pullover": "Slow arc, from above the chest to behind the head. Feel the lats and rib cage stretch. Start at 45 pounds.",
+  "DB Rear Delt Fly": "Soft elbows. Squeeze the back of the shoulder. No momentum.",
+  "DB Row tripod": "Pull the elbow to the hip. Hips stay square.",
+  "DB Shoulder Press": "Press straight up. Ribs stay down. Don't arch.",
+  "DB Snatch": "Hips drive it. Punch overhead and lock out.",
+  "DB Squeeze Press": "Squeeze the dumbbells together the whole time. Constant tension.",
+  "DB Thrusters": "Squat deep. Drive up and press in one motion.",
+  "DB Z Press": "Tall spine. No leaning back. Core carries the press.",
+  "Deficit Reverse Lunge": "Step back controlled. Front heel stays down. Torso tall.",
+  "Dips": "Bodyweight to start. Add weight once reps feel easy. Shoulders stay down.",
+  "Farmer Carry": "Tall posture. Ribs down. Short, quick steps.",
+  "GHD Hip Extension": "Squeeze the glutes at the top. Don't over-arch the lower back.",
+  "Incline DB Curl": "Elbows back. Slow lowering. Feel the stretch.",
+  "KB Swing": "Hips, not arms. Snap the hips and let the bell float.",
+  "Lateral Lunge": "Sit back into the hip. Toes forward. Chest up.",
+  "Overhead Tricep Extension": "Elbows forward. Full stretch, full lockout.",
+  "Pallof Hold": "Don't rotate. Band tension, not load. Core control.",
+  "Push Press + Push Jerk": "Dip straight down. Drive. Lock out stacked over your ears. Push jerk should feel easier than the press.",
+  "Push-up": "Chest to the floor. Body in one line.",
+  "Row": "Legs first, then back, then arms.",
+  "Seated Rear Delt Fly": "Lead with the elbows. Squeeze. No momentum.",
+  "Single-leg DB RDL": "Hinge, don't squat. Hips square. Flat back. Balance trains the stabilizers.",
+  "Slider Hamstring Curl": "Hips stay high. Slow on the way out. Pull the heels in with the hamstrings.",
+  "Spider Curl": "Chest stays on the bench. Squeeze at the top.",
+  "Suitcase Carry": "Don't lean. Resist the drop. Core stays tight.",
+  "Thrusters": "Build into it with lighter sets first. Squat deep, drive up, press through the top.",
+  "Turkish Get-Up": "Slow. One piece at a time. Eyes on the hand.",
+  "Walking Lunge": "Long step. Back knee kisses the floor.",
+  "Weighted Copenhagen Plank": "Hips high. Resist the drop. Slow and steady. Stop if you feel any pubic bone discomfort.",
+  "Weighted Dead Bug": "Slow. Exhale as you reach. Ribs don't flare. Core-safe, higher demand."
+ },
+ "warm-up moves": {
+  "World's Greatest Stretch": "Reach up and rotate. Open the hips.",
+  "Glute Bridge March": "Hips stay level. Squeeze each rep.",
+  "Hip Circles": "Big, slow circles.",
+  "Posterior Hip Capsule Stretch": "Sink back. Breathe into the hip.",
+  "Squat to Stand": "Fold down, chest up, stand tall.",
+  "Cat Cow": "Move with your breath.",
+  "Child's Pose Thread the Needle": "Reach through. Open the upper back.",
+  "Scapular Push-up": "Arms straight. Shoulder blades do the work.",
+  "Push-up to Down Dog": "Flow it. Press the floor away.",
+  "Band Pull-Apart": "Wake up the back of the shoulders."
+ }
+};
+/* COACH_SCRIPT:END */
+function csGet(sec,label){
+  const s=COACH_SCRIPT[sec]; if(!s) return null;
+  const k=Object.keys(s).find(x=>x.toLowerCase()===String(label).toLowerCase());
+  return k===undefined?null:s[k];
+}
+let csRot={};
+// A line from the script (rotating through variants), with a built-in fallback
+function csLine(sec,label,fallback){
+  let t=csGet(sec,label);
+  if(Array.isArray(t)){ if(!t.length) t=null; else { const k=sec+'|'+label, i=csRot[k]||0; csRot[k]=i+1; t=t[i%t.length]; } }
+  return t||fallback||'';
+}
+// Fill {placeholders}; a sentence whose placeholder has no value is dropped
+function csFill(t,v){
+  return String(t||'').split(/(?<=[.!?])\s+/).filter(sn=>{
+    const ks=[...sn.matchAll(/\{(\w+)\}/g)].map(m=>m[1]);
+    return ks.every(k=>v[k]!==undefined&&v[k]!==null&&v[k]!=='');
+  }).join(' ').replace(/\{(\w+)\}/g,(m,k)=>v[k]).replace(/\s+([.,!?])/g,'$1').replace(/\s{2,}/g,' ').trim();
+}
+function csSay(t,v){ return gsSpoken(csFill(t,v||{})); }
+function csSetup(name){ return csGet('setup lines',name)||''; }
+function csCue(name){ return csGet('exercise cues',name)||EXERCISE_NOTES[name]||''; }
+function csWords(t){ return (String(t).match(/\S+/g)||[]).length; }
+function csSecs(t){ return csWords(t)/2.5+1.5; }   // rough speaking time
+
 function gsBuild(day,withWarmup){
+  csRot={};
   const items=WORKOUTS[day.workout]||[];
   const steps=[];
   const wt=gsWarmupType(day.workout);
+  const deload=!!WORKOUT_DELOAD[day.workout];
   if(withWarmup&&wt){
     steps.push({kind:'preview',title:'Warm Up',sub:'',dur:20,block:'Warm-up'});
     gsWarmItems(wt).forEach(w=>{
-      steps.push({kind:'warmup',title:w.name,sub:w.sub,dur:w.secs,block:'Warm-up',
-        say:`${gsSpoken(w.base)}${w.side?`, ${w.side.toLowerCase()} side`:''}. ${gsDurSpoken(w.secs)}. Go.`});
+      const extra=csGet('warm-up moves',w.base)||'';
+      const base=csLine('warm-up',w.side?'each-side move':'each move',w.side?'{exercise}, {side} side. {seconds} seconds. Go.':'{exercise}. {seconds} seconds. Go.');
+      let say=csSay(base,{exercise:w.base,side:w.side&&w.side.toLowerCase(),seconds:w.secs});
+      if(extra){ const i=say.indexOf('. '); say=i<0?`${say} ${extra}`:`${say.slice(0,i+1)} ${gsSpoken(extra)} ${say.slice(i+2)}`; }
+      steps.push({kind:'warmup',title:w.name,sub:w.sub,dur:w.secs,block:'Warm-up',say});
     });
   }
   // Group into blocks: a straight exercise, a superset (until the next marker), or a finisher
@@ -2447,8 +2665,14 @@ function gsBuild(day,withWarmup){
   });
   let pending=[], lastRest=GS_FIRST_SETUP;
   const pushPause=(step)=>{ step.log=pending; pending=[]; steps.push(step); };
-  let firstRest=true;
-  const rest=(step)=>{ if(firstRest){ step.say+=' Log your weight while you rest.'; firstRest=false; } step.say10='10 seconds. Get ready.'; pushPause(step); };
+  let firstRest=true, restN=0;
+  const rest=(step,strength)=>{
+    if(firstRest){ step.say+=' '+csSay(csLine('strength sets','extra line on the very first rest','Log your weight while you rest.'),{}); firstRest=false; }
+    // Now and then, a coaching line halfway through a longer strength rest
+    if(strength&&step.dur>=90&&(restN++%2===1)) step.halfSay=csSay(csLine('strength sets','rest (mid-lift coaching, use occasionally)',''),{});
+    step.say10=csSay(csLine('timer','10 seconds left (rest)','10 seconds. Get ready.'),{});
+    pushPause(step);
+  };
   const work=(ex,ei,si,sub,block,say)=>{
     const entry={exId:`${day.id}-ex${ei}`,exName:ex[0],si,setsStr:ex[1]};
     pending.push(entry);
@@ -2457,26 +2681,25 @@ function gsBuild(day,withWarmup){
   // Sections drive the session screen: timeline segments, the list on screen, and which row is lit
   const secs=[];
   if(withWarmup&&wt){
-    secs.push({title:'Warm Up',sub:'',kind:'wu',rows:gsWarmItems(wt).map(w=>({n:'1x',name:w.name,sub:w.sub}))});
+    secs.push({title:'Warm Up',sub:'',kind:'wu',rows:gsWarmItems(wt).map(w=>({n:'1x',name:w.name,sub:w.sub,base:w.base,secs:w.secs}))});
     steps.forEach((st,i)=>{ st.sec=0; st.row=i-1; });
   }
   const tag=(s0,b)=>{
     let si, map={}, first=-1;
     if(b.fin){
-      secs.push({title:'Finisher',sub:b.fin.badge||'',kind:'fin',rows:(b.fin.movements||[]).map(m=>({n:'',name:m.name,sub:m.reps}))});
+      secs.push({title:'Finisher',sub:b.fin.badge||'',kind:'fin',rows:(b.fin.movements||[]).map(m=>({n:'',name:m.name,sub:m.reps,reps:m.reps}))});
       si=secs.length-1;
     } else if(b.ss){
       const R=b.rounds||parseNumSets(b.exs[0].ex[1]);
-      secs.push({title:b.ss,sub:`${R} rounds · ${b.rest}s rest`,kind:'ss',
-        rows:b.exs.map(({ex})=>({n:`${R}x`,name:ex[0],sub:`${gsRepsLbl(ex[1])}${/\d$/.test(gsRepsLbl(ex[1]))?' reps':''}`}))});
+      secs.push({title:b.ss,sub:`${R} rounds · ${b.rest}s rest`,kind:'ss',rounds:R,
+        rows:b.exs.map(({ex})=>({n:`${R}x`,name:ex[0],setsStr:ex[1],sub:`${gsRepsLbl(ex[1])}${/\d$/.test(gsRepsLbl(ex[1]))?' reps':''}`}))});
       si=secs.length-1; b.exs.forEach(({ei},k)=>map[`${day.id}-ex${ei}`]=k); first=0;
     } else {
       const {ex,ei}=b.exs[0], last=secs[secs.length-1];
       if(!last||last.kind!=='str') secs.push({title:'Strength',sub:'',kind:'str',rows:[]});
       si=secs.length-1;
-      const rows=secs[si].rows; rows.push({n:`${parseNumSets(ex[1])}x`,name:ex[0],
+      const rows=secs[si].rows; rows.push({n:`${parseNumSets(ex[1])}x`,name:ex[0],setsStr:ex[1],
         sub:`${gsRepsLbl(ex[1])}${/\d$/.test(gsRepsLbl(ex[1]))?' reps':''} · ${fmtTime(ex[2]||REST_TIMES[ex[0]]||120)} rest`});
-      secs[si].sub=`${rows.length} lift${rows.length>1?'s':''} · full rest`;
       map[`${day.id}-ex${ei}`]=rows.length-1; first=rows.length-1;
     }
     for(let i=s0;i<steps.length;i++){
@@ -2484,59 +2707,74 @@ function gsBuild(day,withWarmup){
       st.row=b.fin?-2:st.exId!==undefined?map[st.exId]:st.kind==='rest'?(b.ss?-1:first):st.kind==='setup'?first:-1;
     }
   };
-  let prevStraight=false;
+  let prevStraight=false, ssCount=0;
   blocks.filter(b=>b.fin||b.exs.length).forEach(b=>{
     const straight=!b.fin&&!b.ss, newSec=!straight||!prevStraight; prevStraight=straight;
     const firstName=b.fin?'Finisher':b.exs[0].ex[0];
     const blockName=b.fin?`Finisher · ${b.fin.badge||''}`:b.ss?`${b.ss} · ${b.exs.map(e=>e.ex[0]).join(' / ')}`:firstName;
-    const setupSay=b.fin
-      ? `Last block, the finisher. ${gsSpoken(b.fin.badge||'')}. ${(b.fin.movements||[]).map(m=>`${gsSpoken(m.name)}, ${gsSpoken(m.reps)}`).join('. ')}. Get set up.`
-      : b.ss
-      ? `Next up, ${b.ss}. ${b.exs.map(e=>gsSpoken(e.ex[0])).join(', then ')}. ${b.rounds||parseNumSets(b.exs[0].ex[1])} rounds. Get set up.`
-      : `Next up, ${gsSpoken(firstName)}. ${parseNumSets(b.exs[0].ex[1])} sets of ${gsRepsSpoken(b.exs[0].ex[1])}. ${gsSpoken(EXERCISE_NOTES[firstName]||'')} Get set up.`;
+    // Set-up for a second lift in the same section (previews replace this for new sections)
+    const setupSay=straight?csSay(csLine('strength sets','set up for the next lift','Next up, {exercise}. {sets} sets of {reps}. {setup} {cue} Get set up.'),
+      {exercise:firstName,sets:parseNumSets(b.exs[0].ex[1]),reps:gsRepsSpoken(b.exs[0].ex[1]),setup:csSetup(firstName),cue:csCue(firstName)}):'';
     const s0=steps.length;
     pushPause({kind:newSec?'preview':'setup',title:firstName,sub:b.ss?`${b.ss} · ${b.exs.length} exercises`:'Get your equipment ready',
-      dur:Math.min(90,Math.max(45,lastRest)),block:blockName,say:setupSay,say10:'10 seconds.'});
+      dur:Math.min(90,Math.max(45,lastRest)),block:blockName,say:setupSay,
+      say10:csSay(csLine('timer','10 seconds left (set up)','10 seconds.'),{})});
     const tagThis=()=>tag(s0,b);
     if(b.fin){
       const f=b.fin, rounds=f._fin==='interval'?(f.rounds||1):1;
-      for(let r=0;r<rounds;r++) steps.push({kind:'finisher',title:f.badge||'Finisher',
-        sub:rounds>1?`Round ${r+1} of ${rounds}`:(f._fin==='amrap'?'As many rounds as possible':'For time'),
-        dur:f.duration,block:blockName,movs:f.movements||[],
-        say:rounds>1?(r===0?`Round 1 of ${rounds}. Go!`:r===rounds-1?'Last round. Go!':`Round ${r+1}. Go!`):'Go! Finish strong.',
-        halfSay:rounds===1&&f.duration>=240?'Halfway there. Keep moving.':''});
+      for(let r=0;r<rounds;r++){
+        const say=rounds>1
+          ?csSay(r===0?csLine('finisher','interval, first round','Round 1 of {rounds}. Go!'):r===rounds-1?csLine('finisher','interval, last round','Last round. Go!'):csLine('finisher','interval, middle rounds','Round {round}. Go!'),{round:r+1,rounds})
+          :csSay(csLine('finisher','amrap / for time','Go! Finish strong.'),{});
+        steps.push({kind:'finisher',title:f.badge||'Finisher',
+          sub:rounds>1?`Round ${r+1} of ${rounds}`:(f._fin==='amrap'?'As many rounds as possible':'For time'),
+          dur:f.duration,block:blockName,movs:f.movements||[],say,
+          halfSay:rounds===1&&f.duration>=240?csSay(csLine('finisher','halfway (long finishers)','Halfway there. Keep moving.'),{}):''});
+      }
       lastRest=GS_FIRST_SETUP; tagThis();
     } else if(b.ss){
-      const R=b.rounds||parseNumSets(b.exs[0].ex[1]);
+      const R=b.rounds||parseNumSets(b.exs[0].ex[1]), effort=(ssCount++%2===1);
       for(let r=0;r<R;r++){
         b.exs.forEach(({ex,ei},k)=>{
           if(k>0) steps.push({kind:'switch',title:ex[0],sub:'Move to the next exercise',dur:GS_SWITCH,block:blockName,
-            say:`Switch. ${gsSpoken(ex[0])}.`,exId:`${day.id}-ex${ei}`,si:r});
-          const lead=k>0?'':r===0?'Round 1. ':r===R-1?'Last round. ':`Round ${r+1}. `;
+            say:csSay(csLine('supersets','switch between exercises','Switch. {exercise}.'),{exercise:ex[0]}),exId:`${day.id}-ex${ei}`,si:r});
+          const lbl=k>0?'second exercise in the round':r===0?'first round':r===R-1?'last round':'middle rounds';
+          const fb=k>0?'{exercise}, {reps}. Go.':r===0?'Round 1. {exercise}, {reps}. Go.':r===R-1?'Last round. {exercise}, {reps}. Go.':'Round {round}. {exercise}, {reps}. Go.';
           work(ex,ei,r,`${b.ss} · Round ${r+1} of ${R} · ${gsRepsLbl(ex[1])}`,blockName,
-            `${lead}${gsSpoken(ex[0])}, ${gsRepsSpoken(ex[1])}. Go.`);
+            csSay(csLine('supersets',lbl,fb),{exercise:ex[0],reps:gsRepsSpoken(ex[1]),round:r+1,rounds:R}));
         });
-        if(r<R-1) rest({kind:'rest',title:'Rest',sub:`${b.ss} · Round ${r+2} next`,dur:b.rest,block:blockName,
-          say:`Rest, ${gsDurSpoken(b.rest)}. Round ${r+2} next.`});
+        if(r<R-1){
+          let say=csSay(csLine('supersets','rest between rounds','Rest, {rest}. Round {round} next.'),{rest:gsDurSpoken(b.rest),round:r+2});
+          if(effort&&r===R-2) say+=' '+csSay(csLine('supersets','effort reminder (last round of accessories, occasionally)',''),{});
+          rest({kind:'rest',title:'Rest',sub:`${b.ss} · Round ${r+2} next`,dur:b.rest,block:blockName,say:say.trim()},false);
+        }
       }
       lastRest=b.rest; tagThis();
     } else {
       const {ex,ei}=b.exs[0], n=parseNumSets(ex[1]), restSecs=ex[2]||REST_TIMES[ex[0]]||120;
       for(let si=0;si<n;si++){
+        const lbl=si===0?'first set':si===n-1?'last set':'middle sets';
+        const fb=si===0?'Set 1. {reps}. Go.':si===n-1?'Last set! {reps}. Go.':'Set {set}. Go.';
         work(ex,ei,si,`Set ${si+1} of ${n} · ${gsRepsLbl(ex[1])}`,blockName,
-          si===0?`Set 1. ${gsRepsSpoken(ex[1])}. Go.`:si===n-1?`Last set! ${gsRepsSpoken(ex[1])}. Go.`:`Set ${si+1}. Go.`);
-        if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Set ${si+2} of ${n} next`,dur:restSecs,block:blockName,
-          say:`Rest, ${gsDurSpoken(restSecs)}. ${si+2===n?'Last set':'Set '+(si+2)} next.`});
+          csSay(csLine('strength sets',lbl,fb),{reps:gsRepsSpoken(ex[1]),set:si+1,sets:n}));
+        if(si<n-1){
+          const lastNext=si+2===n;
+          const say=csSay(lastNext?csLine('strength sets','rest before the last set','Rest, {rest}. Last set next.'):csLine('strength sets','rest','Rest, {rest}. Set {set} next.'),
+            {rest:gsDurSpoken(restSecs),set:si+2});
+          rest({kind:'rest',title:'Rest',sub:`Set ${si+2} of ${n} next`,dur:restSecs,block:blockName,say},true);
+        }
       }
       lastRest=restSecs; tagThis();
     }
   });
   // Previews: run down each movement in the section (warm-up 15–30s, barbell sections ~1 min)
   const rowSay=(x,r)=>{
-    const sets=r.n&&r.n!=='1x'?`${parseInt(r.n)} ${x.kind==='ss'?'rounds':'sets'} of `:'';
-    const what=gsSpoken(r.sub.replace(/ · .*$/,'').replace(/(\d+) secs/,'$1 seconds'));
-    const cue=x.kind==='str'?' '+gsSpoken(EXERCISE_NOTES[r.name]||''):'';
-    return `${gsSpoken(r.name)}. ${sets}${what}.${cue}`;
+    if(x.kind==='wu') return csSay(csLine('section preview','each warm-up movement','{exercise}. {seconds} seconds.'),{exercise:r.base||r.name,seconds:r.secs});
+    if(x.kind==='fin') return csSay(csLine('section preview','each finisher movement','{exercise}, {reps}.'),{exercise:r.name,reps:r.reps});
+    if(x.kind==='ss') return csSay(csLine('section preview','each superset movement','{exercise}. {rounds} rounds of {reps}. {setup}'),
+      {exercise:r.name,rounds:x.rounds,reps:gsRepsSpoken(r.setsStr),setup:csSetup(r.name)});
+    return csSay(csLine('section preview','each strength lift','{exercise}. {sets} sets of {reps}. {setup} {cue}'),
+      {exercise:r.name,sets:parseNumSets(r.setsStr),reps:gsRepsSpoken(r.setsStr),setup:csSetup(r.name),cue:csCue(r.name)});
   };
   steps.forEach(st=>{
     if(st.kind!=='preview') return;
@@ -2544,20 +2782,50 @@ function gsBuild(day,withWarmup){
     st.dur=x.kind==='wu'?Math.min(30,Math.max(15,x.rows.length*5)):x.kind==='fin'?30:heavy?60:40;
     st.title=x.title; st.sub='Get set up'; st.row=-3; st.log=st.log||[];
     st.rowSay=x.rows.map(r=>rowSay(x,r));
-    st.say=`${x.title}. ${st.rowSay[0]}`; st.say10='10 seconds.';
+    st.rowSay[0]=`${csSay(csLine('section preview','section intro','{section}.'),{section:x.title})} ${st.rowSay[0]}`;
+    st.say=st.rowSay[0]; st.rowW=st.rowSay.map(csSecs);
+    st.say10=csSay(csLine('timer','10 seconds left (set up)','10 seconds.'),{});
   });
   if(steps[0]&&steps[0].sec===undefined){ steps[0].sec=0; steps[0].row=-1; }
+
+  // "Before we start": space, fuel and body checks, then today's briefing (its own section)
+  const wi=WEEKS.findIndex(w=>w.days.some(d=>d.id===day.id));
+  const weekNum=wi>=0?(WEEKS[wi].num||wi+1):null;
+  const sess=gsSpoken(day.session.replace(/ — /,'. '));
+  const brief=(COACH_SCRIPT['session briefing']||{});
+  const bKey=Object.keys(brief).find(k=>!/deload|trail/i.test(k)&&day.session.toLowerCase().startsWith(k.split(',')[0].trim().toLowerCase()));
+  const bRows=[
+    {name:'Space',raw:csLine('before we start','space check','Set up your space. Equipment and water within reach.')},
+    {name:'Fuel',raw:csLine('before we start','fuel check','Pre-workout fuel in? Eat first if you haven\'t.')},
+    {name:'Body',raw:csLine('before we start','body check','Quick scan. Anything sharp? Tell me now, we adjust.')},
+    {name:'Mindset',raw:csLine('before we start','mindset','Trust the plan. Let\'s go.')},
+  ];
+  const todayRaw=[bKey?brief[bKey]:'', deload?csLine('session briefing','deload week (adds to the briefing)',''):''].filter(Boolean).join(' ');
+  if(todayRaw) bRows.push({name:'Today',raw:todayRaw});
+  const startRaw=csLine('start and finish','session starts','{session}. {minutes} minutes. Let\'s go.');
+  const bStep={kind:'preview',title:'Before we start',sub:'',dur:0,block:'Before we start',row:-3,log:[],sec:0};
+  const vars={week:weekNum,session:sess};
+  const sayRows=()=>bRows.map((r,i)=>csSay(r.raw,vars)+(i===bRows.length-1?' '+csSay(startRaw,vars):''));
+  vars.minutes=Math.round((gsTotal(steps)+60)/60);
+  let rs=sayRows(); bStep.dur=Math.round(Math.min(90,Math.max(30,rs.reduce((a,t)=>a+csSecs(t),0)+3)));
+  vars.minutes=Math.round((gsTotal(steps)+bStep.dur)/60); rs=sayRows();
+  bStep.rowSay=rs; bStep.say=rs[0]; bStep.rowW=rs.map(csSecs);
+  bStep.say10=csSay(csLine('timer','10 seconds left (set up)','10 seconds.'),{});
+  steps.forEach(st=>{ st.sec+=1; });
+  steps.unshift(bStep);
+  secs.unshift({title:'Before we start',sub:'',kind:'brief',rows:bRows.map(r=>({n:'',name:r.name,sub:csFill(r.raw,{week:weekNum})}))});
+
   // Time span of each section, for the timeline
   let t=0; secs.forEach(x=>{ x.start=null; x.dur=0; });
   steps.forEach(st=>{ const x=secs[st.sec]; if(x){ if(x.start===null) x.start=t; x.dur+=st.dur; } t+=st.dur; });
   secs.forEach(x=>{
-    x.sub=x.kind==='wu'?`${fmtDur(x.dur)} · Bodyweight`
+    x.sub=x.kind==='brief'?`${fmtDur(x.dur)}${deload?' · Deload week':''}`
+      :x.kind==='wu'?`${fmtDur(x.dur)} · Bodyweight`
       :x.kind==='str'?`${x.rows.length} lift${x.rows.length>1?'s':''} · ${fmtDur(x.dur)}`
       :x.kind==='ss'?`${x.sub.split(' · ')[0]} · ${fmtDur(x.dur)}`
       :`${x.sub} · ${fmtDur(x.dur)}`;
   });
   steps.secs=secs;
-  if(steps[0]) steps[0].say=`Let's go. ${gsSpoken(day.session.replace(/ — /,'. '))}. About ${Math.round(gsTotal(steps)/60)} minutes. ${steps[0].say||''}`;
   steps.finalLog=pending;
   return steps;
 }
@@ -2788,7 +3056,8 @@ function gsFinish(){
   G.phase='done'; G.endedAt=Date.now();
   S.done[G.day.id]=true; saveWorkout();
   gsPersist(); gsBeep(1040,700); gsRender();
-  gsSay(`Session complete. ${Math.round((G.endedAt-G.startedAt)/60000)} minutes. Great work.`);
+  { const v=csGet('start and finish','session complete (rotate)'), list=Array.isArray(v)&&v.length?v:['Session complete. {minutes} minutes. Great work.'];
+    gsSay(csSay(list[Math.floor(Date.now()/86400000)%list.length],{minutes:Math.round((G.endedAt-G.startedAt)/60000)})); }
   launchConfetti(window.innerWidth/2,window.innerHeight/3);
 }
 
@@ -3284,7 +3553,12 @@ function gsPickClose(){ G.pick=null; gsRender(); }
 function gsPvRow(){
   const st=G.steps[G.idx], n=(G.steps.secs[st.sec]||{rows:[]}).rows.length;
   if(st.kind!=='preview'||!n) return -1;
-  return Math.min(n-1,Math.floor((st.dur*1000-Math.max(0,gsLeft()))/(st.dur*1000/n)));
+  const e=(st.dur*1000-Math.max(0,gsLeft()))/1000;
+  if(st.rowW&&st.rowW.length===n){
+    const sum=st.rowW.reduce((a,b)=>a+b,0), f=Math.min(1,st.dur/sum);
+    let c=0; for(let i=0;i<n;i++){ c+=st.rowW[i]*f; if(e<c) return i; } return n-1;
+  }
+  return Math.min(n-1,Math.floor(e/(st.dur/n)));
 }
 function gsRenderTime(){
   if(!G||G.phase!=='run') return;
