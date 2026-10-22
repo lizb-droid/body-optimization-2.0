@@ -4,29 +4,28 @@
 ## Identity
 - **Name:** Liz
 - **Occupation:** Senior UI/UX Designer (Sans Serif — Autodesk account lead)
-- **Life stage:** Postpartum (10 months), actively breastfeeding — plans to continue long-term
+- **Life stage:** Postpartum, still breastfeeding (2 sessions a day) — plans to continue long-term
 
 ## Physical Stats
 | Metric | Value |
 |---|---|
-| Current weight | 150 lbs / 68 kg |
+| Current weight | 150 lbs / 68 kg (update at Week 4 check-in) |
 | Pre-pregnancy weight | 145 lbs |
 | Pregnancy peak | 210 lbs |
-| Lost postpartum | 60 lbs in 9 months |
+| Lost postpartum | 60 lbs |
 | Body composition goal | Lean + muscular — not just light |
 
 ## Goals (Priority Order)
-1. Body recomposition — build visible muscle, reduce body fat, look and feel strong
-2. Trail race performance — summer series + two Cirque A-races
+1. Body recomposition — build as much visible muscle as possible; **one-year goal: ripped** (lean, muscular, strong). Current phase: 12-week hypertrophy block, Nov 9, 2026 – Jan 31, 2027
+2. Trail running — Zone 2 uphill walk/run for aerobic base and enjoyment (no races planned)
 3. Maintain breast milk supply — **non-negotiable constraint on all decisions**
 4. Feel good — energy, mood, recovery, confidence
 
 ## Training History
 - Many years of weightlifting including serious Olympic lifting (clean & jerk, snatch)
 - Strong neuromotor base and excellent movement literacy
-- Rebuilding running volume postpartum — base solid, progressing conservatively
-- Morning lift window: **5:00–6:00 AM (60 min hard stop)**
-- Runs in the afternoon — Wednesday races and Saturday trail
+- Morning lift window: **5:00–6:00 AM (60 min hard stop, warm-up included)**
+- Trail runs on Fridays: Zone 2, up to 4 miles, all uphill — walk the climbs, run the flats and downhills
 
 ## Home Gym Equipment
 - Barbell, squat rack, bench, DBs, KBs, GHD, rowing machine, bike
@@ -35,15 +34,15 @@
 ## Weekly Schedule
 | Day | Session | Notes |
 |---|---|---|
-| Monday | Lower A lift | Fresh legs — 2 days before race |
-| Tuesday | Upper A lift | Easy — legs stay fresh for Wednesday |
-| Wednesday | Race / Run | Weekly trail series all summer |
-| Thursday | Rest | Full recovery |
-| Friday | Upper B lift | Upper only — no leg fatigue before Saturday |
-| Saturday | Trail Run | Aerobic base + race-specific fitness |
+| Monday | Lower A — glute focus | Heavy Back Squat + Hip Thrust |
+| Tuesday | Upper A — chest + back | |
+| Wednesday | Lower B — quads + hamstrings | Thrusters, Cyclist Squat, Split Squat |
+| Thursday | Upper B — shoulders + chest | Push Press/Jerk |
+| Friday | Trail run — Zone 2 | Walk downhills if quads are sore (Saturday is full body) |
+| Saturday | Full body — pull + glutes | Light glute piece only, legs are not the focus |
 | Sunday | Rest | Full rest |
 
-**Rule: ONE lower body lifting day per week. Racing + trail running = additional leg stimulus.**
+**Rule: two lower-body lifting days (Mon, Wed) plus a light glute piece Saturday. Friday trail run is easy aerobic work only.** Holidays: train as normal.
 
 ## Exercise Preferences
 **Loves:** Push press, DB shoulder press, cleans, jerks, clean pulls, barbell bench press, barbell back squat, RDL, hip thrusts, bicep curls, front squat
@@ -59,12 +58,13 @@
 ## Daily Macro Targets
 | Day Type | Protein | Carbs | Fat | Calories |
 |---|---|---|---|---|
-| Regular / Rest | 150g | 165g | 65g | ~1,845 |
-| Training (Strength) | 150g | 175g | 65g | ~1,885 |
-| Run Days | 150g | 175g | 65g | ~1,885 |
-| Race Days | 150g | 195g | 50g | ~1,830 |
+| Strength (Mon, Tue, Wed, Thu, Sat) | 160g | 190g | 55g | ~1,895 |
+| Trail Run (Fri) | 160g | 195g | 55g | ~1,915 |
+| Rest (Sun) | 160g | 165g | 60g | ~1,840 |
 
 **Red lines:** Never below 1,750 kcal/day | Never below 150g protein | Never below 100g carbs
+
+Change log: macros updated Oct 22, 2026 for the hypertrophy block (protein 150 → 160g to support muscle growth; carbs raised on strength days to fuel five lifts a week; fat lowered to 55g; race-day row removed since no races are planned). Review at the Week 4 check-in using weight trend and lift progress.
 
 ## Supplement Stack
 | Supplement | Dose | Timing | Purpose |
@@ -92,20 +92,5 @@
 - Frame everything around **performance and function** — aesthetic follows
 - Olympic lifting background — power movements are accessible and motivating
 
-## Race Calendar — 17-Week Program (Apr 20 – Aug 16, 2026)
-| Date | Race | Week | Notes |
-|---|---|---|---|
-| Apr 22 | Eagle Mountain | Wk 1 | Run by effort |
-| Apr 29 | Dimple Dell | Wk 2 | Run by effort |
-| May 13 | Soldier Hollow | Wk 4 | Deload — easy effort |
-| May 20 | Heber | Wk 5 | Start pushing |
-| Jun 3 | Dimple Dell | Wk 7 | Push it |
-| Jun 10 | Deer Valley | Wk 8 | Fitness test |
-| Jun 24 | Solitude | Wk 10 | Full race effort — peak week |
-| Jul 8 | Alta Series | Wk 12 | Shakeout only |
-| **Jul 11** | **CIRQUE ALTA** | **Wk 12** | **~8 mi, ~3,000 ft — A-RACE** |
-| Jul 15 | Snowbird Series | Wk 13 | Easy — post-Cirque recovery |
-| Jul 29 | Brighton | Wk 15 | Push it — rebuilding |
-| Aug 5 | Alta Series | Wk 16 | Full race effort — peak week |
-| Aug 12 | Snowbird Series | Wk 17 | Shakeout only |
-| **Aug 15** | **CIRQUE SNOWBIRD** | **Wk 17** | **~8 mi, ~3,000 ft — A-RACE** |
+## Races
+None planned. The old 17-week race calendar (Cirque Alta / Cirque Snowbird, summer series) is retired.
