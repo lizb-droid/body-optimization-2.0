@@ -782,7 +782,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:'Robo
   <div style="background:var(--dk1);border-radius:20px 20px 0 0;padding:24px 20px;width:100%;box-sizing:border-box">
     <div style="font-size:17px;font-weight:600;color:#fff;margin-bottom:6px">Log Macros</div>
     <div style="font-size:13px;color:var(--tt);margin-bottom:16px">Paste the macro snippet from your Claude nutrition chat.</div>
-    <textarea id="macro-paste" placeholder='{"date":"2026-06-28","protein":150,"carbs":175,"fat":65,"calories":1885,"dayType":"Training"}' style="width:100%;box-sizing:border-box;height:100px;background:#111;border:1px solid var(--brd);border-radius:10px;color:#fff;font-size:13px;font-family:monospace;padding:10px;resize:none"></textarea>
+    <textarea id="macro-paste" placeholder='{"date":"2026-11-09","protein":160,"carbs":190,"fat":55,"calories":1895,"dayType":"Strength"}' style="width:100%;box-sizing:border-box;height:100px;background:#111;border:1px solid var(--brd);border-radius:10px;color:#fff;font-size:13px;font-family:monospace;padding:10px;resize:none"></textarea>
     <button onclick="confirmMacroLog()" style="margin-top:12px;width:100%;height:48px;background:var(--ind);border:none;border-radius:var(--r-full);font-size:16px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit">Save</button>
     <button onclick="closeMacroLog()" style="margin-top:8px;width:100%;height:44px;border:1px solid var(--brd);border-radius:var(--r-full);background:transparent;font-size:14px;font-weight:500;color:var(--ts);cursor:pointer;font-family:inherit">Cancel</button>
   </div>
@@ -2926,8 +2926,9 @@ function gsVoices(){
 function gsPickVoice(){
   const vs=gsVoices(); let saved=null;
   try{ saved=localStorage.getItem('betalizgsvoice'); }catch(e){}
-  const pref=['Ava','Zoe','Samantha','Allison','Google US English','Karen','Serena'];
-  gsVoice=vs.find(v=>v.voiceURI===saved)||vs.find(v=>gsVoiceRank(v)<2&&v.lang==='en-US')||vs.find(v=>gsVoiceRank(v)<2)
+  const pref=['Zoe','Ava','Samantha','Allison','Google US English','Karen','Serena'];
+  const zoe=vs.filter(v=>/^zoe\b/i.test(v.name)).sort((a,b)=>gsVoiceRank(a)-gsVoiceRank(b))[0];
+  gsVoice=vs.find(v=>v.voiceURI===saved)||zoe||vs.find(v=>gsVoiceRank(v)<2&&v.lang==='en-US')||vs.find(v=>gsVoiceRank(v)<2)
     ||pref.map(n=>vs.find(v=>v.name.includes(n))).find(Boolean)||vs.find(v=>v.lang==='en-US')||vs[0]||null;
   if(G&&G.phase==='plan') gsRender();
   sdRender();
@@ -3597,9 +3598,10 @@ function renderMacros(){
   }
   const p=parseFloat(m.p)||0,c=parseFloat(m.c)||0,f=parseFloat(m.f)||0,kcal=parseFloat(m.kcal)||0;
   const dayType=(m.dayType||'').toLowerCase();
-  const tgt=dayType==='race'?{p:150,c:195,f:50,kcal:1830}
-    :dayType==='run'||dayType==='training'||dayType==='strength'?{p:150,c:175,f:65,kcal:1885}
-    :{p:150,c:165,f:65,kcal:1845};
+  // Targets from profile/liz-athlete-profile.md (Oct 22, 2026)
+  const tgt=dayType==='run'||dayType==='race'?{p:160,c:195,f:55,kcal:1915}
+    :dayType==='training'||dayType==='strength'?{p:160,c:190,f:55,kcal:1895}
+    :{p:160,c:165,f:60,kcal:1840};
 
   function barRow(name,val,target,color,numColor){
     const pct=Math.min(100,Math.round((val/target)*100));
