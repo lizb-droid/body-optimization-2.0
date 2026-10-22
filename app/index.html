@@ -32,7 +32,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:#0f0f0
 #content{flex:1;overflow:hidden;position:relative}
 .tab-panel{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none}
 .tab-panel.active{display:block}
-#tabnav{flex-shrink:0;display:flex;align-items:stretch;height:68px;margin:6px 16px calc(14px + env(safe-area-inset-bottom));border-radius:22px;border:1px solid rgba(255,255,255,.12);background:rgba(28,28,28,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);overflow:hidden}
+#tabnav{flex-shrink:0;display:flex;align-items:stretch;height:calc(64px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);border-top:1px solid rgba(255,255,255,.12);background:#161616}
 
 /* ── Header ── */
 .hdr-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 0}
