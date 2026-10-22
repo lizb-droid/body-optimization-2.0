@@ -2872,19 +2872,80 @@ function gsPickVoice(){
     ||pref.map(n=>vs.find(v=>v.name.includes(n))).find(Boolean)||vs.find(v=>v.lang==='en-US')||vs[0]||null;
 }
 if('speechSynthesis' in window){ gsPickVoice(); try{ speechSynthesis.addEventListener('voiceschanged',gsPickVoice); }catch(e){} }
-function gsSay(text){ if(G&&G.audio==='coach') gsSpeak(text); }
-function gsSpeak(text){
-  if(!text||!('speechSynthesis' in window)) return;
-  try{
-    speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(text.replace(/\s+/g,' ').trim());
-    if(gsVoice) u.voice=gsVoice;
-    u.rate=1.04;
-    speechSynthesis.speak(u);
-  }catch(e){}
+// ── Coach voice: recorded clips (app/audio/coach, made by tools/record-coach-voice.py),
+// falling back to the phone's voice for any line without a recording ──
+// File name = FNV-1a hash of the exact line, same as the recording tool.
+function csHash(text){
+  let h=0x811c9dc5;
+  for(const b of new TextEncoder().encode(text)){ h^=b; h=Math.imul(h,0x01000193)>>>0; }
+  return h.toString(16).padStart(8,'0');
 }
-function gsHush(){ try{ speechSynthesis.cancel(); }catch(e){} }
-function gsUnlockAudio(){ try{ gsAC=gsAC||new (window.AudioContext||window.webkitAudioContext)(); gsAC.resume(); }catch(e){} }
+function csNorm(t){ return String(t||'').replace(/\s+/g,' ').trim(); }
+const gsAudio=typeof Audio!=='undefined'?new Audio():null;
+let gsQueue=[], gsQueueId=0;
+function gsSay(text){ if(G&&G.audio==='coach') gsSpeak(text); }
+// Speak one line, or a list of lines one after another
+function gsSpeak(text){
+  gsHush();
+  gsQueue=(Array.isArray(text)?text:[text]).map(csNorm).filter(Boolean);
+  const id=++gsQueueId;
+  const next=()=>{ if(id!==gsQueueId||!gsQueue.length) return; gsSpeakOne(gsQueue.shift(),next); };
+  next();
+}
+function gsSpeakOne(text,done){
+  const h=csHash(text), embedded=window.COACH_AUDIO&&window.COACH_AUDIO[h];
+  if(gsAudio&&(embedded||!window.COACH_AUDIO)){
+    let fellBack=false;
+    const fallback=()=>{ if(fellBack) return; fellBack=true; gsSpeakTTS(text,done); };
+    gsAudio.onended=()=>done&&done();
+    gsAudio.onerror=fallback;
+    gsAudio.src=embedded||`audio/coach/${h}.mp3`;
+    const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(fallback);
+    return;
+  }
+  gsSpeakTTS(text,done);
+}
+function gsSpeakTTS(text,done){
+  if(!('speechSynthesis' in window)){ done&&done(); return; }
+  try{
+    const u=new SpeechSynthesisUtterance(text);
+    if(gsVoice) u.voice=gsVoice;
+    u.rate=1.04; u.onend=()=>done&&done();
+    speechSynthesis.speak(u);
+  }catch(e){ done&&done(); }
+}
+function gsHush(){
+  gsQueue=[]; gsQueueId++;
+  try{ if(gsAudio){ gsAudio.onended=gsAudio.onerror=null; gsAudio.pause(); } }catch(e){}
+  try{ speechSynthesis.cancel(); }catch(e){}
+}
+// Runs inside a tap: unlocks Web Audio (whistle) and the clip player for the rest of the session
+function gsUnlockAudio(){
+  try{ gsAC=gsAC||new (window.AudioContext||window.webkitAudioContext)(); gsAC.resume(); }catch(e){}
+  try{ if(gsAudio&&!gsAudio.dataset.unlocked){ gsAudio.dataset.unlocked='1'; gsAudio.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='; const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(()=>{}); } }catch(e){}
+}
+// Every line the coach can say in the current program, for the recording tool
+function coachAllLines(){
+  const out=new Set(['Coach on.']);
+  WEEKS.forEach(w=>{ if(!w.num) return; w.days.forEach(d=>{
+    if(d.type!=='lift'||!WORKOUTS[d.workout]) return;
+    gsBuild(d,true).forEach(st=>{
+      ['say','halfSay','say10','talk'].forEach(k=>st[k]&&out.add(csNorm(st[k])));
+      (st.rowSay||[]).forEach(t=>out.add(csNorm(t)));
+    });
+  }); });
+  gsFinishParts().forEach(parts=>parts.forEach(t=>out.add(csNorm(t))));
+  for(let m=10;m<=90;m++) out.add(csNorm(gsSpoken(`${m} minutes.`)));
+  return [...out].filter(Boolean);
+}
+// Finish lines are split around "{minutes} minutes." so one recording per number covers every variant
+function gsFinishParts(minutes){
+  const v=csGet('start and finish','session complete (rotate)');
+  const list=Array.isArray(v)&&v.length?v:['Session complete. {minutes} minutes. Great work.'];
+  return list.map(t=>t.split(/(\{minutes\} minutes\.)/).map(x=>x.trim()).filter(Boolean)
+    .filter(x=>minutes!==undefined||x!=='{minutes} minutes.')
+    .map(x=>x==='{minutes} minutes.'?`${minutes} minutes.`:x).map(x=>gsSpoken(x)));
+}
 // 10-second warning sounds, synthesized so they work offline
 function gsTone(freq,at,dur,type,vol){
   const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+at;
@@ -2983,8 +3044,7 @@ function gsFinish(){
   G.phase='done'; G.endedAt=Date.now();
   S.done[G.day.id]=true; saveWorkout();
   gsPersist(); gsBeep(1040,700); gsRender();
-  { const v=csGet('start and finish','session complete (rotate)'), list=Array.isArray(v)&&v.length?v:['Session complete. {minutes} minutes. Great work.'];
-    gsSay(csSay(list[Math.floor(Date.now()/86400000)%list.length],{minutes:Math.round((G.endedAt-G.startedAt)/60000)})); }
+  { const all=gsFinishParts(Math.round((G.endedAt-G.startedAt)/60000)); if(G.audio==='coach') gsSpeak(all[Math.floor(Date.now()/86400000)%all.length]); }
   launchConfetti(window.innerWidth/2,window.innerHeight/3);
 }
 

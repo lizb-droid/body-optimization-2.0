@@ -2,3 +2,6 @@
 *.tmp
 *.plugin
 *.html.tmp.*
+
+# Voice model download (tools/record-coach-voice.py)
+tools/.voice-cache/
