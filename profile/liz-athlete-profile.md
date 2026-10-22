@@ -4,7 +4,7 @@
 ## Identity
 - **Name:** Liz
 - **Occupation:** Senior UI/UX Designer (Sans Serif — Autodesk account lead)
-- **Life stage:** Postpartum, still breastfeeding (2 sessions a day) — plans to continue long-term
+- **Life stage:** Postpartum (15 months), nursing 2x/day — transitioning, estrogen recovering
 
 ## Physical Stats
 | Metric | Value |
@@ -12,7 +12,7 @@
 | Current weight | 150 lbs / 68 kg (update at Week 4 check-in) |
 | Pre-pregnancy weight | 145 lbs |
 | Pregnancy peak | 210 lbs |
-| Lost postpartum | 60 lbs |
+| Lost postpartum | 60 lbs in 9 months |
 | Body composition goal | Lean + muscular — not just light |
 
 ## Goals (Priority Order)
@@ -62,9 +62,9 @@
 | Trail Run (Fri) | 160g | 195g | 55g | ~1,915 |
 | Rest (Sun) | 160g | 165g | 60g | ~1,840 |
 
-**Red lines:** Never below 1,750 kcal/day | Never below 150g protein | Never below 100g carbs
+**Red lines:** Never below 1,700 kcal/day | Never below 160g protein | Never below 100g carbs
 
-Change log: macros updated Oct 22, 2026 for the hypertrophy block (protein 150 → 160g to support muscle growth; carbs raised on strength days to fuel five lifts a week; fat lowered to 55g; race-day row removed since no races are planned). Review at the Week 4 check-in using weight trend and lift progress.
+Change log: macros updated Oct 22, 2026 for the hypertrophy block (carbs raised on strength days to fuel five lifts a week; fat held at 55g; rest-day carbs raised so rest-day intake stays above the red line; race-day row removed since no races are planned). Review at the Week 4 check-in using weight trend and lift progress.
 
 ## Supplement Stack
 | Supplement | Dose | Timing | Purpose |
