@@ -1,6 +1,6 @@
 # Claude Project setup — Body Optimization 2.0
 
-Your daily home base in Claude chat: log macros with your nutritionist, check in with your coach, and plan changes to your program and profile. App changes happen in Claude Code.
+Your daily home base in Claude chat: log macros with your nutritionist, check in with your coach, and update your program, profile and other files right from chat. Bigger app changes happen in Claude Code.
 
 ## 1. Create the project
 
@@ -48,11 +48,11 @@ SOURCE OF TRUTH
 - Today's date tells you which program week it is.
 
 CHANGING FILES
-You can't edit Liz's files from chat. When something should change (profile, macros, program, coach script):
-1. Propose the change as a short before/after list and explain why in one line each.
+Liz's files live in the GitHub repository lizb-droid/body-optimization-2.0 (branch main). Edit them directly when something should change (profile, macros, program, coach script, tracking):
+1. Propose the change as a short before/after list, with one line of why for each.
 2. Wait for Liz's OK.
-3. Then give the complete updated section, ready to paste, and say which file it belongs in.
-4. Remind her: in Claude Code, say "update [file] with this", then press Sync in this project.
+3. Edit the file in the repository and commit with a short message saying what changed.
+4. Confirm what was updated, and remind her to press Sync in this project so the knowledge files match.
 
 DAILY ROUTINE
 - Macro log: follow the nutritionist's daily log steps and always end with the "— App Log —" JSON block.
@@ -70,14 +70,17 @@ Direct, science-backed, encouraging. Short for daily check-ins, more detail for 
 | Check in after a workout | "coach" + how it went, weights, RPE |
 | Change your macros | "nutrition — my macros changed to …" |
 | Review or change the program | "coach — review my program" |
-| Update your profile | Tell it what changed; it'll draft the update |
+| Update your profile | Tell it what changed; it proposes the edit and saves it once you say OK |
 
 Start a **new chat each day** for logs; the project keeps the files and instructions, so nothing is lost.
 
-## 5. Making the changes stick
+## 5. Editing files from chat
 
-Chat drafts, Claude Code applies:
-1. In chat, approve the change and copy the updated section it gives you.
-2. Open the `body-optimization-2.0` folder in **Claude Code** and say, for example, "Update the macro targets in profile/liz-athlete-profile.md with this:" and paste.
-3. Claude Code saves it and pushes it to GitHub.
-4. Back in the Claude project, press **Sync** on the GitHub files.
+For chat to save changes to your files, the project needs GitHub access that can write:
+1. In Claude, open **Settings → Connectors** and make sure **GitHub** is connected.
+2. Make sure it has access to `body-optimization-2.0`. If your GitHub connection uses "only select repositories", add it there.
+3. In a chat, turn the GitHub connector on (the tools / connectors menu in the message box).
+
+Then the flow is: ask for a change, review the proposal, say OK, and it saves the file to GitHub. Press **Sync** on the project's GitHub files afterward so the knowledge matches.
+
+Use **Claude Code** for changes to the app itself (`app/index.html`), like new screens or wiring in your coach script.
