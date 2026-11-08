@@ -2444,19 +2444,88 @@ function gsSetVoice(uri){
   try{ localStorage.setItem('betalizgsvoice',uri); }catch(e){}
   gsPickVoice(); gsSpeak("Next up, Barbell Hip Thrust. 4 sets of 10 reps. Let's go."); sdRender();
 }
-function gsSay(text){ if(G&&G.audio==='coach') gsSpeak(text); }
-function gsSpeak(text){
-  if(!text||!('speechSynthesis' in window)) return;
-  try{
-    speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(text.replace(/\s+/g,' ').trim());
-    if(gsVoice) u.voice=gsVoice;
-    u.rate=1.04;
-    speechSynthesis.speak(u);
-  }catch(e){}
+// ── Coach voice: pre-recorded clips (app/audio/coach/<fnv1a>.mp3, Heart voice via Kokoro-82M)
+// falls back to the phone's Web Speech voice for any line without a recording ──
+function csHash(text){
+  let h=0x811c9dc5;
+  for(const b of new TextEncoder().encode(text)){ h^=b; h=Math.imul(h,0x01000193)>>>0; }
+  return h.toString(16).padStart(8,'0');
 }
-function gsHush(){ try{ speechSynthesis.cancel(); }catch(e){} }
-function gsUnlockAudio(){ try{ gsAC=gsAC||new (window.AudioContext||window.webkitAudioContext)(); gsAC.resume(); }catch(e){} }
+function csNorm(t){ return String(t||'').replace(/\s+/g,' ').trim(); }
+const gsAudio=typeof Audio!=='undefined'?new Audio():null;
+const GS_GAP_MS=450;
+let gsQ=[], gsBusy=false, gsLineId=0;
+function gsSay(text){ if(G&&G.audio==='coach') gsEnqueue(text,G.idx); }
+function gsSpeak(text){ (Array.isArray(text)?text:[text]).forEach(t=>gsEnqueue(t)); }
+function gsEnqueue(text,step){
+  const t=csNorm(text); if(!t) return;
+  gsQ.push({text:t,step});
+  if(!gsBusy) gsNextLine();
+}
+function gsNextLine(){
+  while(gsQ.length&&gsQ[0].step!==undefined&&!(G&&G.idx===gsQ[0].step)) gsQ.shift();
+  if(!gsQ.length){ gsBusy=false; return; }
+  gsBusy=true;
+  const it=gsQ.shift(), id=++gsLineId;
+  gsSpeakOne(it.text,()=>{ if(id!==gsLineId) return; setTimeout(()=>{ if(id===gsLineId) gsNextLine(); },GS_GAP_MS); });
+}
+function gsSpeakOne(text,done){
+  const h=csHash(text), id=gsLineId;
+  let finished=false;
+  const finish=()=>{ if(finished) return; finished=true; done&&done(); };
+  if(gsAudio){
+    let fellBack=false;
+    const fallback=e=>{ if(fellBack||id!==gsLineId||(e&&e.name==='AbortError')) return; fellBack=true; gsSpeakTTS(text,finish); };
+    gsAudio.onended=finish;
+    gsAudio.onerror=()=>fallback();
+    gsAudio.src=`audio/coach/${h}.mp3`;
+    const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(fallback);
+    return;
+  }
+  gsSpeakTTS(text,finish);
+}
+function gsSpeakTTS(text,done){
+  if(!('speechSynthesis' in window)){ done&&done(); return; }
+  try{
+    const u=new SpeechSynthesisUtterance(text);
+    if(gsVoice) u.voice=gsVoice;
+    u.rate=1.04; u.onend=()=>done&&done();
+    speechSynthesis.speak(u);
+  }catch(e){ done&&done(); }
+}
+function gsHush(){
+  gsQ=[]; gsLineId++; gsBusy=false;
+  try{ if(gsAudio){ gsAudio.onended=gsAudio.onerror=null; gsAudio.pause(); } }catch(e){}
+  try{ speechSynthesis.cancel(); }catch(e){}
+}
+function gsUnlockAudio(){
+  try{ gsAC=gsAC||new (window.AudioContext||window.webkitAudioContext)(); gsAC.resume(); }catch(e){}
+  try{ if(gsAudio&&!gsAudio.dataset.unlocked){ gsAudio.dataset.unlocked='1'; gsAudio.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='; const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(()=>{}); } }catch(e){}
+}
+// Every line the coach can say — used by tools/record-coach-voice.py via tools/coach-lines.mjs
+function coachAllLines(){
+  const out=new Set(['Coach on.']);
+  WEEKS.forEach(w=>{ if(!w.num) return; w.days.forEach(d=>{
+    if(d.type!=='lift'||!WORKOUTS[d.workout]) return;
+    gsBuild(d,true).forEach(st=>{
+      ['say','halfSay','say10','talk'].forEach(k=>{ if(st[k]) out.add(csNorm(st[k])); });
+      (st.sayList||[]).forEach(t=>out.add(csNorm(t)));
+      (st.rowSay||[]).forEach(t=>out.add(csNorm(t)));
+    });
+  }); });
+  gsFinishLines().forEach(t=>out.add(csNorm(t)));
+  for(let m=10;m<=90;m++) out.add(`${m} minutes.`);
+  return [...out].filter(Boolean);
+}
+function gsFinishLines(){
+  return [
+    'Done. {minutes} minutes. That\'s the plan working.',
+    'Nice work. {minutes} minutes. Log it and eat within thirty minutes.',
+    'That\'s it. {minutes} minutes. Protein and carbs now, then go live your day.',
+    'Done. That was the easy week doing its job.',
+    'Max day done. Log those numbers.',
+  ];
+}
 // 10-second warning sounds, synthesized so they work offline
 function gsTone(freq,at,dur,type,vol){
   const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+at;
