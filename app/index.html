@@ -1131,9 +1131,14 @@ function mergeKeys(k2,k3){
 }
 function loadState(){
   try{
-    // One-time migration: wipe old program's completion data
+    // Clear done data from prior programs
     localStorage.removeItem('betalizdone2');
     localStorage.removeItem('betalizdone3');
+    if(localStorage.getItem('betalizprogramver')!=='12wk-nov2026'){
+      localStorage.removeItem('betalizdone4');
+      localStorage.removeItem('betalizdone5');
+      localStorage.setItem('betalizprogramver','12wk-nov2026');
+    }
     const d=mergeKeys('betalizdone4','betalizdone5'),
           w=mergeKeys('betalizweights2','betalizweights3'),
           n=mergeKeys('betaliznotes2','betaliznotes3'),
@@ -3524,7 +3529,7 @@ async function tryLoadFromGitHub(){
     const data=await r.json();
     if(!data.exported) return;
     // Merge: backup fills any missing keys; localStorage data wins on conflict
-    if(data.done) S.done={...data.done,...S.done};
+    // done is intentionally excluded — completion state resets with each program block
     if(data.weights) S.weights={...data.weights,...S.weights};
     if(data.notes) S.notes={...data.notes,...S.notes};
     if(data.prs) S.prs={...data.prs,...S.prs};
