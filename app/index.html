@@ -1131,11 +1131,11 @@ function mergeKeys(k2,k3){
 }
 function loadState(){
   try{
-    const d=mergeKeys('betalizdone2','betalizdone3'),
+    const d=mergeKeys('betalizdone4','betalizdone5'),
           w=mergeKeys('betalizweights2','betalizweights3'),
           n=mergeKeys('betaliznotes2','betaliznotes3'),
           p=mergeKeys('betalizprs2','betalizprs3');
-    const wk=ls('betalizweek3')||ls('betalizweek2'),
+    const wk=ls('betalizweek4')||ls('betalizweek5'),
           m=ls('betalizmacros'), pr=ls('betalizprogress');
     if(Object.keys(d).length) S.done=d;
     if(Object.keys(w).length) S.weights=w;
@@ -1152,11 +1152,11 @@ function saveWorkout(){
     const ds=JSON.stringify(S.done), ws=JSON.stringify(S.weights),
           ns=JSON.stringify(S.notes), ps=JSON.stringify(S.prs),
           wks=String(S.weekIdx);
-    localStorage.setItem('betalizdone2',ds);   localStorage.setItem('betalizdone3',ds);
+    localStorage.setItem('betalizdone4',ds);   localStorage.setItem('betalizdone5',ds);
     localStorage.setItem('betalizweights2',ws); localStorage.setItem('betalizweights3',ws);
     localStorage.setItem('betaliznotes2',ns);   localStorage.setItem('betaliznotes3',ns);
     localStorage.setItem('betalizprs2',ps);     localStorage.setItem('betalizprs3',ps);
-    localStorage.setItem('betalizweek2',wks);   localStorage.setItem('betalizweek3',wks);
+    localStorage.setItem('betalizweek4',wks);   localStorage.setItem('betalizweek5',wks);
   }catch(e){}
 }
 
