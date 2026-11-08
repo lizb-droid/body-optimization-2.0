@@ -1131,6 +1131,9 @@ function mergeKeys(k2,k3){
 }
 function loadState(){
   try{
+    // One-time migration: wipe old program's completion data
+    localStorage.removeItem('betalizdone2');
+    localStorage.removeItem('betalizdone3');
     const d=mergeKeys('betalizdone4','betalizdone5'),
           w=mergeKeys('betalizweights2','betalizweights3'),
           n=mergeKeys('betaliznotes2','betaliznotes3'),
