@@ -25,7 +25,7 @@
 - Many years of weightlifting including serious Olympic lifting (clean & jerk, snatch)
 - Strong neuromotor base and excellent movement literacy
 - Morning lift window: **5:00–6:00 AM (60 min hard stop, warm-up included)**
-- Trail runs on Fridays: Zone 2, up to 4 miles, all uphill — walk the climbs, run the flats and downhills
+- Conditioning day: intervals (bike + row or similar) — replaces trail running as primary conditioning; trail runs used when preferred
 
 ## Home Gym Equipment
 - Barbell, squat rack, bench, DBs, KBs, GHD, rowing machine, bike
@@ -36,13 +36,13 @@
 |---|---|---|
 | Monday | Lower A — glute focus | Heavy Back Squat + Hip Thrust |
 | Tuesday | Upper A — chest + back | |
-| Wednesday | Lower B — quads + hamstrings | Thrusters, Cyclist Squat, Split Squat |
+| Wednesday | Lower B — quads + hamstrings | Cyclist Squat, Bulgarian Split Squat, short finisher |
 | Thursday | Upper B — shoulders + chest | Push Press/Jerk |
-| Friday | Trail run — Zone 2 | Walk downhills if quads are sore (Saturday is full body) |
+| Friday | Conditioning — 15-second sprints (bike or row) | Optional; active prep first; trail run when preferred |
 | Saturday | Full body — pull + glutes | Light glute piece only, legs are not the focus |
 | Sunday | Rest | Full rest |
 
-**Rule: two lower-body lifting days (Mon, Wed) plus a light glute piece Saturday. Friday trail run is easy aerobic work only.** Holidays: train as normal.
+**Rule: two lower-body lifting days (Mon, Wed) plus a light glute piece Saturday. Friday conditioning is aerobic/interval work only.** Holidays: train as normal.
 
 ## Exercise Preferences
 **Loves:** Push press, DB shoulder press, cleans, jerks, clean pulls, barbell bench press, barbell back squat, RDL, hip thrusts, bicep curls, front squat
@@ -58,13 +58,15 @@
 ## Daily Macro Targets
 | Day Type | Protein | Carbs | Fat | Calories |
 |---|---|---|---|---|
-| Strength (Mon, Tue, Wed, Thu, Sat) | 160g | 190g | 55g | ~1,895 |
-| Trail Run (Fri) | 160g | 195g | 55g | ~1,915 |
-| Rest (Sun) | 160g | 165g | 60g | ~1,840 |
+| Strength (Mon, Tue, Wed, Thu, Sat) | 160g | 180g | 55g | ~1,855 |
+| Conditioning — Intervals (Fri) | 160g | 200g | 55g | ~1,895 |
+| Conditioning — Trail Run (Fri) | 160g | 185g | 55g | ~1,870 |
+| Race | 160g | 195g | 50g | ~1,850 |
+| Rest (Sun) | 160g | 130g | 55g | ~1,655 |
 
 **Red lines:** Never below 1,700 kcal/day | Never below 160g protein | Never below 100g carbs
 
-Change log: macros updated Oct 22, 2026 for the hypertrophy block (carbs raised on strength days to fuel five lifts a week; fat held at 55g; rest-day carbs raised so rest-day intake stays above the red line; race-day row removed since no races are planned). Review at the Week 4 check-in using weight trend and lift progress.
+Change log: macros updated Oct 30, 2026 — five day types added (Strength / Conditioning-Intervals / Conditioning-Trail Run / Race / Rest). Intervals get highest carbs (200g) due to glycolytic demand; trail run moderate (185g Zone 2); rest day lowest (130g). Review at the Week 4 check-in using weight trend and lift progress.
 
 ## Supplement Stack
 | Supplement | Dose | Timing | Purpose |
@@ -83,7 +85,7 @@ Change log: macros updated Oct 22, 2026 for the hypertrophy block (carbs raised 
 - Prolactin elevated → estrogen suppressed → affects recovery, bone density, joint laxity
 - Relaxin may still be present — monitor joint stability under heavy loads
 - Cycle returned April 2026 (Day 1: week of Apr 14)
-- Fasted morning training spikes cortisol disproportionately in women — **pre-workout fuel is mandatory**
+- Fasted morning training spikes cortisil disproportionately in women — **pre-workout fuel is mandatory**
 - Milk supply is a leading indicator of underfueling — monitor weekly
 
 ## Coaching Communication Style

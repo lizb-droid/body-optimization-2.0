@@ -1,223 +1,164 @@
 # Coach script
 
-Everything the coach says during a guided session. Rewrite any line in your own words and leave the ones you like. Once it is final, it gets wired into the app.
+Everything the coach says during a guided session. The coach is quiet on purpose: a warm intro, a short setup line before the hard exercises, and a few words at the moments that matter. No set-by-set talking, no countdowns (the app already beeps at 10 seconds). Rewrite any line in your own words.
 
-The coach should sound like a person standing next to you: setting up your space, reminding you to brace, telling you what to watch for. Not talking the whole time. The most talking happens at the start of the session and at the start of each movement. During sets, lines stay short.
-
-Words in `{curly brackets}` get filled in automatically. Keep them where you want the number or name to be spoken. Lines you can hear mid-set are one idea each, mostly under 12 words.
+Words in `{curly brackets}` get filled in automatically. Keep them where you want the number or name to be spoken.
 
 | Placeholder | Becomes |
 |---|---|
-| `{session}` | Workout name, e.g. "Push. Shoulders and chest" |
-| `{minutes}` | Total minutes, e.g. "48" |
-| `{section}` | Section name, e.g. "Superset A" |
+| `{session}` | Workout name, e.g. "Lower A. Glutes" |
+| `{minutes}` | Total minutes, e.g. "58" |
 | `{exercise}` | Exercise name |
+| `{sets}` | Total sets |
 | `{reps}` | Reps or time, e.g. "8 to 12 reps", "20 second hold" |
-| `{set}` / `{sets}` | Current set number / total sets |
-| `{round}` / `{rounds}` | Current round / total rounds |
-| `{rest}` | Rest length, e.g. "2 minutes" |
-| `{seconds}` | Warm-up move length |
+| `{rounds}` / `{round}` | Finisher total rounds / current round |
+| `{sprints}` | Friday sprint count for the week |
 | `{side}` | "left" or "right" |
-| `{cue}` | That exercise's coaching cue (from the cue list further down) |
-| `{setup}` | **New.** That exercise's setup and bracing line (from the setup list further down) |
+| `{seconds}` | Warm-up move length |
+| `{cue}` | Setup and key point for hard exercises (list further down). Blank means the coach stays silent |
+| `{effort}` | How hard it should feel, for main lifts only (lines below, picked by week type) |
 
-**New for the app (needs a code change):** the `{setup}` placeholder, the session briefings, the "Before we start" block, the rotating variants (rotate through them so it never sounds the same twice), and the deload lines (need a flag for deload weeks).
+**What needs a code change in the app (Claude Code):**
+- Remove the "10 seconds left" voice lines. Keep the beep.
+- `{cue}` now carries setup and the key point together (the old `{setup}` is merged in). Easy exercises have no cue and are spoken as name, sets and reps only.
+- New `{effort}` placeholder, chosen by week type: standard, block-start (weeks 1 and 7), deload (6, 12), test (5, 11).
+- Session intros, chosen by session and week type.
+- No spoken set numbers, no rest announcements, no round-by-round talk except the lines listed here.
+- `{sprints}` and the Friday lines.
+- Rotating variants: where a line has several versions, pick one at random so it doesn't repeat.
 
-## Before we start (plays first, every session)
+## When the coach talks (and when it doesn't)
 
-- **Space check:** Set up your space. Bar, plates, bench, dumbbells. Water within reach.
-- **Fuel check:** Pre-workout fuel in? Training fasted costs you. Eat first if you haven't.
-- **Body check:** Quick scan. Anything sharp? Any pelvic floor pressure? Tell me now, we adjust.
-- **Mindset:** This is week {week} of the plan. Trust it. Let's go.
+**Talks:** session intro, the setup gap before each exercise (one line), the first rest of a main lift (one check-in), the last set of a main lift, finisher start and last round, Friday sprint starts, and the finish.
 
-(`{week}` is optional. If the app can't fill it, drop the last line.)
+**Silent:** set numbers, rest countdowns, middle sets, middle rounds, the 10-second warning, and easy exercises' cues.
 
-## Session briefing (right after "Before we start", one per session)
+## Session intro (plays once, before the warm-up)
 
-Each one covers: what today is, what matters most, what to watch for. Read it all, then the session starts.
+- **Lower A, glutes:** Morning. Today's glutes. Squat first, then hip thrusts, then single-leg work. Heavy day, so brace on every rep. {minutes} minutes. Set up the rack and the bench before we start.
+- **Upper A, chest and back:** Morning. Chest and back today. Bench first, then rows, then shoulders and arms. Shoulder blades back and down on every press. {minutes} minutes. Set up the bench and the bar first.
+- **Lower B, quads and hamstrings:** Morning. Quads and hamstrings. One big front squat, then split squats and hamstring work, then a short finisher. It's a shorter session on purpose. {minutes} minutes. Heels on plates for the squat.
+- **Upper B, shoulders and chest:** Morning. Shoulders and chest. Push press leads, so clear your overhead space. Ribs down, glutes tight. {minutes} minutes. Band pull-aparts first.
+- **Conditioning (Friday):** Morning. Conditioning day. Short sprints, all out, then easy. You get on the machine once and stay on. Not feeling it? Skipping is allowed. About {minutes} minutes.
+- **Full body (Saturday):** Morning. Full body Saturday. Row heavy, keep the hip thrust easy, then arms. {minutes} minutes. Last session of the week.
 
-- **Lower A, glutes:** Lower A. Glutes first. Today is heavy. Back Squat, then Hip Thrust. Set the rack so the bar sits at mid-chest. Bench ready for thrusts, pad on the bar. Brace on every rep: big breath into your belly, ribs down, glutes tight. Any pelvic floor pressure or leaking? Stop that movement. Let's build.
-- **Upper A, chest and back:** Upper A. Chest and back. Bench and row carry the day. Set the bench and bar before the clock starts. Shoulders down and back on every press. Pull the shoulder blades together before every row. Band pull-aparts first, wake up the back of the shoulders.
-- **Lower B, quads and hamstrings:** Lower B. Quads and hamstrings. Thrusters first, so build into them with lighter sets. Heels on plates for the cyclist squat. GHD and sliders within reach. Brace hard and drive through the whole foot. Quality over speed.
-- **Upper B, shoulders and chest:** Upper B. Shoulders and chest. Push press is the star. Clear your overhead space. Ribs down, glutes tight, no leaning back. Everything overhead stays stacked. Band pull-aparts before we press.
-- **Full body, pull and glutes:** Saturday. Full body. Pull first, then glutes. Row, pullover, then a light hip thrust. Keep the thrust easy. Your legs ran yesterday. Flat back, brace, own the tempo.
-- **Trail run (if guided):** Friday. Trail run. Zone 2. Walk the climbs, run the flats and downhills. Conversation pace, always. Quads sore from Wednesday? Walk the downs. Saturday needs your legs.
-- **Deload week (adds to the briefing):** Deload week. Lighter on purpose. Same weights as last week. Fewer sets. Stop with reps in the tank. This is where the fatigue clears and the next block hits harder.
+**Deload weeks (6 and 12), plays instead of the intro above:**
+Deload week. This is supposed to feel easy. Same weights as last week, fewer sets, stop with three or four reps in the tank. You're not losing anything. The fatigue clears and the next block hits harder. {minutes} minutes.
 
-## Start and finish
-
-- **Session starts:** {session}. {minutes} minutes. Earn it.
-- **Session complete (rotate):**
-  - Done. {minutes} minutes. That's the plan working.
-  - Session complete. {minutes} minutes. Log it, then eat within thirty minutes.
-  - That's it. {minutes} minutes. Protein and carbs now, hydrate, then go live your day.
-
-## Section preview (start of each section, runs down each movement)
-
-This is where the coach talks the most: what's coming and how to set up.
-
-- **Section intro:** {section}.
-- **Each strength lift:** {exercise}. {sets} sets of {reps}. {setup} {cue}
-- **Each superset movement:** {exercise}. {rounds} rounds of {reps}. {setup}
-- **Each warm-up movement:** {exercise}. {seconds} seconds.
-- **Each finisher movement:** {exercise}, {reps}.
+**Max-test weeks (5 and 11), plays instead of the intro above on test days:**
+- **Monday, squat:** Max week. Squat day. Warm up slowly, then work up to three attempts. Stop at your last clean rep. Everything after that runs lighter, two sets each, no finisher. {minutes} minutes.
+- **Tuesday, bench:** Max week. Bench day. Warm up slowly, work up to three attempts, pause on the chest. Stop at your last clean rep. Accessories run lighter today. {minutes} minutes.
+- **Saturday, hip thrust:** Max week. Row first, then we test the hip thrust. Work up in small jumps, two second lockout on every rep. {minutes} minutes.
+- **Friday:** Hold back today. This one is about your output, not wrecking yourself.
 
 ## Warm-up
 
-- **Each move:** {exercise}. {seconds} seconds. Easy and smooth.
-- **Each-side move:** {exercise}, {side} side. {seconds} seconds. Easy and smooth.
+- **Section start:** Warm-up. About four minutes.
+- **Each move:** {exercise}.
+- **Each-side move:** {exercise}, {side} side.
+- **Warm-up done:** Warm-up done. Let's lift.
 
-## Strength sets (rotate the variants)
+## Exercises (strength work)
 
-- **First set:**
-  - Set 1. {reps}. Brace. Make it clean.
-  - Set 1. {reps}. Breathe in, ribs down, go.
-  - Set 1. {reps}. Move it with intent.
-- **Middle sets:**
-  - Set {set}. Reset your brace. Go.
-  - Set {set}. Same quality as set 1. Go.
-  - Set {set}. Own it.
-- **Last set:**
-  - Last set. Leave nothing. {reps}.
-  - Last set. Brace and finish strong. {reps}.
-  - Last set. Make it the best one.
-- **Rest:** Rest, {rest}. Set {set} next.
-- **Rest (mid-lift coaching, use occasionally):**
-  - Shake it out. Breathe slow. Nothing to rush.
-  - Check your setup. Same position every set.
-  - How did that feel? Log your weight.
-- **Rest before the last set:** Rest, {rest}. Last set next. Make it count.
-- **Extra line on the very first rest:** Log your weight. Breathe.
-- **Set up for the next lift:** Next up, {exercise}. {sets} sets of {reps}. {setup} {cue} Get set up.
+The coach speaks once per exercise, during the 2 minute setup gap, so you can hear it while you set up.
 
-## Supersets
+- **First exercise of the session:** First up, {exercise}. {sets} sets of {reps}. {cue} {effort}
+- **Setup gap before each next exercise:** Next up, {exercise}. {sets} sets of {reps}. {cue}
+- **Same line for main lifts, with effort:** Next up, {exercise}. {sets} sets of {reps}. {cue} {effort}
+- **Easy exercises (no cue):** Next up, {exercise}. {sets} sets of {reps}.
+- **Unilateral work, at the start of each side:** {side} side.
 
-- **First round:** Round 1. {exercise}, {reps}. Go.
-- **Middle rounds:** Round {round}. {exercise}, {reps}. Stay tight.
-- **Last round:** Last round. {exercise}, {reps}. Finish it.
-- **Second exercise in the round:** {exercise}, {reps}. Go.
-- **Switch between exercises:** Switch. {exercise}.
-- **Rest between rounds:** Rest, {rest}. Round {round} next.
-- **Effort reminder (last round of accessories, occasionally):** Last round. Stop one or two reps shy of failure.
+**First rest of a main lift (one check-in, then quiet):**
+- Log your weight. Did that feel like two reps in the tank? If it was easier, we add next week. If it was a grind, we hold.
+- Log it. Two reps left, not zero. That's the target.
+
+**Last set of a main lift (rotate):**
+- Last set. One or two in the tank. Don't grind it.
+- Last one. Make it your best.
+- Last set. Brace and finish clean.
+
+**Last set of a main lift on deload weeks:** Last set. Keep it easy.
+
+**Last set of an accessory (optional, off by default, use sparingly):** Last set. Stop one or two shy of failure.
+
+## `{effort}` lines (main lifts only)
+
+- **Standard weeks:** Working weight. About two reps left in the tank on every set.
+- **Block start (weeks 1 and 7):** First week at this weight. Aim for about 80 percent. It should feel like two reps in the tank.
+- **Deload weeks:** Easy today. Stop with three or four reps left.
+- **Max-test lift:** Max day. Work up in small jumps. Every rep clean.
 
 ## Finisher
 
-- **Interval, first round:** Round 1 of {rounds}. Go!
-- **Interval, middle rounds:** Round {round}. Keep it moving!
-- **Interval, last round:** Last round. Empty the tank!
-- **AMRAP / for time:** Go! Finish strong.
-- **Halfway (long finishers):** Halfway there. Keep moving.
+- **Start:** Finisher. {exercise}. Go.
+- **First round:** Round 1 of {rounds}. Go.
+- **Middle rounds:** (silent)
+- **Last round:** Last round. Empty the tank.
+- **For time:** Go. Finish strong.
 
-## Timer
+## Friday conditioning
 
-- **10 seconds left (rest):** 10 seconds. Get ready.
-- **10 seconds left (set up):** 10 seconds.
+- **Active prep start:** Active prep. Two rounds. Get your legs ready.
+- **Pogo jumps:** {cue}
+- **After active prep:** Hop on the machine. Easy for three minutes.
+- **Builds:** Three builds. Ten seconds at about seventy percent.
+- **Before the main set:** Main set. {sprints} sprints, fifteen seconds all out. If a sprint drops more than ten percent below your best, we call it.
+- **Each sprint:** Go.
+- **Halfway:** Halfway.
+- **Last sprint:** Last one. Everything.
+- **Cool-down:** Cool down. Five minutes easy. Nice work.
+- **Deload Friday:** Easy twenty minutes. Nothing to prove today.
 
-## Setup lines (`{setup}`)
+## Finish
 
-Read during the section preview and when you set up for a lift. Space, equipment, bracing, body position. Two or three short sentences. Moves with no equipment setup are left blank on purpose.
-
-- **Arnold Press:** Sit tall, ribs down. Dumbbells at your chest, palms facing you.
-- **Band Pull-Apart:** Hold the band at chest height. Arms straight.
-- **Barbell Back Squat:** Bar at mid-chest in the rack. Hands tight, bar on your upper back. Big breath into your belly, ribs down, glutes tight.
-- **Barbell Bench Press:** Eyes under the bar. Shoulder blades pinched and down. Feet planted.
-- **Barbell Bent Over Row:** Hinge to about 45 degrees. Flat back. Brace like someone's about to poke your stomach.
-- **Barbell Cyclist Squat:** Heels on plates. Bar in the front rack, elbows high. Big breath, ribs down.
-- **Barbell Hip Thrust:** Upper back on the bench, pad on the bar. Feet flat, chin tucked. Ribs down.
-- **Bird Dog:** Hands under shoulders, knees under hips. Neutral spine.
-- **Bulgarian Split Squat:** Back foot on the bench, front foot a long step out. Dumbbells at your sides.
-- **Chest-Supported DB Row:** Incline bench, chest on the pad. Let the arms hang.
-- **DB Floor Press:** Lie on the floor, knees bent. Elbows will touch down at the bottom.
-- **DB High Pull:** Dumbbells in front of your thighs. Soft knees, tall chest.
-- **DB Lateral Raise:** Slight bend in the elbow. Ribs down. Stay tall, no leaning.
-- **DB Pullover:** Lie along the bench, one dumbbell held over your chest. Ribs down.
-- **DB Rear Delt Fly:** Hinge forward, flat back. Dumbbells hang under your shoulders.
-- **DB Row tripod:** One hand and one knee braced. Flat back, hips square.
-- **DB Shoulder Press:** Sit or stand tall. Dumbbells at shoulder height. Ribs down, glutes tight.
-- **DB Snatch:** Dumbbell between your feet. Hips back, chest up.
-- **DB Squeeze Press:** Lie back, dumbbells together over your chest. Press them into each other.
-- **DB Thrusters:** Dumbbells at your shoulders. Feet shoulder width. Brace first.
-- **DB Z Press:** Sit on the floor, legs straight. Tall spine. Dumbbells at your shoulders.
-- **Deficit Reverse Lunge:** Front foot on a plate. Dumbbells at your sides. Stand tall.
-- **Dips:** Set your station. Shoulders down. Slight lean forward for chest.
-- **Farmer Carry:** Heavy dumbbells at your sides. Stand tall, ribs stacked.
-- **GHD Hip Extension:** Hips just past the pad. Feet locked. Start with a neutral spine.
-- **Incline DB Curl:** Bench at about 60 degrees. Arms hang straight down.
-- **KB Swing:** Bell a foot in front of you. Hips back. Flat back.
-- **Lateral Lunge:** Wide stance, toes forward. Dumbbell held at your chest.
-- **Overhead Tricep Extension:** One dumbbell, both hands, overhead. Ribs down.
-- **Pallof Hold:** Band anchored at chest height. Stand sideways, feet wide. Hold the band at your chest.
-- **Push Press + Push Jerk:** Clear your overhead space. Bar in the rack position. Ribs down, glutes tight.
-- **Push-up:** Hands under shoulders. Body in one line.
-- **Row:** Feet strapped in. Sit tall. Handle in both hands.
-- **Seated Rear Delt Fly:** Sit tall, chest on your thighs. Dumbbells under your knees.
-- **Single-leg DB RDL:** Dumbbell in the hand opposite your standing leg. Soft knee. Tall chest.
-- **Slider Hamstring Curl:** Lie on your back. Heels on sliders or towels. Hips up.
-- **Spider Curl:** Chest on an incline bench. Arms hang straight down.
-- **Suitcase Carry:** One dumbbell at your side. Stand tall, ribs stacked.
-- **Thrusters:** Bar in the front rack, elbows high. Feet shoulder width. Brace first.
-- **Turkish Get-Up:** Lie on your back. Arm straight up. Eyes on the hand.
-- **Walking Lunge:** Dumbbells at your sides. Tall chest. Long steps.
-- **Weighted Copenhagen Plank:** Top foot on the bench. Forearm down. Hips high.
-- **Weighted Dead Bug:** Flat on your back. Ribs down, low back glued to the floor. Light dumbbell in the extended arm.
+- **Normal (rotate):**
+  - Done. {minutes} minutes. That's the plan working.
+  - Nice work. {minutes} minutes. Log it and eat within thirty minutes.
+  - That's it. {minutes} minutes. Protein and carbs now, then go live your day.
+- **Deload:** Done. That was the easy week doing its job.
+- **Max-test day:** Max day done. Log those numbers.
 
 ## Exercise cues (`{cue}`)
 
-Read during the section preview and when you set up for a lift. What to feel, what to avoid, what to remember.
+Setup and key point together, in one or two short sentences. Only for the hard or technical moves. Blank means the coach says nothing: Arnold Press, DB Squeeze Press, DB Floor Press, DB Shoulder Press, DB Rear Delt Fly, Seated Rear Delt Fly, DB Lateral Raise, Incline DB Curl, DB Bicep Curl, Overhead Tricep Extension, DB Row (tripod), Push-up, Walking Lunge.
 
-- **Arnold Press:** Rotate smoothly. Palms face you at the bottom, forward at the top.
-- **Band Pull-Apart:** Squeeze the shoulder blades. No shrugging.
-- **Barbell Back Squat:** Knees track over toes. Drive the floor away. Heaviest lower-body lift, so take the full rest.
-- **Barbell Bench Press:** Bar to the lower chest. Elbows about 45 degrees. Drive through the feet.
-- **Barbell Bent Over Row:** Row to the lower ribs. Squeeze the blades. Chest stays up.
-- **Barbell Cyclist Squat:** Upright torso. Knees forward. Elbows up. Different angle from Monday's squat.
-- **Barbell Hip Thrust:** Squeeze and hold two seconds at the top. Ribs down. Your number one movement.
-- **Bird Dog:** Opposite arm and leg. Hips level. Slow and controlled.
-- **Bulgarian Split Squat:** Drop straight down. Front heel stays planted. Drive through it.
-- **Chest-Supported DB Row:** Elbows to the hips. Squeeze the lats. Zero lower back involvement.
-- **DB Floor Press:** Elbows touch down, then press. Chest-dominant, no bench needed.
-- **DB High Pull:** Pull to the chin, elbows high. Controlled tempo. No need to explode.
-- **DB Lateral Raise:** Lead with the elbows. Stop at shoulder height. No swinging.
-- **DB Pullover:** Slow arc, from above the chest to behind the head. Feel the lats and rib cage stretch. Start at 45 pounds.
-- **DB Rear Delt Fly:** Soft elbows. Squeeze the back of the shoulder. No momentum.
-- **DB Row tripod:** Pull the elbow to the hip. Hips stay square.
-- **DB Shoulder Press:** Press straight up. Ribs stay down. Don't arch.
-- **DB Snatch:** Hips drive it. Punch overhead and lock out.
-- **DB Squeeze Press:** Squeeze the dumbbells together the whole time. Constant tension.
-- **DB Thrusters:** Squat deep. Drive up and press in one motion.
-- **DB Z Press:** Tall spine. No leaning back. Core carries the press.
-- **Deficit Reverse Lunge:** Step back controlled. Front heel stays down. Torso tall.
-- **Dips:** Bodyweight to start. Add weight once reps feel easy. Shoulders stay down.
-- **Farmer Carry:** Tall posture. Ribs down. Short, quick steps.
-- **GHD Hip Extension:** Squeeze the glutes at the top. Don't over-arch the lower back.
-- **Incline DB Curl:** Elbows back. Slow lowering. Feel the stretch.
+- **Barbell Back Squat:** Bar at mid-chest in the rack. Big breath, ribs down, brace. Hips back first, then down. Drive the floor away.
+- **Barbell Bench Press:** Eyes under the bar. Shoulder blades pinched and down, feet planted. Touch the lower chest and press.
+- **Barbell Bent Over Row:** Hinge to about forty-five degrees. Flat back, brace. Pull to your lower ribs.
+- **Barbell Hip Thrust:** Upper back on the bench, pad on the bar. Ribs down, chin tucked. Squeeze at the top for two seconds.
+- **Barbell Cyclist Squat:** Heels on plates, bar in the front rack, elbows high. Sit straight down and drive up.
+- **Push Press + Push Jerk:** Clear your overhead space. Dip straight down, drive, and lock out over your ears. The jerk reps should feel easier than the press.
+- **Single-leg DB RDL:** Hips back, soft knee, flat back. Keep your hips square. Left side, thirty seconds, then right.
+- **Curtsy Lunge:** Step back and across behind you. Front knee tracks over the toes. Chest tall.
+- **Bulgarian Split Squat:** Back foot on the bench, long step out. Drop straight down, front heel stays planted.
+- **Weighted Dead Bug:** Ribs down, low back on the floor. Breathe out as you reach.
+- **Chest-Supported DB Row:** Chest on the pad. Go heavy. Elbows to your hips.
+- **DB Pullover:** Ribs down. Slow arc over your head. Feel the lats stretch.
+- **Dips:** Shoulders down, slight lean forward. Bodyweight first. Add weight when it's easy.
+- **Weighted Copenhagen Plank:** Top foot on the bench, hips high. Stop if you feel any pubic bone discomfort.
+- **GHD Hip Extension:** Hips just past the pad. Squeeze the glutes at the top. Don't over-arch your lower back.
+- **Slider Hamstring Curl:** Hips high. Slow on the way out. Pull the heels in with your hamstrings.
+- **Bird Dog:** Opposite arm and leg. Keep your hips level.
+- **Pallof Hold:** Band at chest height. Don't let it pull you around.
 - **KB Swing:** Hips, not arms. Snap the hips and let the bell float.
-- **Lateral Lunge:** Sit back into the hip. Toes forward. Chest up.
-- **Overhead Tricep Extension:** Elbows forward. Full stretch, full lockout.
-- **Pallof Hold:** Don't rotate. Band tension, not load. Core control.
-- **Push Press + Push Jerk:** Dip straight down. Drive. Lock out stacked over your ears. Push jerk should feel easier than the press.
-- **Push-up:** Chest to the floor. Body in one line.
-- **Row:** Legs first, then back, then arms.
-- **Seated Rear Delt Fly:** Lead with the elbows. Squeeze. No momentum.
-- **Single-leg DB RDL:** Hinge, don't squat. Hips square. Flat back. Balance trains the stabilizers.
-- **Slider Hamstring Curl:** Hips stay high. Slow on the way out. Pull the heels in with the hamstrings.
-- **Spider Curl:** Chest stays on the bench. Squeeze at the top.
-- **Suitcase Carry:** Don't lean. Resist the drop. Core stays tight.
-- **Thrusters:** Build into it with lighter sets first. Squat deep, drive up, press through the top.
-- **Turkish Get-Up:** Slow. One piece at a time. Eyes on the hand.
-- **Walking Lunge:** Long step. Back knee kisses the floor.
-- **Weighted Copenhagen Plank:** Hips high. Resist the drop. Slow and steady. Stop if you feel any pubic bone discomfort.
-- **Weighted Dead Bug:** Slow. Exhale as you reach. Ribs don't flare. Core-safe, higher demand.
+- **DB Snatch:** Hips drive it. Punch overhead and lock out.
+- **Goblet Squat:** Elbows inside the knees. Chest tall.
+- **Suitcase Carry:** Stand tall. Don't lean.
+- **Pogo Jumps:** Stiff ankles, small and quiet. Land soft. Stop if you feel any leaking or pressure.
+- **Skips:** Tall posture, drive the knee up.
+- **Twisting Reverse Lunge:** Step back and rotate toward the front leg. Slow and controlled.
 
-## Warm-up moves (optional, adds a line after the name)
+## Warm-up moves
 
-- **World's Greatest Stretch:** Reach up and rotate. Open the hips.
-- **Glute Bridge March:** Hips stay level. Squeeze each rep.
-- **Hip Circles:** Big, slow circles.
-- **Posterior Hip Capsule Stretch:** Sink back. Breathe into the hip.
-- **Squat to Stand:** Fold down, chest up, stand tall.
-- **Cat Cow:** Move with your breath.
-- **Child's Pose Thread the Needle:** Reach through. Open the upper back.
-- **Scapular Push-up:** Arms straight. Shoulder blades do the work.
-- **Push-up to Down Dog:** Flow it. Press the floor away.
-- **Band Pull-Apart:** Wake up the back of the shoulders.
+Name only, spoken as above. No extra line.
+
+- World's Greatest Stretch
+- Glute Bridge March
+- Hip Circles
+- Posterior Hip Capsule Stretch
+- Squat to Stand
+- Cat Cow
+- Child's Pose Thread the Needle
+- Scapular Push-up
+- Push-up to Down Dog
+- Band Pull-Apart
