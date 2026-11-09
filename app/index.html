@@ -2636,8 +2636,22 @@ function gsSecJump(dir){
   gsJump(cur===0?s0:gsSecStart(cur-1));
 }
 function gsExJump(idx){ if(!G||G.phase!=='run') return; gsJump(idx); }
-// Previous / Next on the pause screen: move a section and carry on
-function gsPauseJump(dir){ gsSecJump(dir); if(G&&G.phase==='run'&&G.pausedLeft!==null) gsTogglePause(); }
+function gsExSegJump(dir){
+  if(!G||G.phase!=='run') return;
+  const segs=G.steps.exSegs, cur=G.steps[G.idx].block;
+  const curIdx=segs.findIndex(x=>x.block===cur);
+  if(dir>0){
+    const nxt=segs[curIdx+1];
+    gsJump(nxt?nxt.startIdx:G.steps.length);
+  } else {
+    const seg=segs[Math.max(0,curIdx)];
+    if(!seg) return;
+    if(G.idx>seg.startIdx||curIdx===0) gsJump(seg.startIdx);
+    else gsJump(segs[curIdx-1].startIdx);
+  }
+}
+// Previous / Next on the pause screen: move an exercise and carry on
+function gsPauseJump(dir){ gsExSegJump(dir); if(G&&G.phase==='run'&&G.pausedLeft!==null) gsTogglePause(); }
 function gsReplay(){ if(G&&G.phase==='run') gsJump(G.idx); }
 (function(){
   const el=document.getElementById('gs');
@@ -2655,7 +2669,7 @@ function gsReplay(){ if(G&&G.phase==='run') gsJump(G.idx); }
   function up(x,y){
     if(!active) return; active=false;
     const dx=x-x0, dy=y-y0;
-    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){ clearTimeout(tapT); gsSecJump(dx<0?1:-1); return; }
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){ clearTimeout(tapT); gsExSegJump(dx<0?1:-1); return; }
     if(Math.abs(dx)>10||Math.abs(dy)>10||Date.now()-t0>450) return;
     if(Date.now()-lastTap<300){ clearTimeout(tapT); lastTap=0; gsReplay(); return; }
     lastTap=Date.now();
@@ -3008,7 +3022,7 @@ function gsRender(){
   el.innerHTML=`<div class="sx${sec.kind==='fin'?' fin':''}${img?' has-img':''}" ${img?`style="background-image:url('${img}')"`:''}>
     <div class="sx-top">
       <div class="sx-clock"><span id="sx-el">0:00</span> · <span id="sx-pct">0%</span></div>
-      <button class="sx-skip" onclick="gsSecJump(1)">${GS_IC.next}Skip section</button>
+      <button class="sx-skip" onclick="gsExSegJump(1)">${GS_IC.next}Skip exercise</button>
     </div>
     <div class="sx-tl">${G.steps.exSegs.map((x,i)=>`<div class="sx-seg${st.block===x.block?' cur':''}" style="flex:${x.dur}" onclick="gsExJump(${x.startIdx})" title="${escH(x.name)}"><i id="sx-xf${i}"></i></div>`).join('')}</div>
     ${st.kind==='preview'?`<div class="sx-main" id="sx-main">
