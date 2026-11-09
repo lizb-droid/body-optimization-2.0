@@ -659,7 +659,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:'Robo
     <div id="hdr-normal">
       <div class="hm-top">
         <div class="hm-titles">
-          <div class="hm-title"><span id="hdr-title">Workout</span><span class="beta-tag">Beta</span></div>
+          <div class="hm-title"><span id="hdr-title">Workout</span></div>
           <div class="hdr-date" id="hdr-date"></div>
         </div>
         <button id="gh-save-btn" class="nav-btn" style="padding:8px 16px" onclick="saveToGitHub()">Save</button>
@@ -1149,7 +1149,9 @@ function loadState(){
     if(Object.keys(w).length) S.weights=w;
     if(Object.keys(n).length) S.notes=n;
     if(Object.keys(p).length) S.prs=p;
-    if(wk) S.weekIdx=Math.min(parseInt(wk)||0,WEEKS.length-1);
+    // Always open on today's week (Nov 9 2026 = Week 1)
+    const _daysIn=Math.floor((Date.now()-new Date('2026-11-09').getTime())/86400000);
+    S.weekIdx=Math.min(Math.max(0,Math.floor(_daysIn/7)),WEEKS.length-1);
     if(m) S.macros=JSON.parse(m);
     if(pr) S.progress=JSON.parse(pr);
   }catch(e){console.warn(e)}
