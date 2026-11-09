@@ -816,9 +816,9 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:'Robo
 // ─────────────────────────────────────────────
 
 const REST_TIMES = {
-  "Barbell Back Squat":240,"Front Squat":240,"Barbell RDL":240,"Clean Pull":240,
-  "Barbell Bench Press":180,"Barbell Bent Over Row":180,"Barbell Strict Press":180,
-  "Bulgarian Split Squat":180,"Hip Thrust":180,"Single-arm DB Row":120,
+  "Barbell Back Squat":120,"Front Squat":120,"Barbell RDL":120,"Clean Pull":120,
+  "Barbell Bench Press":120,"Barbell Bent Over Row":120,"Barbell Strict Press":120,
+  "Bulgarian Split Squat":120,"Hip Thrust":120,"Single-arm DB Row":120,
   "DB Incline Press":120,"DB Shoulder Press":120,
   "Box Jump":120,"Push Press":120,"Push Press + Push Jerk":120,"KB Swing":90,"GHD Hip Extension":90,
   "Single-leg RDL":90,"Step-up with Knee Drive":90,"DB Pullover":120,
@@ -1134,10 +1134,12 @@ function loadState(){
     // Clear done data from prior programs
     localStorage.removeItem('betalizdone2');
     localStorage.removeItem('betalizdone3');
-    if(localStorage.getItem('betalizprogramver')!=='12wk-nov2026'){
+    if(localStorage.getItem('betalizprogramver')!=='12wk-nov2026-v2'){
       localStorage.removeItem('betalizdone4');
       localStorage.removeItem('betalizdone5');
-      localStorage.setItem('betalizprogramver','12wk-nov2026');
+      localStorage.removeItem('betalizweights2');
+      localStorage.removeItem('betalizweights3');
+      localStorage.setItem('betalizprogramver','12wk-nov2026-v2');
     }
     const d=mergeKeys('betalizdone4','betalizdone5'),
           w=mergeKeys('betalizweights2','betalizweights3'),
@@ -1773,8 +1775,7 @@ function renderExRow(ex,ei,day,prev,inSS=false,isSSEnd=false,ssRest=60){
 
   // Total sets = base or user-expanded
   const baseSets=parseNumSets(setsStr);
-  const existingKeys=Object.keys(sets).map(Number).filter(n=>!isNaN(n));
-  const numSets=existingKeys.length>0?Math.max(baseSets,Math.max(...existingKeys)+1):baseSets;
+  const numSets=baseSets+(sets._extra||0);
 
   // PR check
   const vals=Object.values(sets).map(v=>{
@@ -2210,7 +2211,7 @@ function gsBuild(day,withWarmup){
     steps.push({kind:'preview',title:'Warm Up',sub:'',dur:20,block:'Warm-up'});
     gsWarmItems(wt).forEach(w=>{
       steps.push({kind:'warmup',title:w.name,sub:`${w.secs} secs`,dur:w.secs,block:'Warm-up',
-        say:`${gsSpoken(w.base)}${w.side?`, ${w.side.toLowerCase()} side`:''}. ${gsDurSpoken(w.secs)}. Go.`});
+        say:`${gsSpoken(w.base)}${w.side?`, ${w.side.toLowerCase()} side`:''}. ${gsDurSpoken(w.secs)}.`});
     });
   }
   // Group into blocks: a straight exercise, a superset (until the next marker), or a finisher
@@ -2278,7 +2279,7 @@ function gsBuild(day,withWarmup){
       for(let r=0;r<rounds;r++) steps.push({kind:'finisher',title:f.badge||'Finisher',
         sub:rounds>1?`Round ${r+1} of ${rounds}`:(f._fin==='amrap'?'As many rounds as possible':'For time'),
         dur:f.duration,block:blockName,movs:f.movements||[],
-        say:rounds>1?(r===0?`Round 1 of ${rounds}. Go!`:r===rounds-1?'Last round. Go!':`Round ${r+1}. Go!`):'Go! Finish strong.',
+        say:rounds>1?(r===0?`Round 1 of ${rounds}.`:r===rounds-1?'Last round.':`Round ${r+1}.`):'Finish strong.',
         halfSay:rounds===1&&f.duration>=240?'Halfway there. Keep moving.':''});
       lastRest=GS_FIRST_SETUP; tagThis();
     } else if(b.ss){
@@ -2289,19 +2290,45 @@ function gsBuild(day,withWarmup){
             say:`Switch. ${gsSpoken(ex[0])}.`,exId:`${day.id}-ex${ei}`,si:r});
           const lead=k>0?'':r===0?'Round 1. ':r===R-1?'Last round. ':`Round ${r+1}. `;
           work(ex,ei,r,`${b.ss} · Round ${r+1} of ${R} · ${gsRepsLbl(ex[1])}`,blockName,
-            `${lead}${gsSpoken(ex[0])}, ${gsRepsSpoken(ex[1])}. Go.`);
+            `${lead}${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}.`);
         });
         if(r<R-1) rest({kind:'rest',title:'Rest',sub:`${b.ss} · Round ${r+2} next`,dur:b.rest,block:blockName,
           say:`Rest, ${gsDurSpoken(b.rest)}. Round ${r+2} next.`});
       }
       lastRest=b.rest; tagThis();
     } else {
-      const {ex,ei}=b.exs[0], n=parseNumSets(ex[1]), restSecs=REST_TIMES[ex[0]]||120;
+      const {ex,ei}=b.exs[0], n=parseNumSets(ex[1]), restSecs=Math.min(120,REST_TIMES[ex[0]]||120);
+      const isUni=/\bea\b/.test(ex[1]);
       for(let si=0;si<n;si++){
-        work(ex,ei,si,`Set ${si+1} of ${n} · ${gsRepsLbl(ex[1])}`,blockName,
-          si===0?`Set 1. ${gsRepsSpoken(ex[1])}. Go.`:si===n-1?`Last set! ${gsRepsSpoken(ex[1])}. Go.`:`Set ${si+1}. Go.`);
-        if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Set ${si+2} of ${n} next`,dur:restSecs,block:blockName,
-          say:`Rest, ${gsDurSpoken(restSecs)}. ${si+2===n?'Last set':'Set '+(si+2)} next.`});
+        if(isUni){
+          const exId=`${day.id}-ex${ei}`, exName=ex[0];
+          const range=ex[1].match(/×(\d+)(?:[–-](\d+))?/);
+          const reps=range?parseInt(range[2]||range[1]):8;
+          const sideDur=Math.min(60,Math.max(20,Math.round((reps*3.5+5)/5)*5));
+          const repsSpoken=gsRepsSpoken(ex[1]).replace(/ each side/,'');
+          const setLbl=si===0?'':'Round '+(si+1)+'. ';
+          const addSide=(side,ssi)=>{
+            const e={exId,exName,si:ssi,setsStr:ex[1],side};
+            pending.push(e);
+            const isFirst=si===0&&side==='Left', isLast=side==='Right'&&si===n-1;
+            steps.push({kind:'work',title:exName,
+              sub:`${si===0?'Set 1':'Round '+(si+1)} · ${side} side · ${gsRepsLbl(ex[1]).replace(/\s*ea\b/,'')}`,
+              dur:sideDur,block:blockName,note:EXERCISE_NOTES[exName]||'',
+              say:`${isFirst?gsSpoken(exName)+'. ':''}${side} side. ${repsSpoken}.${isLast?' Last round.':''}`,
+              exId,si:ssi,exName,setsStr:ex[1],side});
+          };
+          addSide('Left',si);
+          rest({kind:'rest',title:'Rest',sub:'Switch sides · 30 sec',dur:30,block:blockName,
+            say:'Switch sides. 30 seconds.',say10:'10 seconds. Switch.'});
+          addSide('Right',si);
+          if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Round ${si+2} of ${n} next`,dur:restSecs,block:blockName,
+            say:`Rest, ${gsDurSpoken(restSecs)}. Round ${si+2} next.`});
+        } else {
+          work(ex,ei,si,`Set ${si+1} of ${n} · ${gsRepsLbl(ex[1])}`,blockName,
+            si===n-1?`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}. Last set.`:`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}.`);
+          if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Set ${si+2} of ${n} next`,dur:restSecs,block:blockName,
+            say:`Rest, ${gsDurSpoken(restSecs)}. ${si+2===n?'Last set':'Set '+(si+2)} next.`});
+        }
       }
       lastRest=restSecs; tagThis();
     }
@@ -2332,6 +2359,15 @@ function gsBuild(day,withWarmup){
       :`${x.sub} · ${fmtDur(x.dur)}`;
   });
   steps.secs=secs;
+  // Exercise segments for the timeline (one per exercise block)
+  const exSegs=[]; steps.forEach((st,i)=>{
+    if(!exSegs.length||exSegs[exSegs.length-1].block!==st.block){
+      exSegs.push({name:st.block,block:st.block,startIdx:i,startOffset:0,dur:0,endIdx:i});
+    }
+    const seg=exSegs[exSegs.length-1]; seg.dur+=st.dur; seg.endIdx=i;
+  });
+  let _offs=0; exSegs.forEach(x=>{ x.startOffset=_offs; _offs+=x.dur; });
+  steps.exSegs=exSegs;
   if(steps[0]) steps[0].say=`Let's go. ${gsSpoken(day.session.replace(/ — /,'. '))}. About ${Math.round(gsTotal(steps)/60)} minutes. ${steps[0].say||''}`;
   steps.finalLog=pending;
   return steps;
@@ -2505,7 +2541,7 @@ function gsUnlockAudio(){
 // Every line the coach can say — used by tools/record-coach-voice.py via tools/coach-lines.mjs
 function coachAllLines(){
   const out=new Set(['Coach on.']);
-  WEEKS.forEach(w=>{ if(!w.num) return; w.days.forEach(d=>{
+  WEEKS.forEach(w=>{ w.days.forEach(d=>{
     if(d.type!=='lift'||!WORKOUTS[d.workout]) return;
     gsBuild(d,true).forEach(st=>{
       ['say','halfSay','say10','talk'].forEach(k=>{ if(st[k]) out.add(csNorm(st[k])); });
@@ -2551,7 +2587,7 @@ function gsStart(){
   gsUnlockAudio();
   G.phase='run'; G.idx=0; G.startedAt=Date.now(); G.endAt=Date.now()+G.steps[0].dur*1000; G.pausedLeft=null;
   clearInterval(G.tick); G.tick=setInterval(gsTick,250);
-  gsWake(true); gsPersist(); gsRender(); gsAnnounce();
+  gsWake(true); gsPersist(); gsBeep(880,350); gsRender(); gsAnnounce();
 }
 
 function gsLeft(){ return G.pausedLeft!==null?G.pausedLeft:G.endAt-Date.now(); }
@@ -2568,7 +2604,7 @@ function gsTick(){
   if(changed){ gsBeep(880,450); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsAnnounce(); if(JR) jrMark(); return; }
   const st=G.steps[G.idx], left=gsLeft(), s=Math.ceil(left/1000);
   // One chime at 10 seconds left (skipped on steps too short for it to mean anything)
-  if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsChime(); if(st.say10) setTimeout(()=>gsSay(st.say10),550); }
+  if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsTripleClick(); if(st.say10) setTimeout(()=>gsSay(st.say10),550); }
   if(st.halfSay&&left<=st.dur*500&&left>11000&&G.halfAt!==G.idx){ G.halfAt=G.idx; gsSay(st.halfSay); }
   gsRenderTime();
 }
@@ -2599,6 +2635,7 @@ function gsSecJump(dir){
   const s0=gsSecStart(cur);
   gsJump(cur===0?s0:gsSecStart(cur-1));
 }
+function gsExJump(idx){ if(!G||G.phase!=='run') return; gsJump(idx); }
 // Previous / Next on the pause screen: move a section and carry on
 function gsPauseJump(dir){ gsSecJump(dir); if(G&&G.phase==='run'&&G.pausedLeft!==null) gsTogglePause(); }
 function gsReplay(){ if(G&&G.phase==='run') gsJump(G.idx); }
@@ -2715,7 +2752,7 @@ function jrRender(){
       return;
     }
     const [name,setsStr]=it, exId=`${day.id}-ex${ei}`, sets=S.weights[exId]||{};
-    const n=Math.max(parseNumSets(setsStr),...Object.keys(sets).map(k=>+k+1).filter(x=>!isNaN(x)));
+    const n=parseNumSets(setsStr)+(sets._extra||0);
     const target=parseTargetReps(setsStr), pv=prev[name]||{};
     const lastVals=Object.values(pv).map(x=>parseFloat(jrVal(x).w)).filter(x=>!isNaN(x));
     const isCur=cur&&cur.exId===exId;
@@ -2798,9 +2835,12 @@ function jrInput(inp){
 }
 function jrAddSet(exId){
   if(!S.weights[exId]) S.weights[exId]={};
-  const keys=Object.keys(S.weights[exId]).map(Number), ei=+exId.split('-ex')[1];
+  const ei=+exId.split('-ex')[1];
   const base=parseNumSets(WORKOUTS[JR.day.workout][ei][1]);
-  S.weights[exId][Math.max(base,keys.length?Math.max(...keys)+1:0)]={w:'',r:''};
+  const extra=S.weights[exId]._extra||0;
+  S.weights[exId]._extra=extra+1;
+  S.weights[exId][base+extra]={w:'',r:''};
+  saveWorkout();
   const top=document.getElementById('jr-body').scrollTop; jrRender(); document.getElementById('jr-body').scrollTop=top;
 }
 // Slide the sheet down (from the header, or from the list when it's scrolled to the top) to close it
@@ -2849,6 +2889,10 @@ function gsBeep(freq,ms){
     g.gain.setValueAtTime(.3,t); g.gain.exponentialRampToValueAtTime(.001,t+ms/1000);
     o.start(t); o.stop(t+ms/1000);
   }catch(e){}
+}
+function gsTripleClick(){
+  if(!G||G.audio==='off'||!gsAC) return;
+  try{ [0,0.14,0.28].forEach(at=>gsTone(1200,at,.07,'square',.1)); }catch(e){}
 }
 
 async function gsWake(on){
@@ -2966,7 +3010,7 @@ function gsRender(){
       <div class="sx-clock"><span id="sx-el">0:00</span> · <span id="sx-pct">0%</span></div>
       <button class="sx-skip" onclick="gsSecJump(1)">${GS_IC.next}Skip section</button>
     </div>
-    <div class="sx-tl">${secs.map((x,i)=>`<div class="sx-seg${i===st.sec?' cur':''}" style="flex:${x.dur}"><i id="sx-f${i}"></i></div>`).join('')}</div>
+    <div class="sx-tl">${G.steps.exSegs.map((x,i)=>`<div class="sx-seg${st.block===x.block?' cur':''}" style="flex:${x.dur}" onclick="gsExJump(${x.startIdx})" title="${escH(x.name)}"><i id="sx-xf${i}"></i></div>`).join('')}</div>
     ${st.kind==='preview'?`<div class="sx-main" id="sx-main">
       <div class="sx-title">${escH(sec.title)}</div>
       ${sec.sub?`<span class="sx-chip">${escH(sec.sub)}</span>`:''}
@@ -2994,10 +3038,11 @@ function gsRender(){
     </div>`:''}
     ${G.pick?gsPickView():''}
     ${G.leaving?`<div class="gs-sheet" onclick="if(event.target===this)gsStay()"><div class="gs-sheet-card">
-      <div class="gs-name" style="margin-top:0">Leave this session?</div>
-      <div class="gs-sub">Your spot is saved. Resume it from the day screen.</div>
-      <button class="gs-big-btn" onclick="gsStay()">Keep going</button>
-      <button class="gs-ghost-btn" onclick="gsClose(true)">Leave session</button>
+      <div class="gs-name" style="margin-top:0">End workout?</div>
+      <div class="gs-sub">Save your spot to pick up where you left off, or delete to start fresh next time.</div>
+      <button class="gs-big-btn" onclick="gsEndSave()">End &amp; Save</button>
+      <button class="gs-ghost-btn" onclick="gsEndDelete()">End &amp; Delete</button>
+      <button class="gs-ghost-btn" style="margin-top:4px;opacity:.6" onclick="gsStay()">Keep going</button>
     </div></div>`:''}
   </div>`;
   const on=document.querySelector('#sx-main .sx-row.on');
@@ -3005,6 +3050,8 @@ function gsRender(){
   gsRenderTime();
 }
 function gsStay(){ G.leaving=false; gsRender(); }
+function gsEndSave(){ G.leaving=false; gsClose(true); }
+function gsEndDelete(){ G.leaving=false; gsClose(true); try{ localStorage.removeItem('betalizguided'); }catch(e){} }
 
 // ── Set screen: what you're doing now (or next, during rest), timer, reps and weight ──
 const GS_ARC_L=80*Math.PI*240/180;
@@ -3019,9 +3066,16 @@ function gsRepsPrefix(setsStr){
 }
 function gsShown(w){
   const key=`${w.exId}|${w.si}`, d=(G.draft||{})[key]||{};
-  const sets=S.weights[w.exId]||{}, cur=jrVal(sets[w.si]), before=jrVal(sets[w.si-1]);
-  const last=jrVal((buildPrevWeights()[w.exName]||{})[w.si]);
-  return {w:d.w!==undefined?d.w:(cur.w||before.w||last.w||''),r:d.r!==undefined?d.r:(cur.r||parseTargetReps(w.setsStr)||'')};
+  const sets=S.weights[w.exId]||{}, cur=jrVal(sets[w.si]);
+  let wVal='';
+  if(d.w!==undefined) wVal=d.w;
+  else if(cur.w) wVal=cur.w;
+  else {
+    const pr=parseFloat(S.prs[w.exName])||0;
+    if(pr){ const pct=w.si===0?.60:.80; wVal=String(Math.round(pr*pct/2.5)*2.5); }
+  }
+  const r=d.r!==undefined?d.r:(cur.r||parseTargetReps(w.setsStr)||'');
+  return {w:wVal,r};
 }
 // A work set is logged with the reps and weight on screen when its timer finishes
 function gsCommitSet(st){
@@ -3039,7 +3093,8 @@ function gsSetView(st){
   let kicker='', title='', sub='', extra='';
   if(w){
     kicker=(prep?`Up next · `:'')+(w.sub||'').replace(/ · [^·]*$/,'');
-    title=`<b>${escH(gsRepsPrefix(w.setsStr))}</b> ${escH(w.exName)}${/\bea\b/.test(w.setsStr)?' · each side':''}`;
+    title=`<b>${escH(gsRepsPrefix(w.setsStr).replace(/\s*ea\b/,''))}</b> ${escH(w.exName)}${w.side?' · '+w.side+' side':/\bea\b/.test(w.setsStr)?' · each side':''}`;
+
     if(prep) sub=st.kind==='rest'?'Rest':st.kind==='switch'?'Switch exercises':'Get set up';
   } else if(st.kind==='warmup'){
     const sec=G.steps.secs[st.sec]; kicker=`Warm-up · ${st.row+1} of ${sec.rows.length}`;
@@ -3104,6 +3159,14 @@ function gsPickView(){
 function gsPickSet(val){
   const p=G.pick, key=`${p.exId}|${p.si}`;
   G.draft=G.draft||{}; G.draft[key]=Object.assign({},G.draft[key],{[p.field]:String(val).trim()});
+  if(p.field==='w'){
+    G.steps.forEach(st=>{
+      if(st.kind==='work'&&st.exId===p.exId&&st.si>p.si){
+        const done=S.weights[st.exId]&&S.weights[st.exId][st.si]&&jrVal(S.weights[st.exId][st.si]).w;
+        if(!done){ const k=`${st.exId}|${st.si}`; G.draft[k]=Object.assign({},G.draft[k]||{},{w:String(val).trim()}); }
+      }
+    });
+  }
   const cur=(S.weights[p.exId]||{})[p.si];
   if(cur&&jrVal(cur).w){ const v=gsShown(p); S.weights[p.exId][p.si]={w:v.w,r:v.r}; saveWorkout(); }
 }
@@ -3139,7 +3202,7 @@ function gsRenderTime(){
   const total=gsTotal(G.steps), done=total-gsRemaining();
   document.getElementById('sx-el').textContent=fmtTime(Math.max(0,Math.round((Date.now()-G.startedAt)/1000)));
   document.getElementById('sx-pct').textContent=Math.floor(100*done/total)+'%';
-  G.steps.secs.forEach((x,i)=>{ const f=document.getElementById('sx-f'+i); if(f) f.style.width=Math.max(0,Math.min(100,100*(done-x.start)/x.dur))+'%'; });
+  G.steps.exSegs.forEach((x,i)=>{ const f=document.getElementById('sx-xf'+i); if(f) f.style.width=Math.max(0,Math.min(100,100*(done-x.startOffset)/x.dur))+'%'; });
 }
 
 // ─────────────────────────────────────────────
