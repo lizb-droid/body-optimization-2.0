@@ -1134,12 +1134,10 @@ function loadState(){
     // Clear done data from prior programs
     localStorage.removeItem('betalizdone2');
     localStorage.removeItem('betalizdone3');
-    if(localStorage.getItem('betalizprogramver')!=='12wk-nov2026-v2'){
+    if(localStorage.getItem('betalizprogramver')!=='12wk-nov2026-v3'){
       localStorage.removeItem('betalizdone4');
       localStorage.removeItem('betalizdone5');
-      localStorage.removeItem('betalizweights2');
-      localStorage.removeItem('betalizweights3');
-      localStorage.setItem('betalizprogramver','12wk-nov2026-v2');
+      localStorage.setItem('betalizprogramver','12wk-nov2026-v3');
     }
     const d=mergeKeys('betalizdone4','betalizdone5'),
           w=mergeKeys('betalizweights2','betalizweights3'),
