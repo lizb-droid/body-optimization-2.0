@@ -1149,9 +1149,11 @@ function loadState(){
     if(Object.keys(w).length) S.weights=w;
     if(Object.keys(n).length) S.notes=n;
     if(Object.keys(p).length) S.prs=p;
-    // Always open on today's week (Nov 9 2026 = Week 1)
+    // Always open on today's exact date (Nov 9 2026 = Week 1 Monday)
     const _daysIn=Math.floor((Date.now()-new Date('2026-11-09').getTime())/86400000);
-    S.weekIdx=Math.min(Math.max(0,Math.floor(_daysIn/7)),WEEKS.length-1);
+    const _wi=Math.min(Math.max(0,Math.floor(_daysIn/7)),WEEKS.length-1);
+    const _di=Math.min(_daysIn%7,6);
+    S.weekIdx=_wi; S.selDay={wi:_wi,di:_di};
     if(m) S.macros=JSON.parse(m);
     if(pr) S.progress=JSON.parse(pr);
   }catch(e){console.warn(e)}
