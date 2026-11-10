@@ -2301,7 +2301,9 @@ function gsBuild(day,withWarmup){
     } else {
       const {ex,ei}=b.exs[0], n=parseNumSets(ex[1]), restSecs=Math.min(120,REST_TIMES[ex[0]]||120);
       const isUni=/\bea\b/.test(ex[1]);
+      const isDeload=/↓/.test(WEEKS[S.weekIdx]?.label||''), isMax=/★/.test(WEEKS[S.weekIdx]?.label||'');
       for(let si=0;si<n;si++){
+        const pct=isDeload?'50-60%':isMax?'85%':(si===0?'60%':'80%');
         if(isUni){
           const exId=`${day.id}-ex${ei}`, exName=ex[0];
           const holdMatch=ex[1].match(/×(\d+)s\b/);
@@ -2315,7 +2317,7 @@ function gsBuild(day,withWarmup){
             pending.push(e);
             const isFirst=si===0&&side==='Left', isLast=side==='Right'&&si===n-1;
             steps.push({kind:'work',title:exName,
-              sub:`${si===0?'Set 1':'Round '+(si+1)} · ${side} side · ${gsRepsLbl(ex[1]).replace(/\s*ea\b/,'')}`,
+              sub:`${si===0?'Set 1':'Round '+(si+1)} · ${pct} · ${side} side · ${gsRepsLbl(ex[1]).replace(/\s*ea\b/,'')}`,
               dur:sideDur,block:blockName,note:EXERCISE_NOTES[exName]||'',
               say:`${isFirst?gsSpoken(exName)+'. ':''}${side} side. ${repsSpoken}.${isLast?' Last round.':''}`,
               exId,si:ssi,exName,setsStr:ex[1],side});
@@ -2327,7 +2329,7 @@ function gsBuild(day,withWarmup){
           if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Round ${si+2} of ${n} next`,dur:restSecs,block:blockName,
             say:`Rest, ${gsDurSpoken(restSecs)}. Round ${si+2} next.`});
         } else {
-          work(ex,ei,si,`Set ${si+1} of ${n} · ${gsRepsLbl(ex[1])}`,blockName,
+          work(ex,ei,si,`Set ${si+1} of ${n} · ${pct} · ${gsRepsLbl(ex[1])}`,blockName,
             si===n-1?`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}. Last set.`:`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}.`);
           if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Set ${si+2} of ${n} next`,dur:restSecs,block:blockName,
             say:`Rest, ${gsDurSpoken(restSecs)}. ${si+2===n?'Last set':'Set '+(si+2)} next.`});
@@ -2390,7 +2392,7 @@ function gsOpen(dayId){
   if(!day||!WORKOUTS[day.workout]) return;
   const saved=gsSaved();
   let audio='coach'; try{ audio=localStorage.getItem('betalizgsaudio')||'coach'; }catch(e){}
-  G={day,warm:true,audio,phase:'plan',idx:0,endAt:0,pausedLeft:null,startedAt:0,tick:null,wl:null,beepAt:null,halfAt:null,prs:0};
+  G={day,warm:true,audio,phase:'plan',idx:0,endAt:0,pausedLeft:null,startedAt:0,tick:null,wl:null,beepAt:null,halfAt:null,endBeepAt:null,prs:0};
   if(saved&&saved.dayId===dayId){
     G.warm=saved.warm!==false; G.steps=gsBuild(day,G.warm);
     G.phase='run'; G.idx=Math.min(saved.idx,G.steps.length-1); G.pausedLeft=saved.left; G.startedAt=saved.startedAt||Date.now();
@@ -2594,9 +2596,9 @@ function gsAnnounce(){ const st=G&&G.steps[G.idx]; if(st) gsSay(st.say); }
 
 function gsStart(){
   gsUnlockAudio();
-  G.phase='run'; G.idx=0; G.startedAt=Date.now(); G.endAt=Date.now()+G.steps[0].dur*1000; G.pausedLeft=null;
+  G.phase='run'; G.idx=0; G.startedAt=Date.now(); G.endAt=Date.now()+G.steps[0].dur*1000+700; G.pausedLeft=null;
   clearInterval(G.tick); G.tick=setInterval(gsTick,250);
-  gsWake(true); gsPersist(); gsBeep(880,350); gsRender(); gsAnnounce();
+  gsWake(true); gsPersist(); gsCountdownEnd(); gsRender(); gsAnnounce();
 }
 
 function gsLeft(){ return G.pausedLeft!==null?G.pausedLeft:G.endAt-Date.now(); }
@@ -2610,11 +2612,11 @@ function gsTick(){
     if(G.idx>=G.steps.length){ gsFinish(); return; }
     G.endAt+=G.steps[G.idx].dur*1000;
   }
-  if(changed){ gsBeep(880,450); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsHush(); gsAnnounce(); if(JR) jrMark(); return; }
-  const st=G.steps[G.idx], left=gsLeft(), s=Math.ceil(left/1000);
+  if(changed){ G.endAt=Date.now()+G.steps[G.idx].dur*1000+700; gsCountdownEnd(); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsHush(); gsAnnounce(); if(JR) jrMark(); return; }
+  const st=G.steps[G.idx], left=gsLeft(), s=Math.max(0,Math.min(st.dur,Math.ceil((left-700)/1000)));
   // One chime at 10 seconds left (skipped on steps too short for it to mean anything)
-  if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsTripleClick(); if(st.say10) setTimeout(()=>gsSay(st.say10),550); }
-  if(st.halfSay&&left<=st.dur*500&&left>11000&&G.halfAt!==G.idx){ G.halfAt=G.idx; gsSay(st.halfSay); }
+  if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsHighPing(); if(st.say10) setTimeout(()=>gsSay(st.say10),550); }
+  if(st.halfSay&&left<=st.dur*500+700&&left>11000&&G.halfAt!==G.idx){ G.halfAt=G.idx; gsSay(st.halfSay); }
   gsRenderTime();
 }
 
@@ -2629,9 +2631,9 @@ function gsJump(to){
   gsCommitLog(true);
   if(to>=G.steps.length){ gsFinish(); return; }
   G.idx=Math.max(0,to); G.steps[G.idx].extra=0;
-  const ms=G.steps[G.idx].dur*1000;
-  if(G.pausedLeft!==null) G.pausedLeft=ms; else G.endAt=Date.now()+ms;
-  G.beepAt=G.halfAt=null;
+  const ms=G.steps[G.idx].dur*1000+700;
+  if(G.pausedLeft!==null) G.pausedLeft=ms; else { G.endAt=Date.now()+ms; gsCountdownEnd(); }
+  G.beepAt=G.halfAt=G.endBeepAt=null;
   gsPersist(); gsRender();
   if(G.pausedLeft===null){ gsHush(); gsAnnounce(); }
 }
@@ -2891,11 +2893,29 @@ function jrDrag(){
 }
 
 // Write logged sets back into S.weights (same format as the day view)
+function gsLogWeight(inp){
+  inp.dataset.dirty='1';
+  gsCommitLog(false);
+  const row=inp.closest('.gs-log-row'), exId=row.dataset.exid, si=parseInt(row.dataset.si), val=inp.value.trim();
+  G.draft=G.draft||{};
+  G.draft[`${exId}|${si}`]=Object.assign({},G.draft[`${exId}|${si}`]||{},{w:val});
+  G.steps.forEach(st=>{
+    if(st.kind==='work'&&st.exId===exId&&st.si>si){
+      if(!jrVal((S.weights[st.exId]||{})[st.si]).w){ const k=`${st.exId}|${st.si}`; G.draft[k]=Object.assign({},G.draft[k]||{},{w:val}); }
+    }
+  });
+  const w=gsTargetWork(G.steps[G.idx]); if(!w) return;
+  const v=gsShown(w);
+  const btn=document.querySelector('#gs .rs-w')||document.querySelector('#gs .ss-ctrl .ss-side:last-child');
+  if(btn) btn.innerHTML=v.w?`<span class="v">${escH(v.w)}</span><span class="k">lb</span>`:`<span class="plus">+</span><span class="k">weight</span>`;
+}
 function gsCommitLog(checkPR){
   document.querySelectorAll('#gs .gs-log-row').forEach(row=>{
     const exId=row.dataset.exid, exName=row.dataset.exname, si=parseInt(row.dataset.si);
-    const w=row.querySelector('[data-field="w"]').value.trim(), r=row.querySelector('[data-field="r"]').value.trim();
+    const wi=row.querySelector('[data-field="w"]');
+    const w=wi.value.trim(), r=row.querySelector('[data-field="r"]').value.trim();
     if(!w) return;
+    if(checkPR&&!wi.dataset.dirty) return;
     if(!S.weights[exId]) S.weights[exId]={};
     S.weights[exId][si]={w,r};
     const num=parseFloat(w);
@@ -2914,10 +2934,36 @@ function gsBeep(freq,ms){
     o.start(t); o.stop(t+ms/1000);
   }catch(e){}
 }
+function gsCountdownEnd(){
+  if(!G||G.audio==='off'||!gsAC) return;
+  if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(gsCountdownEnd,80)); return; }
+  try{
+    const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+0.02;
+    o.frequency.value=880; o.type='sine'; o.connect(g); g.connect(gsAC.destination);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(.6,t+0.01);
+    g.gain.setValueAtTime(.6,t+0.6);
+    g.gain.linearRampToValueAtTime(0,t+0.7);
+    o.start(t); o.stop(t+0.75);
+  }catch(e){}
+}
 function gsTripleClick(){
   if(!G||G.audio==='off'||!gsAC) return;
   if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(gsTripleClick,80)); return; }
   try{ [0,0.14,0.28].forEach(at=>gsTone(1200,at,.1,'square',.35)); }catch(e){}
+}
+function gsHighPing(){
+  if(!G||G.audio==='off'||!gsAC) return;
+  if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(gsHighPing,80)); return; }
+  try{
+    [0,0.11,0.22].forEach(at=>{
+      const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+at+0.02;
+      o.frequency.value=2000; o.type='sine'; o.connect(g); g.connect(gsAC.destination);
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.6,t+0.005);
+      g.gain.exponentialRampToValueAtTime(.001,t+0.05);
+      o.start(t); o.stop(t+0.06);
+    });
+  }catch(e){}
 }
 
 async function gsWake(on){
@@ -2927,6 +2973,7 @@ async function gsWake(on){
   }catch(e){}
 }
 document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&gsAC&&gsAC.state==='suspended') gsAC.resume();
   if(G&&G.phase==='run'&&document.visibilityState==='visible'){ if(G.wl&&G.wl.released) G.wl=null; gsWake(true); gsTick(); }
 });
 
@@ -2942,7 +2989,7 @@ function gsLogRows(log){
     const hint=last.w?`Last time ${last.w}${last.r?'×'+last.r:''}`:`Set ${e.si+1}`;
     return `<div class="gs-log-row" data-exid="${e.exId}" data-exname="${escH(e.exName)}" data-si="${e.si}">
       <div class="lbl">${escH(e.exName)}<small>${escH(hint)}</small></div>
-      <input type="text" inputmode="decimal" data-field="w" value="${escH(w)}" placeholder="lb" onfocus="this.select()" oninput="gsCommitLog(false)">
+      <input type="text" inputmode="decimal" data-field="w" value="${escH(w)}" placeholder="lb" onfocus="this.select()" oninput="gsLogWeight(this)">
       <input type="text" inputmode="decimal" data-field="r" value="${escH(r)}" placeholder="reps" onfocus="this.select()" oninput="gsCommitLog(false)">
     </div>`;
   }).join('');
@@ -3105,6 +3152,9 @@ function gsShown(w){
 // A work set is logged with the reps and weight on screen when its timer finishes
 function gsCommitSet(st){
   if(!st||st.kind!=='work') return;
+  const key=`${st.exId}|${st.si}`, d=(G.draft||{})[key]||{};
+  const curW=jrVal((S.weights[st.exId]||{})[st.si]).w;
+  if(d.w===undefined&&!curW) return;
   const v=gsShown(st); if(!v.w) return;
   if(!S.weights[st.exId]) S.weights[st.exId]={};
   S.weights[st.exId][st.si]={w:v.w,r:v.r};
@@ -3221,9 +3271,11 @@ function gsRenderTime(){
   }
   const left=Math.max(0,gsLeft());
   const t=document.getElementById('gs-t'); if(!t) return;
-  t.textContent=fmtTime(Math.ceil(left/1000));
+  const ds=Math.max(0,Math.min(st0.dur,Math.ceil((left-700)/1000)));
+  t.textContent=fmtTime(ds);
+  if(ds===0&&st0.dur>5&&G.endBeepAt!==G.idx){ G.endBeepAt=G.idx; gsCountdownEnd(); }
   const m=document.getElementById('ss-arc-m');
-  if(m){ const tot=(st0.dur+(st0.extra||0))*1000, f=Math.max(0,Math.min(1,1-left/tot)); m.setAttribute('stroke-dasharray',`${GS_ARC_L*f} ${GS_ARC_L}`); }
+  if(m){ const adjLeft=Math.max(0,left-700), tot=st0.dur*1000, f=Math.max(0,Math.min(1,1-adjLeft/tot)); m.setAttribute('stroke-dasharray',`${GS_ARC_L*f} ${GS_ARC_L}`); }
   const total=gsTotal(G.steps), done=total-gsRemaining();
   document.getElementById('sx-el').textContent=fmtTime(Math.max(0,Math.round((Date.now()-G.startedAt)/1000)));
   document.getElementById('sx-pct').textContent=Math.floor(100*done/total)+'%';
