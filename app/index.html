@@ -2399,6 +2399,7 @@ function gsOpen(dayId){
   document.getElementById('gs').classList.add('open');
   gsUnlockAudio();
   gsRender();
+  if(G.phase==='run') setTimeout(gsAnnounce,300);
 }
 
 function gsClose(force){
@@ -2609,7 +2610,7 @@ function gsTick(){
     if(G.idx>=G.steps.length){ gsFinish(); return; }
     G.endAt+=G.steps[G.idx].dur*1000;
   }
-  if(changed){ gsBeep(880,450); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsAnnounce(); if(JR) jrMark(); return; }
+  if(changed){ gsBeep(880,450); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsHush(); gsAnnounce(); if(JR) jrMark(); return; }
   const st=G.steps[G.idx], left=gsLeft(), s=Math.ceil(left/1000);
   // One chime at 10 seconds left (skipped on steps too short for it to mean anything)
   if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsTripleClick(); if(st.say10) setTimeout(()=>gsSay(st.say10),550); }
@@ -2909,14 +2910,14 @@ function gsBeep(freq,ms){
   try{
     const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+0.04;
     o.frequency.value=freq; o.connect(g); g.connect(gsAC.destination);
-    g.gain.setValueAtTime(.3,t); g.gain.exponentialRampToValueAtTime(.001,t+ms/1000);
+    g.gain.setValueAtTime(.7,t); g.gain.exponentialRampToValueAtTime(.001,t+ms/1000);
     o.start(t); o.stop(t+ms/1000);
   }catch(e){}
 }
 function gsTripleClick(){
   if(!G||G.audio==='off'||!gsAC) return;
   if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(gsTripleClick,80)); return; }
-  try{ [0,0.14,0.28].forEach(at=>gsTone(1200,at,.07,'square',.1)); }catch(e){}
+  try{ [0,0.14,0.28].forEach(at=>gsTone(1200,at,.1,'square',.35)); }catch(e){}
 }
 
 async function gsWake(on){
