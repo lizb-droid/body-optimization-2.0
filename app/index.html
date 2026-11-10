@@ -2397,6 +2397,7 @@ function gsOpen(dayId){
     G.tick=setInterval(gsTick,250);
   } else G.steps=gsBuild(day,G.warm);
   document.getElementById('gs').classList.add('open');
+  gsUnlockAudio();
   gsRender();
 }
 
@@ -2528,7 +2529,11 @@ function gsSpeakTTS(text,done){
   try{
     const u=new SpeechSynthesisUtterance(text);
     if(gsVoice) u.voice=gsVoice;
-    u.rate=1.04; u.onend=()=>done&&done();
+    u.rate=1.04;
+    let fin=false;
+    const finish=()=>{ if(fin) return; fin=true; clearTimeout(tt); done&&done(); };
+    const tt=setTimeout(finish, Math.max(3000, text.length*60));
+    u.onend=finish; u.onerror=finish;
     speechSynthesis.speak(u);
   }catch(e){ done&&done(); }
 }
@@ -2627,7 +2632,7 @@ function gsJump(to){
   if(G.pausedLeft!==null) G.pausedLeft=ms; else G.endAt=Date.now()+ms;
   G.beepAt=G.halfAt=null;
   gsPersist(); gsRender();
-  if(G.pausedLeft===null) gsAnnounce();
+  if(G.pausedLeft===null){ gsHush(); gsAnnounce(); }
 }
 function gsNext(){ gsCommitSet(G.steps[G.idx]); gsJump(G.idx+1); }
 function gsSecStart(sec){ return G.steps.findIndex(st=>st.sec===sec); }
