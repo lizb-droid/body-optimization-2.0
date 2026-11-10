@@ -2572,7 +2572,7 @@ function gsFinishLines(){
 }
 // 10-second warning sounds, synthesized so they work offline
 function gsTone(freq,at,dur,type,vol){
-  const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+at;
+  const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+0.04+at;
   o.type=type||'sine'; o.frequency.value=freq; o.connect(g); g.connect(gsAC.destination);
   g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||.3,t+.008); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
   o.start(t); o.stop(t+dur+.02); return o;
@@ -2905,8 +2905,9 @@ function gsCommitLog(checkPR){
 
 function gsBeep(freq,ms){
   if(!G||G.audio==='off'||!gsAC) return;
+  if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(()=>gsBeep(freq,ms),80)); return; }
   try{
-    const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime;
+    const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+0.04;
     o.frequency.value=freq; o.connect(g); g.connect(gsAC.destination);
     g.gain.setValueAtTime(.3,t); g.gain.exponentialRampToValueAtTime(.001,t+ms/1000);
     o.start(t); o.stop(t+ms/1000);
@@ -2914,6 +2915,7 @@ function gsBeep(freq,ms){
 }
 function gsTripleClick(){
   if(!G||G.audio==='off'||!gsAC) return;
+  if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(gsTripleClick,80)); return; }
   try{ [0,0.14,0.28].forEach(at=>gsTone(1200,at,.07,'square',.1)); }catch(e){}
 }
 
