@@ -2311,15 +2311,15 @@ function gsBuild(day,withWarmup){
           const reps=range?parseInt(range[2]||range[1]):8;
           const sideDur=holdMatch?Math.min(60,parseInt(holdMatch[1])+5):Math.min(40,Math.max(20,Math.round((reps*3+5)/5)*5));
           const repsSpoken=gsRepsSpoken(ex[1]).replace(/ each side/,'');
-          const setLbl=si===0?'':'Round '+(si+1)+'. ';
           const addSide=(side,ssi)=>{
             const e={exId,exName,si:ssi,setsStr:ex[1],side};
             pending.push(e);
-            const isFirst=si===0&&side==='Left', isLast=side==='Right'&&si===n-1;
+            const isFirst=si===0&&side==='Left';
+            const roundTag=n===1?'':si===n-1?' Last round.':(side==='Left'&&si>0)?` Round ${si+1} of ${n}.`:'';
             steps.push({kind:'work',title:exName,
               sub:`${si===0?'Set 1':'Round '+(si+1)} · ${pct} · ${side} side · ${gsRepsLbl(ex[1]).replace(/\s*ea\b/,'')}`,
               dur:sideDur,block:blockName,note:EXERCISE_NOTES[exName]||'',
-              say:`${isFirst?gsSpoken(exName)+'. ':''}${side} side. ${repsSpoken}.${isLast?' Last round.':''}`,
+              say:`${isFirst?gsSpoken(exName)+'. ':''}${side} side. ${repsSpoken}.${roundTag}`,
               exId,si:ssi,exName,setsStr:ex[1],side});
           };
           addSide('Left',si);
