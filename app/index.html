@@ -3684,7 +3684,7 @@ const GH_REPO='lizb-droid/body-optimization-2.0';
 const GH_FILE='app/data/backup.json'; // this repo's backup; the original body-optimization app is never written to
 const GH_API=`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
 // Seeds history from the original app's public backup (read-only); writes only go to GH_FILE above
-const GH_RAW=`https://raw.githubusercontent.com/lizb-droid/body-optimization/main/app/data/backup.json`;
+const GH_RAW=`https://raw.githubusercontent.com/lizb-droid/body-optimization-2.0/main/app/data/backup.json`;
 
 function buildBackup(){
   return JSON.stringify({
@@ -3744,6 +3744,7 @@ async function tryLoadFromGitHub(){
     if(!data.exported) return;
     // Merge: backup fills any missing keys; localStorage data wins on conflict
     // done is intentionally excluded — completion state resets with each program block
+    if(data.done) S.done={...data.done,...S.done};
     if(data.weights) S.weights={...data.weights,...S.weights};
     if(data.notes) S.notes={...data.notes,...S.notes};
     if(data.prs) S.prs={...data.prs,...S.prs};
