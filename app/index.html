@@ -3766,6 +3766,8 @@ document.getElementById('hdr-date').textContent=todayStr();
 })();
 renderWeekTabs();
 renderDayCards();
+// Scroll to today after layout settles (clientWidth may be 0 during first render)
+requestAnimationFrame(()=>{ hmStripTo(S.weekIdx,false); hmScrollTo(S.selDay,false); });
 tryLoadFromGitHub();
 </script>
 </body>
