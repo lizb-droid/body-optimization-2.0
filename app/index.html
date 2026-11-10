@@ -2184,7 +2184,7 @@ function gsRepsLbl(setsStr){ return (setsStr||'').replace(/^\d+×/,'').replace(/
 // Coach voice: turn program shorthand into something a voice can read
 function gsSpoken(t){
   return String(t||'')
-    .replace(/\bDB\b/g,'dumbbell').replace(/\bKB\b/g,'kettlebell').replace(/\bRDL\b/g,'R D L').replace(/\bGHD\b/g,'G H D')
+    .replace(/\bDB\b/g,'Dumbbell').replace(/\bKB\b/g,'kettlebell').replace(/\bRDL\b/g,'R D L').replace(/\bGHD\b/g,'G H D')
     .replace(/\bea( side)?\b/g,'each side').replace(/\bcal\b/g,'calories').replace(/(\d+) min\b/g,'$1 minute')
     .replace(/(\d+)m\b/g,'$1 meters').replace(/(\d+)s\b/g,'$1 second').replace(/#(\d)/g,'number $1')
     .replace(/(\d)-(?=\d)/g,'$1, ').replace(/…/g,', down to ').replace(/(\d)×(\d)/g,'$1 by $2').replace(/\s*×\s*/g,', ').replace(/–/g,' to ')
@@ -3747,8 +3747,7 @@ async function tryLoadFromGitHub(){
     if(data.weights) S.weights={...data.weights,...S.weights};
     if(data.notes) S.notes={...data.notes,...S.notes};
     if(data.prs) S.prs={...data.prs,...S.prs};
-    if(data.weekIdx!==undefined && S.weekIdx===0 && !localStorage.getItem('betalizweek2') && !localStorage.getItem('betalizweek3'))
-      S.weekIdx=Math.min(data.weekIdx,WEEKS.length-1);
+    // Never restore weekIdx from backup — always open on today's week
     if(data.progress && !S.progress) S.progress=data.progress;
     if(data.checkins && !S.checkins) S.checkins=data.checkins;
     saveWorkout();
