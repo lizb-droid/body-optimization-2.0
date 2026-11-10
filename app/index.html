@@ -2330,7 +2330,9 @@ function gsBuild(day,withWarmup){
             say:`Rest, ${gsDurSpoken(restSecs)}. Round ${si+2} next.`});
         } else {
           work(ex,ei,si,`Set ${si+1} of ${n} · ${pct} · ${gsRepsLbl(ex[1])}`,blockName,
-            si===n-1?`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}. Last set.`:`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}.`);
+            n===1?`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}.`
+            :si===n-1?`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}. Last set.`
+            :`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}. Set ${si+1} of ${n}.`);
           if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Set ${si+2} of ${n} next`,dur:restSecs,block:blockName,
             say:`Rest, ${gsDurSpoken(restSecs)}. ${si+2===n?'Last set':'Set '+(si+2)} next.`});
         }
@@ -2598,7 +2600,7 @@ function gsStart(){
   gsUnlockAudio();
   G.phase='run'; G.idx=0; G.startedAt=Date.now(); G.endAt=Date.now()+G.steps[0].dur*1000+700; G.pausedLeft=null;
   clearInterval(G.tick); G.tick=setInterval(gsTick,250);
-  gsWake(true); gsPersist(); gsCountdownEnd(); gsRender(); gsAnnounce();
+  gsWake(true); gsPersist(); gsCountdownEnd(); gsRender(); setTimeout(gsAnnounce,750);
 }
 
 function gsLeft(){ return G.pausedLeft!==null?G.pausedLeft:G.endAt-Date.now(); }
@@ -2612,7 +2614,7 @@ function gsTick(){
     if(G.idx>=G.steps.length){ gsFinish(); return; }
     G.endAt+=G.steps[G.idx].dur*1000;
   }
-  if(changed){ G.endAt=Date.now()+G.steps[G.idx].dur*1000+700; gsCountdownEnd(); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsHush(); gsAnnounce(); if(JR) jrMark(); return; }
+  if(changed){ G.endAt=Date.now()+G.steps[G.idx].dur*1000+700; gsCountdownEnd(); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsHush(); setTimeout(gsAnnounce,750); if(JR) jrMark(); return; }
   const st=G.steps[G.idx], left=gsLeft(), s=Math.max(0,Math.min(st.dur,Math.ceil((left-700)/1000)));
   // One chime at 10 seconds left (skipped on steps too short for it to mean anything)
   if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsHighPing(); if(st.say10) setTimeout(()=>gsSay(st.say10),550); }
@@ -2635,7 +2637,7 @@ function gsJump(to){
   if(G.pausedLeft!==null) G.pausedLeft=ms; else { G.endAt=Date.now()+ms; gsCountdownEnd(); }
   G.beepAt=G.halfAt=G.endBeepAt=null;
   gsPersist(); gsRender();
-  if(G.pausedLeft===null){ gsHush(); gsAnnounce(); }
+  if(G.pausedLeft===null){ gsHush(); setTimeout(gsAnnounce,750); }
 }
 function gsNext(){ gsCommitSet(G.steps[G.idx]); gsJump(G.idx+1); }
 function gsSecStart(sec){ return G.steps.findIndex(st=>st.sec===sec); }
@@ -2973,7 +2975,10 @@ async function gsWake(on){
   }catch(e){}
 }
 document.addEventListener('visibilitychange',()=>{
-  if(document.visibilityState==='visible'&&gsAC&&gsAC.state==='suspended') gsAC.resume();
+  if(document.visibilityState==='visible'){
+    if(gsAC&&gsAC.state==='suspended') gsAC.resume();
+    try{ speechSynthesis.resume(); }catch(e){}
+  }
   if(G&&G.phase==='run'&&document.visibilityState==='visible'){ if(G.wl&&G.wl.released) G.wl=null; gsWake(true); gsTick(); }
 });
 
