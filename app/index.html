@@ -2018,6 +2018,25 @@ function handleWeight2(input){
   }
   input.classList.toggle('filled',!!val);
   saveWorkout();
+  // Sync to timer if running: update G.draft and rs-w button / log rows
+  if(G){
+    G.draft=G.draft||{};
+    const key=`${exId}|${si}`;
+    G.draft[key]=Object.assign({},G.draft[key]||{},{[field]:val});
+    // Update log rows in timer panel
+    document.querySelectorAll(`#gs .gs-log-row[data-exid="${exId}"][data-si="${si}"] [data-field="${field}"]`).forEach(i=>{ i.value=val; });
+    // Update rs-w button if it shows this set
+    const tw=gsTargetWork(G.steps[G.idx]);
+    if(tw&&tw.exId===exId&&tw.si===si&&field==='w'){
+      const v=gsShown(tw);
+      const btn=document.querySelector('#gs .rs-w');
+      if(btn) btn.innerHTML=v.w?`<span class="v">${escH(v.w)}</span><span class="k">lb</span>`:`<span class="plus">+</span><span class="k">weight</span>`;
+    }
+    // Update picker input if open for this set
+    if(G.pick&&G.pick.exId===exId&&G.pick.si===si&&G.pick.field===field){
+      const pi=document.getElementById('ss-pick-in'); if(pi){ pi.value=val; }
+    }
+  }
 }
 
 function addSetToEx(exId,dayId,ei){
@@ -2935,6 +2954,10 @@ function gsLogWeight(inp){
   const v=gsShown(w);
   const btn=document.querySelector('#gs .rs-w')||document.querySelector('#gs .ss-ctrl .ss-side:last-child');
   if(btn) btn.innerHTML=v.w?`<span class="v">${escH(v.w)}</span><span class="k">lb</span>`:`<span class="plus">+</span><span class="k">weight</span>`;
+  // Sync to detail-view inputs
+  document.querySelectorAll(`input[data-exid="${exId}"][data-si="${si}"][data-field="w"]`).forEach(i=>{
+    if(!i.closest('#gs')){ i.value=val; i.classList.toggle('filled',!!val); }
+  });
 }
 function gsCommitLog(checkPR){
   document.querySelectorAll('#gs .gs-log-row').forEach(row=>{
@@ -3262,18 +3285,25 @@ function gsPickView(){
   </div></div>`;
 }
 function gsPickSet(val){
-  const p=G.pick, key=`${p.exId}|${p.si}`;
-  G.draft=G.draft||{}; G.draft[key]=Object.assign({},G.draft[key],{[p.field]:String(val).trim()});
+  const p=G.pick, key=`${p.exId}|${p.si}`, trimmed=String(val).trim();
+  G.draft=G.draft||{}; G.draft[key]=Object.assign({},G.draft[key],{[p.field]:trimmed});
   if(p.field==='w'){
     G.steps.forEach(st=>{
       if(st.kind==='work'&&st.exId===p.exId&&st.si>p.si){
         const done=S.weights[st.exId]&&S.weights[st.exId][st.si]&&jrVal(S.weights[st.exId][st.si]).w;
-        if(!done){ const k=`${st.exId}|${st.si}`; G.draft[k]=Object.assign({},G.draft[k]||{},{w:String(val).trim()}); }
+        if(!done){ const k=`${st.exId}|${st.si}`; G.draft[k]=Object.assign({},G.draft[k]||{},{w:trimmed}); }
       }
     });
   }
-  const cur=(S.weights[p.exId]||{})[p.si];
-  if(cur&&jrVal(cur).w){ const v=gsShown(p); S.weights[p.exId][p.si]={w:v.w,r:v.r}; saveWorkout(); }
+  // Always sync draft into S.weights so the detail view stays current
+  if(!S.weights[p.exId]) S.weights[p.exId]={};
+  const v=gsShown(p); S.weights[p.exId][p.si]={w:v.w,r:v.r}; saveWorkout();
+  // Sync to detail-view inputs if visible
+  document.querySelectorAll(`input[data-exid="${p.exId}"][data-si="${p.si}"][data-field="${p.field}"]`).forEach(i=>{
+    if(!i.closest('#gs')){ i.value=trimmed; i.classList.toggle('filled',!!trimmed); }
+  });
+  // Sync to log-row inputs in timer
+  document.querySelectorAll(`#gs .gs-log-row[data-exid="${p.exId}"][data-si="${p.si}"] [data-field="${p.field}"]`).forEach(i=>{ i.value=trimmed; });
 }
 function gsPickStep(d){
   const i=document.getElementById('ss-pick-in'), n=parseFloat(i.value)||0;
