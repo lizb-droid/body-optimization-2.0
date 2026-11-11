@@ -2354,7 +2354,7 @@ function gsBuild(day,withWarmup){
           };
           addSide('Left',si);
           rest({kind:'rest',title:'Rest',sub:'Switch sides · 30 sec',dur:30,block:blockName,
-            say:'Switch sides. 30 seconds.',say10:'10 seconds. Switch.'});
+            say:'Switch sides. 30 seconds.'});
           addSide('Right',si);
           if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Round ${si+2} of ${n} next`,dur:restSecs,block:blockName,
             say:`Rest. ${gsDurSpoken(restSecs)}.`});
@@ -2477,7 +2477,7 @@ function sdRender(){
   b.innerHTML=`
     <div class="sd-sec"><div class="sd-h">During the workout</div>
       <div class="sd-seg">${[['coach','Coach voice'],['beeps','Sounds only'],['off','Muted']].map(([k,l])=>`<button class="${a===k?'on':''}" onclick="sdSetAudio('${k}')">${l}</button>`).join('')}</div>
-      <p class="sd-note">${a==='coach'?'The coach talks you through each movement, with a sound at 10 seconds left and at each change.':a==='beeps'?'A sound at 10 seconds left and at each change. No talking.':'No sound at all.'}</p></div>
+      <p class="sd-note">${a==='coach'?'The coach talks you through each exercise and rest. A click at 10 seconds left.':a==='beeps'?'A chime at each change, a click at 10 seconds left. No talking.':'No sound at all.'}</p></div>
     <div class="sd-sec"><div class="sd-h">10-second sound <small>Tap to hear</small></div>
       <div class="sd-list">${Object.entries(GS_CHIMES).map(([id,c])=>`<button class="sd-opt${chime===id?' on':''}" onclick="gsSetChime('${id}')"><span>${c.lbl}</span>${chime===id?HM_CHECK:''}</button>`).join('')}</div></div>
     <div class="sd-sec"><div class="sd-h">Coach voice <small>Tap to hear</small></div>
