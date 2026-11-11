@@ -857,6 +857,11 @@ const WARMUPS = {
   ]
 };
 
+const WU_LIFTS = new Set(["Barbell Back Squat","Barbell Bench Press","Barbell Cyclist Squat","Barbell RDL","Push Press / Push Jerk"]);
+const WU_REPS     = ["5 reps · RPE 3","3 reps · RPE 4","1-2 reps · RPE 5"];
+const WU_REPS_PP  = ["5 reps · RPE 3","3 reps · RPE 4","2 reps · RPE 5"];
+const WU_DUR      = [25, 15, 10];
+
 const EXERCISE_NOTES = {
   "Barbell Back Squat":"Heaviest lower-body lift. Full rest matters — don't sacrifice load for a shorter session.",
   "Barbell Hip Thrust":"2s hold at the top. Your #1 priority movement — keep tension on the glute at peak contraction.",
@@ -2260,7 +2265,7 @@ function gsBuild(day,withWarmup){
       const {ex,ei}=b.exs[0], last=secs[secs.length-1];
       if(!last||last.kind!=='str') secs.push({title:'Strength',sub:'',kind:'str',rows:[]});
       si=secs.length-1;
-      const rows=secs[si].rows; rows.push({n:`${parseNumSets(ex[1])}x`,name:ex[0],
+      const rows=secs[si].rows; rows.push({n:`${parseNumSets(ex[1])+(WU_LIFTS.has(ex[0])?3:0)}x`,name:ex[0],
         sub:`${gsRepsLbl(ex[1])}${/\d$/.test(gsRepsLbl(ex[1]))?' reps':''} · ${fmtTime(REST_TIMES[ex[0]]||120)} rest`});
       secs[si].sub=`${rows.length} lift${rows.length>1?'s':''} · full rest`;
       map[`${day.id}-ex${ei}`]=rows.length-1; first=rows.length-1;
@@ -2279,7 +2284,7 @@ function gsBuild(day,withWarmup){
       ? `Last block, the finisher. ${gsSpoken(b.fin.badge||'')}. ${(b.fin.movements||[]).map(m=>`${gsSpoken(m.name)}, ${gsSpoken(m.reps)}`).join('. ')}. Get set up.`
       : b.ss
       ? `Next up, ${b.ss}. ${b.exs.map(e=>gsSpoken(e.ex[0])).join(', then ')}. ${b.rounds||parseNumSets(b.exs[0].ex[1])} rounds. Get set up.`
-      : `Next up, ${gsSpoken(firstName)}. ${parseNumSets(b.exs[0].ex[1])} sets of ${gsRepsSpoken(b.exs[0].ex[1])}. ${gsSpoken(EXERCISE_NOTES[firstName]||'')} Get set up.`;
+      : `Next up, ${gsSpoken(firstName)}. ${parseNumSets(b.exs[0].ex[1])} sets of ${gsRepsSpoken(b.exs[0].ex[1])}.${WU_LIFTS.has(firstName)?' Three warm-up sets first, then your working sets.':''} ${gsSpoken(EXERCISE_NOTES[firstName]||'')} Get set up.`;
     const s0=steps.length;
     pushPause({kind:newSec?'preview':'setup',title:firstName,sub:b.ss?`${b.ss} · ${b.exs.length} exercises`:'Get your equipment ready',
       dur:Math.min(90,Math.max(45,lastRest)),block:blockName,say:setupSay,say10:'10 seconds.'});
@@ -2310,6 +2315,18 @@ function gsBuild(day,withWarmup){
       const {ex,ei}=b.exs[0], n=parseNumSets(ex[1]), restSecs=Math.min(120,REST_TIMES[ex[0]]||120);
       const isUni=/\bea\b/.test(ex[1]);
       const isDeload=/↓/.test(WEEKS[S.weekIdx]?.label||''), isMax=/★/.test(WEEKS[S.weekIdx]?.label||'');
+      if(WU_LIFTS.has(ex[0])){
+        const wuReps=ex[0].includes('Push Press')?WU_REPS_PP:WU_REPS;
+        wuReps.forEach((wr,wi)=>{
+          steps.push({kind:'warmup',title:ex[0],sub:`Warm-up ${wi+1} · ${wr}`,
+            dur:WU_DUR[wi],block:blockName,note:'',
+            say:`Warm-up ${wi+1}. ${wr.split(' · ')[0]}.`,
+            exId:`${day.id}-ex${ei}`,si:-(wuReps.length-wi),exName:ex[0],setsStr:ex[1]});
+          pushPause({kind:'rest',title:'Rest',
+            sub:`45 sec · ${wi<wuReps.length-1?'Warm-up '+(wi+2)+' next':'Working sets next'}`,
+            dur:45,block:blockName,say:'Rest, 45 seconds.',say10:'10 seconds. Get ready.'});
+        });
+      }
       for(let si=0;si<n;si++){
         const pct=isDeload?'50-60%':isMax?'85%':(si===0?'60%':'80%');
         if(isUni){
