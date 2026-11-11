@@ -1295,6 +1295,7 @@ function readUrlParams(){
 function fmtTime(s){ s=Math.max(0,s); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
 function parseNumSets(str){ const m=(str||'').match(/^(\d+)/); return m?parseInt(m[1]):3; }
 function wuSetsLbl(exName,setsStr){ return WU_LIFTS.has(exName)?setsStr.replace(/^\d+/,n=>parseInt(n)+3):setsStr; }
+function gsOrdinal(n){ return n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`; }
 function parseTargetReps(str){ const m=(str||'').match(/^\d+×(\d+)/); return m?m[1]:''; }
 function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function todayStr(){ return new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); }
@@ -2230,7 +2231,7 @@ function gsBuild(day,withWarmup){
     steps.push({kind:'preview',title:'Warm Up',sub:'',dur:20,block:'Warm-up'});
     gsWarmItems(wt).forEach(w=>{
       steps.push({kind:'warmup',title:w.name,sub:`${w.secs} secs`,dur:w.secs,block:'Warm-up',
-        say:`${gsSpoken(w.base)}${w.side?`, ${w.side.toLowerCase()} side`:''}. ${gsDurSpoken(w.secs)}.`});
+        say:`${gsSpoken(w.base)}${w.side?` ${w.side.toLowerCase()}`:''}. ${gsDurSpoken(w.secs)}.`});
     });
   }
   // Group into blocks: a straight exercise, a superset (until the next marker), or a finisher
@@ -2243,7 +2244,7 @@ function gsBuild(day,withWarmup){
   let pending=[], lastRest=GS_FIRST_SETUP;
   const pushPause=(step)=>{ step.log=pending; pending=[]; steps.push(step); };
   let firstRest=true;
-  const rest=(step)=>{ if(firstRest){ step.say+=' Log your weight while you rest.'; firstRest=false; } step.say10='10 seconds. Get ready.'; pushPause(step); };
+  const rest=(step)=>{ if(firstRest){ step.say+=' Log your weight while you rest.'; firstRest=false; } pushPause(step); };
   const work=(ex,ei,si,sub,block,say)=>{
     const entry={exId:`${day.id}-ex${ei}`,exName:ex[0],si,setsStr:ex[1]};
     pending.push(entry);
@@ -2291,7 +2292,7 @@ function gsBuild(day,withWarmup){
       : `Next up, ${gsSpoken(firstName)}. ${parseNumSets(b.exs[0].ex[1])} sets of ${gsRepsSpoken(b.exs[0].ex[1])}.${WU_LIFTS.has(firstName)?' Three warm-up sets first, then your working sets.':''} ${gsSpoken(EXERCISE_NOTES[firstName]||'')} Get set up.`;
     const s0=steps.length;
     pushPause({kind:newSec?'preview':'setup',title:firstName,sub:b.ss?`${b.ss} · ${b.exs.length} exercises`:'Get your equipment ready',
-      dur:Math.min(90,Math.max(45,lastRest)),block:blockName,say:setupSay,say10:'10 seconds.'});
+      dur:Math.min(90,Math.max(45,lastRest)),block:blockName,say:setupSay});
     const tagThis=()=>tag(s0,b);
     if(b.fin){
       const f=b.fin, rounds=f._fin==='interval'?(f.rounds||1):1;
@@ -2328,7 +2329,7 @@ function gsBuild(day,withWarmup){
             exId:`${day.id}-ex${ei}`,si:-(wuReps.length-wi),exName:ex[0],setsStr:ex[1]});
           pushPause({kind:'rest',title:'Rest',
             sub:`45 sec · ${wi<wuReps.length-1?'Warm-up '+(wi+2)+' next':'Working sets next'}`,
-            dur:45,block:blockName,say:'Rest, 45 seconds.',say10:'10 seconds. Get ready.'});
+            dur:45,block:blockName,say:'Rest. 45 seconds.'});
         });
       }
       for(let si=0;si<n;si++){
@@ -2356,14 +2357,12 @@ function gsBuild(day,withWarmup){
             say:'Switch sides. 30 seconds.',say10:'10 seconds. Switch.'});
           addSide('Right',si);
           if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Round ${si+2} of ${n} next`,dur:restSecs,block:blockName,
-            say:`Rest, ${gsDurSpoken(restSecs)}. Round ${si+2} next.`});
+            say:`Rest. ${gsDurSpoken(restSecs)}.`});
         } else {
           work(ex,ei,si,`Set ${si+1} of ${n} · ${pct} · ${gsRepsLbl(ex[1])}`,blockName,
-            n===1?`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}.`
-            :si===n-1?`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}. Last set.`
-            :`${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}. Set ${si+1} of ${n}.`);
+            `${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}.${n>1?' '+(si===n-1?'Last set.':gsOrdinal(si+1)+' set.'):''}`);
           if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Set ${si+2} of ${n} next`,dur:restSecs,block:blockName,
-            say:`Rest, ${gsDurSpoken(restSecs)}. ${si+2===n?'Last set':'Set '+(si+2)} next.`});
+            say:`Rest. ${gsDurSpoken(restSecs)}.`});
         }
       }
       lastRest=restSecs; tagThis();
@@ -2382,7 +2381,7 @@ function gsBuild(day,withWarmup){
     st.dur=x.kind==='wu'?Math.min(30,Math.max(15,x.rows.length*5)):x.kind==='fin'?30:heavy?60:40;
     st.title=x.title; st.sub='Get set up'; st.row=-3; st.log=st.log||[];
     st.rowSay=x.rows.map(r=>rowSay(x,r));
-    st.say=`${x.title}. ${st.rowSay[0]}`; st.say10='10 seconds.';
+    if(!st.say) st.say='';
   });
   if(steps[0]&&steps[0].sec===undefined){ steps[0].sec=0; steps[0].row=-1; }
   // Time span of each section, for the timeline
@@ -2646,8 +2645,7 @@ function gsTick(){
   if(changed){ G.endAt=Date.now()+G.steps[G.idx].dur*1000+700; gsCountdownEnd(); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsHush(); setTimeout(gsAnnounce,750); if(JR) jrMark(); return; }
   const st=G.steps[G.idx], left=gsLeft(), s=Math.max(0,Math.min(st.dur,Math.ceil((left-700)/1000)));
   // One chime at 10 seconds left (skipped on steps too short for it to mean anything)
-  if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsHighPing(); if(st.say10) setTimeout(()=>gsSay(st.say10),550); }
-  if(st.halfSay&&left<=st.dur*500+700&&left>11000&&G.halfAt!==G.idx){ G.halfAt=G.idx; gsSay(st.halfSay); }
+  if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsHighPing(); }
   gsRenderTime();
 }
 
