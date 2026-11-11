@@ -1294,7 +1294,7 @@ function readUrlParams(){
 
 function fmtTime(s){ s=Math.max(0,s); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
 function parseNumSets(str){ const m=(str||'').match(/^(\d+)/); return m?parseInt(m[1]):3; }
-function wuSetsLbl(exName,setsStr){ return WU_LIFTS.has(exName)?`${parseNumSets(setsStr)+3} sets · ${setsStr} working`:setsStr; }
+function wuSetsLbl(exName,setsStr){ return WU_LIFTS.has(exName)?setsStr.replace(/^\d+/,n=>parseInt(n)+3):setsStr; }
 function parseTargetReps(str){ const m=(str||'').match(/^\d+×(\d+)/); return m?m[1]:''; }
 function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function todayStr(){ return new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); }
@@ -1789,8 +1789,9 @@ function renderExRow(ex,ei,day,prev,inSS=false,isSSEnd=false,ssRest=60){
   const rs=inSS?ssRest:(REST_TIMES[exName]||120);
   const showTimer=!inSS||isSSEnd;
 
-  // Total sets = base or user-expanded
-  const baseSets=parseNumSets(setsStr);
+  // Total sets = base or user-expanded (warm-up lifts include 3 wu sets)
+  const wuCount=WU_LIFTS.has(exName)?3:0;
+  const baseSets=parseNumSets(setsStr)+wuCount;
   const numSets=baseSets+(sets._extra||0);
 
   // PR check
@@ -1816,13 +1817,15 @@ function renderExRow(ex,ei,day,prev,inSS=false,isSSEnd=false,ssRest=60){
     <span></span>
   </div>`;
 
-  const targetReps=parseTargetReps(setsStr);
+  const workingReps=parseTargetReps(setsStr);
+  const WU_TARGET=['5','3',exName.includes('Push Press')?'2':'1'];
 
   const setRowsHtml=Array.from({length:numSets},(_,si)=>{
     const stored=sets[si]||{};
     const wVal=typeof stored==='object'?(stored.w||''):(stored||'');
     const rStoredVal=typeof stored==='object'?(stored.r||''):'';
-    const rVal=rStoredVal||targetReps;
+    const setTarget=wuCount>0&&si<wuCount?WU_TARGET[si]:workingReps;
+    const rVal=rStoredVal||setTarget;
     const wFilled=!!(wVal&&wVal.trim());
     const rFilled=!!(rStoredVal&&rStoredVal.trim());
     const isActive=si===activeSet;
