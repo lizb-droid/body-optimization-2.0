@@ -2617,7 +2617,7 @@ const GS_CHIMES={
   ding:{lbl:'Ding-dong',play:()=>{ gsTone(784,0,.7,'sine',.32); gsTone(622,.38,1,'sine',.32); }}
 };
 function gsChimeId(){ try{ const c=localStorage.getItem('betalizgschime'); return GS_CHIMES[c]?c:'rising'; }catch(e){ return 'rising'; } }
-function gsChime(id){ if(!G||G.audio==='off'||!gsAC) return; try{ GS_CHIMES[id||gsChimeId()].play(); }catch(e){} }
+function gsChime(id){ if(!G||G.audio==='off'||!gsAC) return; if(gsAC.state==='suspended'){ gsAC.resume().then(()=>gsChime(id)); return; } try{ GS_CHIMES[id||gsChimeId()].play(); }catch(e){} }
 function gsChimeRaw(id){ gsUnlockAudio(); try{ GS_CHIMES[id||gsChimeId()].play(); }catch(e){} }
 function gsSetChime(id){ try{ localStorage.setItem('betalizgschime',id); }catch(e){} gsChimeRaw(id); sdRender(); }
 function gsAnnounce(){ const st=G&&G.steps[G.idx]; if(st) gsSay(st.say); }
@@ -2626,7 +2626,7 @@ function gsStart(){
   gsUnlockAudio();
   G.phase='run'; G.idx=0; G.startedAt=Date.now(); G.endAt=Date.now()+G.steps[0].dur*1000+700; G.pausedLeft=null;
   clearInterval(G.tick); G.tick=setInterval(gsTick,250);
-  gsWake(true); gsPersist(); gsCountdownEnd(); gsRender(); setTimeout(gsAnnounce,750);
+  gsWake(true); gsPersist(); gsChime(); gsRender(); setTimeout(gsAnnounce,750);
 }
 
 function gsLeft(){ return G.pausedLeft!==null?G.pausedLeft:G.endAt-Date.now(); }
@@ -2640,7 +2640,7 @@ function gsTick(){
     if(G.idx>=G.steps.length){ gsFinish(); return; }
     G.endAt+=G.steps[G.idx].dur*1000;
   }
-  if(changed){ G.endAt=Date.now()+G.steps[G.idx].dur*1000+700; gsCountdownEnd(); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsHush(); setTimeout(gsAnnounce,750); if(JR) jrMark(); return; }
+  if(changed){ G.endAt=Date.now()+G.steps[G.idx].dur*1000+700; gsChime(); try{ navigator.vibrate&&navigator.vibrate([300,100,300]); }catch(e){} gsPersist(); gsRender(); gsHush(); setTimeout(gsAnnounce,750); if(JR) jrMark(); return; }
   const st=G.steps[G.idx], left=gsLeft(), s=Math.max(0,Math.min(st.dur,Math.ceil((left-700)/1000)));
   // One chime at 10 seconds left (skipped on steps too short for it to mean anything)
   if(s===10&&st.dur>15&&G.beepAt!==G.idx){ G.beepAt=G.idx; gsHighPing(); }
@@ -2659,7 +2659,7 @@ function gsJump(to){
   if(to>=G.steps.length){ gsFinish(); return; }
   G.idx=Math.max(0,to); G.steps[G.idx].extra=0;
   const ms=G.steps[G.idx].dur*1000+700;
-  if(G.pausedLeft!==null) G.pausedLeft=ms; else { G.endAt=Date.now()+ms; gsCountdownEnd(); }
+  if(G.pausedLeft!==null) G.pausedLeft=ms; else { G.endAt=Date.now()+ms; gsChime(); }
   G.beepAt=G.halfAt=G.endBeepAt=null;
   gsPersist(); gsRender();
   if(G.pausedLeft===null){ gsHush(); setTimeout(gsAnnounce,750); }
@@ -3303,7 +3303,6 @@ function gsRenderTime(){
   const t=document.getElementById('gs-t'); if(!t) return;
   const ds=Math.max(0,Math.min(st0.dur,Math.ceil((left-700)/1000)));
   t.textContent=fmtTime(ds);
-  if(ds===0&&st0.dur>5&&G.endBeepAt!==G.idx){ G.endBeepAt=G.idx; gsCountdownEnd(); }
   const m=document.getElementById('ss-arc-m');
   if(m){ const adjLeft=Math.max(0,left-700), tot=st0.dur*1000, f=Math.max(0,Math.min(1,1-adjLeft/tot)); m.setAttribute('stroke-dasharray',`${GS_ARC_L*f} ${GS_ARC_L}`); }
   const total=gsTotal(G.steps), done=total-gsRemaining();
