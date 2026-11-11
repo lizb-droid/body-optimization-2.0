@@ -2547,15 +2547,13 @@ function gsSpeakOne(text,done){
   let finished=false;
   const finish=()=>{ if(finished) return; finished=true; done&&done(); };
   if(gsAudio){
-    let fellBack=false;
-    const fallback=e=>{ if(fellBack||id!==gsLineId||(e&&e.name==='AbortError')) return; fellBack=true; gsSpeakTTS(text,finish); };
     gsAudio.onended=finish;
-    gsAudio.onerror=()=>fallback();
+    gsAudio.onerror=finish;
     gsAudio.src=`audio/coach/${h}.mp3`;
-    const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(fallback);
+    const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(finish);
     return;
   }
-  gsSpeakTTS(text,finish);
+  finish();
 }
 function gsSpeakTTS(text,done){
   if(!('speechSynthesis' in window)){ done&&done(); return; }
