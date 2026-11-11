@@ -841,14 +841,18 @@ const WARMUPS = {
   lower:[
     "World's Greatest Stretch — 30s ea side",
     "Glute Bridge March — 30s",
-    "Hip Circles — 30s ea side",
-    "Posterior Hip Capsule Stretch — 45s ea side",
     "Squat to Stand — 30s"
   ],
   upper:[
     "Cat Cow — 30s",
-    "Child's Pose Thread the Needle — 30s ea side",
     "Scapular Push-up — 30s",
+    "Push-up to Down Dog — 30s",
+    "Band Pull-Apart — 30s"
+  ],
+  saturday:[
+    "Cat Cow — 30s",
+    "Scapular Push-up — 30s",
+    "Glute Bridge March — 30s",
     "Push-up to Down Dog — 30s"
   ]
 };
@@ -875,7 +879,11 @@ const EXERCISE_NOTES = {
   "Weighted Dead Bug":"Light DB in the extended arm — same DR-safe pattern as bodyweight Dead Bug, higher core demand.",
   "Single-leg DB RDL":"Same hip-hinge as Landmine RDL — simpler setup, no barbell. Balance challenge adds proprioception.",
   "Weighted Copenhagen Plank":"Anti-lateral-flexion core. Hold steady, resist hip drop. DR-safe.",
-  "Bird Dog":"Anti-extension and anti-rotation from all-fours. DR-safe core rotation — slow and controlled."
+  "Bird Dog":"Anti-extension and anti-rotation from all-fours. DR-safe core rotation — slow and controlled.",
+  "Barbell RDL":"Hips back, bar close to your legs. 3-second lowering — stop when hamstrings are fully stretched.",
+  "DB Step-Up":"High bench. Lean slightly forward, drive through the front heel. Control the way down.",
+  "Clamshell":"Slow and controlled. Feel it in the side of the glute.",
+  "Slider Hamstring Curl":"Hips high throughout. 3-second lowering — the slow eccentric is what makes it effective. Progress to single-leg once 14 reps feel easy."
 };
 
 const WORKOUTS = {
@@ -887,7 +895,7 @@ const WORKOUTS = {
     ["Barbell Hip Thrust","4×10"],
     ["Single-leg DB RDL","3×8–12 ea"],
     ["Curtsy Lunge","3×8–12 ea"],
-    ["Weighted Dead Bug","3×8 ea"],
+    ["Weighted Dead Bug","2×8 ea"],
     {_fin:"interval",duration:120,rounds:3,badge:"Every 2 min × 3",
       movements:[
         {name:"KB Swing",reps:"10 reps",bw:false},
@@ -926,9 +934,9 @@ const WORKOUTS = {
 
   // WEDNESDAY — Lower B (Quads + Hamstrings)
   hypertrophyWednesday:[
-    ["Barbell Cyclist Squat","4×10"],
+    ["Barbell Cyclist Squat","4×6"],
+    ["Barbell RDL","3×8"],
     ["Bulgarian Split Squat","3×8–12 ea"],
-    ["GHD Hip Extension","3×10–14"],
     ["Slider Hamstring Curl","3×10–14"],
     ["Bird Dog","3×8 ea"],
     {_fin:"interval",duration:120,rounds:3,badge:"Every 2 min × 3",
@@ -938,9 +946,9 @@ const WORKOUTS = {
       ]},
   ],
   hypertrophyWednesdayDeload:[
-    ["Barbell Cyclist Squat","3×10"],
+    ["Barbell Cyclist Squat","3×6"],
+    ["Barbell RDL","2×8"],
     ["Bulgarian Split Squat","2×8 ea"],
-    ["GHD Hip Extension","2×10"],
     ["Slider Hamstring Curl","2×10"],
     ["Bird Dog","2×8 ea"],
   ],
@@ -970,14 +978,14 @@ const WORKOUTS = {
     ["Pallof Hold","2×20s ea"],
   ],
 
-  // SATURDAY — Full Body (Pull + Glutes)
+  // SATURDAY — Full Body (Glute Focus)
   hypertrophySaturday:[
-    ["Barbell Bent Over Row","4×8"],
     ["Barbell Hip Thrust","3×12"],
-    ["DB Pullover","3×8–12"],
-    ["DB Row tripod","2×8–12 ea"],
-    ["Seated Rear Delt Fly","2×10–14"],
+    ["Barbell Bent Over Row","4×8"],
+    ["DB Step-Up","3×8–12 ea"],
     ["DB Bicep Curl","3×8–12"],
+    ["GHD Hip Extension","3×10–14"],
+    ["Clamshell","3×15–20 ea"],
     {_fin:"interval",duration:120,rounds:3,badge:"Every 2 min × 3",
       movements:[
         {name:"Suitcase Carry",reps:"20m ea side",bw:false},
@@ -985,12 +993,12 @@ const WORKOUTS = {
       ]},
   ],
   hypertrophySaturdayDeload:[
-    ["Barbell Bent Over Row","3×8"],
     ["Barbell Hip Thrust","2×12"],
-    ["DB Pullover","3×8–12"],
-    ["DB Row tripod","2×8 ea"],
-    ["Seated Rear Delt Fly","2×10"],
+    ["Barbell Bent Over Row","3×8"],
+    ["DB Step-Up","2×8 ea"],
     ["DB Bicep Curl","2×8"],
+    ["GHD Hip Extension","2×10"],
+    ["Clamshell","2×15 ea"],
   ],
 };
 
@@ -1008,7 +1016,7 @@ const WEEKS = [
     {id:"w1d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w1d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
     {id:"w1d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Bike · 8 × 15s all-out / 45s easy. Active prep first (pogo jumps, skips, lunges). One block on the machine: easy cardio → builds → main set → cool-down."},
-    {id:"w1d5",day:"Saturday",type:"lift",session:"Full Body — Pull + Glutes",workout:"hypertrophySaturday"},
+    {id:"w1d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w1d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
   {label:"Wk 2",dates:"Nov 16–22",days:[
@@ -1017,7 +1025,7 @@ const WEEKS = [
     {id:"w2d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w2d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
     {id:"w2d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 2 sets × 5 sprints (15s on / 45s easy, 2:00 between sets). Active prep first."},
-    {id:"w2d5",day:"Saturday",type:"lift",session:"Full Body — Pull + Glutes",workout:"hypertrophySaturday",note:"Progress photos today — same spot and lighting as baseline (Oct 24)."},
+    {id:"w2d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday",note:"Progress photos today — same spot and lighting as baseline (Oct 24)."},
     {id:"w2d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
   {label:"Wk 3",dates:"Nov 23–29",days:[
@@ -1026,7 +1034,7 @@ const WEEKS = [
     {id:"w3d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w3d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday",note:"Thanksgiving — train as normal."},
     {id:"w3d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Mixed machines · 3 sets × 4 sprints (15s on / 45s easy), swap machine in the 2:00 between sets. Active prep first."},
-    {id:"w3d5",day:"Saturday",type:"lift",session:"Full Body — Pull + Glutes",workout:"hypertrophySaturday"},
+    {id:"w3d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w3d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
   {label:"Wk 4",dates:"Nov 30–Dec 6",days:[
@@ -1035,7 +1043,7 @@ const WEEKS = [
     {id:"w4d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w4d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
     {id:"w4d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 12 × 15s all-out / 30s easy. Density week. Active prep first."},
-    {id:"w4d5",day:"Saturday",type:"lift",session:"Full Body — Pull + Glutes",workout:"hypertrophySaturday"},
+    {id:"w4d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w4d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
   {label:"Wk 5 ★",dates:"Dec 7–13",days:[
@@ -1062,7 +1070,7 @@ const WEEKS = [
     {id:"w7d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w7d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
     {id:"w7d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Christmas Day — train as normal. Bike · 10 × 15s all-out / 45s easy. Active prep first."},
-    {id:"w7d5",day:"Saturday",type:"lift",session:"Full Body — Pull + Glutes",workout:"hypertrophySaturday"},
+    {id:"w7d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w7d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
   {label:"Wk 8",dates:"Dec 28–Jan 3",days:[
@@ -1071,7 +1079,7 @@ const WEEKS = [
     {id:"w8d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w8d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
     {id:"w8d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"New Year's Day — train as normal. Row · 3 sets × 4 sprints (15s on / 45s easy, 2:00 between sets)."},
-    {id:"w8d5",day:"Saturday",type:"lift",session:"Full Body — Pull + Glutes",workout:"hypertrophySaturday"},
+    {id:"w8d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w8d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
   {label:"Wk 9",dates:"Jan 4–10",days:[
@@ -1080,7 +1088,7 @@ const WEEKS = [
     {id:"w9d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w9d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
     {id:"w9d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Mixed machines · 3 sets × 5 sprints (15s on / 45s easy), swap machine in the 2:00 between. Active prep first."},
-    {id:"w9d5",day:"Saturday",type:"lift",session:"Full Body — Pull + Glutes",workout:"hypertrophySaturday"},
+    {id:"w9d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w9d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
   {label:"Wk 10",dates:"Jan 11–17",days:[
@@ -1089,7 +1097,7 @@ const WEEKS = [
     {id:"w10d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w10d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
     {id:"w10d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 14 × 15s all-out / 30s easy. Peak density week. Active prep first."},
-    {id:"w10d5",day:"Saturday",type:"lift",session:"Full Body — Pull + Glutes",workout:"hypertrophySaturday"},
+    {id:"w10d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w10d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
   {label:"Wk 11 ★",dates:"Jan 18–24",days:[
@@ -1728,7 +1736,7 @@ function renderDayDetail(dayId){
     const wk=day.workout;
     const warmupType=gsWarmupType(wk);
     const wu=warmupType?WARMUPS[warmupType]:null;
-    const wuMin=warmupType==='lower'?'~4':'~3';
+    const wuMin='~2';
     if(wu) html+=`<details class="warmup-details">
       <summary><div class="warmup-dot"></div><span class="warmup-lbl">Warm-up · ${wuMin} min</span>
         <svg class="warmup-chevron" viewBox="0 0 24 24" fill="none" width="12" height="12" stroke="#555" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -2149,7 +2157,7 @@ const GS_KIND_COL={preview:'#888',ready:'#888',warmup:'#4D5FFF',work:'#FF9BD7',r
 const GS_RING_C=2*Math.PI*45;
 let G=null, gsAC=null;
 
-function gsWarmupType(wk){ return /Monday|Wednesday|Sat/.test(wk)?'lower':/Tuesday|Thursday/.test(wk)?'upper':null; }
+function gsWarmupType(wk){ return /Monday|Wednesday/.test(wk)?'lower':/Sat/.test(wk)?'saturday':/Tuesday|Thursday/.test(wk)?'upper':null; }
 
 // Work window for one set, estimated from the prescription ("4×8–12 ea", "3×20s ea", "5×(2+4)")
 function gsWorkSecs(setsStr){

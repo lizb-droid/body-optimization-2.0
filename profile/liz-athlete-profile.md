@@ -36,13 +36,13 @@
 |---|---|---|
 | Monday | Lower A — glute focus | Heavy Back Squat + Hip Thrust |
 | Tuesday | Upper A — chest + back | |
-| Wednesday | Lower B — quads + hamstrings | Cyclist Squat, Bulgarian Split Squat, short finisher |
+| Wednesday | Lower B — quads + hamstrings | Cyclist Squat, Barbell RDL, Bulgarian Split Squat, short finisher |
 | Thursday | Upper B — shoulders + chest | Push Press/Jerk |
 | Friday | Conditioning — 15-second sprints (bike or row) | Optional; active prep first; trail run when preferred |
-| Saturday | Full body — pull + glutes | Light glute piece only, legs are not the focus |
+| Saturday | Full body — glute focus | Hip thrust first, row, step-ups, curls, hip extension, clamshells |
 | Sunday | Rest | Full rest |
 
-**Rule: two lower-body lifting days (Mon, Wed) plus a light glute piece Saturday. Friday conditioning is aerobic/interval work only.** Holidays: train as normal.
+**Rule: two lower-body lifting days (Mon, Wed) plus a glute-focused Saturday. Friday conditioning is aerobic/interval work only.** Holidays: train as normal.
 
 ## Exercise Preferences
 **Loves:** Push press, DB shoulder press, cleans, jerks, clean pulls, barbell bench press, barbell back squat, RDL, hip thrusts, bicep curls, front squat
@@ -85,7 +85,7 @@ Change log: macros updated Oct 30, 2026 — five day types added (Strength / Con
 - Prolactin elevated → estrogen suppressed → affects recovery, bone density, joint laxity
 - Relaxin may still be present — monitor joint stability under heavy loads
 - Cycle returned April 2026 (Day 1: week of Apr 14)
-- Fasted morning training spikes cortisil disproportionately in women — **pre-workout fuel is mandatory**
+- Fasted morning training spikes cortisol disproportionately in women — **pre-workout fuel is mandatory**
 - Milk supply is a leading indicator of underfueling — monitor weekly
 
 ## Coaching Communication Style

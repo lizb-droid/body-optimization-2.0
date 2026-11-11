@@ -37,10 +37,10 @@ Words in `{curly brackets}` get filled in automatically. Keep them where you wan
 
 - **Lower A, glutes:** Morning. Today's glutes. Squat first, then hip thrusts, then single-leg work. Heavy day, so brace on every rep. {minutes} minutes. Set up the rack and the bench before we start.
 - **Upper A, chest and back:** Morning. Chest and back today. Bench first, then rows, then shoulders and arms. Shoulder blades back and down on every press. {minutes} minutes. Set up the bench and the bar first.
-- **Lower B, quads and hamstrings:** Morning. Quads and hamstrings. One big front squat, then split squats and hamstring work, then a short finisher. It's a shorter session on purpose. {minutes} minutes. Heels on plates for the squat.
+- **Lower B, quads and hamstrings:** Morning. Quads and hamstrings. Cyclist squat first, then RDL, split squats and hamstring curls, then a short finisher. {minutes} minutes. Heels on plates for the cyclist squat.
 - **Upper B, shoulders and chest:** Morning. Shoulders and chest. Push press leads, so clear your overhead space. Ribs down, glutes tight. {minutes} minutes. Band pull-aparts first.
 - **Conditioning (Friday):** Morning. Conditioning day. Short sprints, all out, then easy. You get on the machine once and stay on. Not feeling it? Skipping is allowed. About {minutes} minutes.
-- **Full body (Saturday):** Morning. Full body Saturday. Row heavy, keep the hip thrust easy, then arms. {minutes} minutes. Last session of the week.
+- **Full body (Saturday):** Morning. Full body Saturday, glute focus. Hip thrust first, then row, step-ups, curls, hip extension and clamshells. {minutes} minutes. Last session of the week.
 
 **Deload weeks (6 and 12), plays instead of the intro above:**
 Deload week. This is supposed to feel easy. Same weights as last week, fewer sets, stop with three or four reps in the tank. You're not losing anything. The fatigue clears and the next block hits harder. {minutes} minutes.
@@ -53,7 +53,7 @@ Deload week. This is supposed to feel easy. Same weights as last week, fewer set
 
 ## Warm-up
 
-- **Section start:** Warm-up. About four minutes.
+- **Section start:** Warm-up. About two minutes.
 - **Each move:** {exercise}.
 - **Each-side move:** {exercise}, {side} side.
 - **Warm-up done:** Warm-up done. Let's lift.
@@ -69,8 +69,11 @@ The coach speaks once per exercise, during the 2 minute setup gap, so you can he
 - **Unilateral work, at the start of each side:** {side} side.
 
 **First rest of a main lift (one check-in, then quiet):**
-- Log your weight. Did that feel like two reps in the tank? If it was easier, we add next week. If it was a grind, we hold.
-- Log it. Two reps left, not zero. That's the target.
+- Log your weight. Did that feel like RPE 8 — about two reps left? If it was easier, we add next week. If it was a grind, we hold.
+- Log it. RPE 8, two reps left, not zero. That's the target.
+
+**Warm-up sets intro (plays once when a barbell lift with warm-up sets starts):**
+- Three warm-up sets first, then your working sets.
 
 **Last set of a main lift (rotate):**
 - Last set. One or two in the tank. Don't grind it.
@@ -83,10 +86,10 @@ The coach speaks once per exercise, during the 2 minute setup gap, so you can he
 
 ## `{effort}` lines (main lifts only)
 
-- **Standard weeks:** Working weight. About two reps left in the tank on every set.
-- **Block start (weeks 1 and 7):** First week at this weight. Aim for about 80 percent. It should feel like two reps in the tank.
-- **Deload weeks:** Easy today. Stop with three or four reps left.
-- **Max-test lift:** Max day. Work up in small jumps. Every rep clean.
+- **Standard weeks:** Working weight. RPE 8 — about two reps left on every set.
+- **Block start (weeks 1 and 7):** First week at this weight. Aim for RPE 8 — about two reps left in the tank.
+- **Deload weeks:** Easy today. RPE 6 — stop with three or four reps left.
+- **Max-test lift:** Max day. Work up in small jumps. RPE 10 only on the attempts. Every rep clean.
 
 ## Finisher
 
@@ -101,7 +104,7 @@ The coach speaks once per exercise, during the 2 minute setup gap, so you can he
 - **Active prep start:** Active prep. Two rounds. Get your legs ready.
 - **Pogo jumps:** {cue}
 - **After active prep:** Hop on the machine. Easy for three minutes.
-- **Builds:** Three builds. Ten seconds at about seventy percent.
+- **Builds:** Three builds. Ten seconds at RPE 7.
 - **Before the main set:** Main set. {sprints} sprints, fifteen seconds all out. If a sprint drops more than ten percent below your best, we call it.
 - **Each sprint:** Go.
 - **Halfway:** Halfway.
@@ -120,24 +123,26 @@ The coach speaks once per exercise, during the 2 minute setup gap, so you can he
 
 ## Exercise cues (`{cue}`)
 
-Setup and key point together, in one or two short sentences. Only for the hard or technical moves. Blank means the coach says nothing: Arnold Press, DB Squeeze Press, DB Floor Press, DB Shoulder Press, DB Rear Delt Fly, Seated Rear Delt Fly, DB Lateral Raise, Incline DB Curl, DB Bicep Curl, Overhead Tricep Extension, DB Row (tripod), Push-up, Walking Lunge.
+Setup and key point together, in one or two short sentences. Only for the hard or technical moves. Blank means the coach says nothing: Arnold Press, DB Squeeze Press, DB Floor Press, DB Shoulder Press, DB Rear Delt Fly, DB Lateral Raise, Incline DB Curl, DB Bicep Curl, Overhead Tricep Extension, Push-up, Walking Lunge.
 
 - **Barbell Back Squat:** Bar at mid-chest in the rack. Big breath, ribs down, brace. Hips back first, then down. Drive the floor away.
 - **Barbell Bench Press:** Eyes under the bar. Shoulder blades pinched and down, feet planted. Touch the lower chest and press.
 - **Barbell Bent Over Row:** Hinge to about forty-five degrees. Flat back, brace. Pull to your lower ribs.
 - **Barbell Hip Thrust:** Upper back on the bench, pad on the bar. Ribs down, chin tucked. Squeeze at the top for two seconds.
 - **Barbell Cyclist Squat:** Heels on plates, bar in the front rack, elbows high. Sit straight down and drive up.
+- **Barbell RDL:** Hips back, bar close to your legs, slow 3-second lowering. Stop when you feel the full hamstring stretch.
 - **Push Press + Push Jerk:** Clear your overhead space. Dip straight down, drive, and lock out over your ears. The jerk reps should feel easier than the press.
 - **Single-leg DB RDL:** Hips back, soft knee, flat back. Keep your hips square. Left side, thirty seconds, then right.
 - **Curtsy Lunge:** Step back and across behind you. Front knee tracks over the toes. Chest tall.
 - **Bulgarian Split Squat:** Back foot on the bench, long step out. Drop straight down, front heel stays planted.
 - **Weighted Dead Bug:** Ribs down, low back on the floor. Breathe out as you reach.
 - **Chest-Supported DB Row:** Chest on the pad. Go heavy. Elbows to your hips.
-- **DB Pullover:** Ribs down. Slow arc over your head. Feel the lats stretch.
 - **Dips:** Shoulders down, slight lean forward. Bodyweight first. Add weight when it's easy.
 - **Weighted Copenhagen Plank:** Top foot on the bench, hips high. Stop if you feel any pubic bone discomfort.
 - **GHD Hip Extension:** Hips just past the pad. Squeeze the glutes at the top. Don't over-arch your lower back.
-- **Slider Hamstring Curl:** Hips high. Slow on the way out. Pull the heels in with your hamstrings.
+- **DB Step-Up:** High bench, lean slightly forward, drive through the front heel. Control the way down.
+- **Slider Hamstring Curl:** Hips high. Slow 3-second lowering — the eccentric is what makes it hard. Pull the heels in with your hamstrings.
+- **Clamshell:** Slow and controlled — feel it in the side of the glute. Once 20 reps feel easy, add weight on the top hip.
 - **Bird Dog:** Opposite arm and leg. Keep your hips level.
 - **Pallof Hold:** Band at chest height. Don't let it pull you around.
 - **KB Swing:** Hips, not arms. Snap the hips and let the bell float.

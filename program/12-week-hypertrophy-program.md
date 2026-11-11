@@ -1,6 +1,6 @@
 # 12-Week Hypertrophy Program
 **Mon Nov 9, 2026 – Sun Jan 31, 2027 · Muscle-Building Phase**
-*Revised Nov 7, 2026 (see program-revisions.md)*
+*Revised Nov 11, 2026 (see program-revisions.md)*
 
 Goal: build as much muscle as possible this block, with a visibly leaner, ripped physique as the one-year outcome.
 Priority order: Glutes → Shoulders → Legs → Core
@@ -10,8 +10,9 @@ Priority order: Glutes → Shoulders → Legs → Core
 
 ## How Sets and Rest Work
 
-- **One heavy barbell lift per day:** Back Squat (Mon), Bench Press (Tue), Cyclist Squat (Wed), Push Press/Jerk (Thu), Bent Over Row (Sat). Hip Thrust on Monday and Saturday is a low-fatigue glute lift, not a second heavy lift.
+- **Main barbell lifts:** Back Squat (Mon), Bench Press (Tue), Cyclist Squat and Barbell RDL (Wed), Push Press/Jerk (Thu), Bent Over Row (Sat). Wednesday has two on purpose. Hip Thrust on Monday and Saturday is a low-fatigue glute lift, not a heavy lift.
 - **No supersets.** Every exercise is its own straight sets. Finish all sets of one exercise before starting the next.
+- **Set counts include warm-up sets.** The session is timed start to finish, so the set count on a lift's line is the total with its warm-up sets, and every warm-up set has its own rest. Back Squat = 3 warm-up + 4 working = 7 sets.
 - **Rest between sets:**
   - Main lifts: 2:00 maximum.
   - Smaller exercises and accessories: 1:00-1:30, as written on each exercise.
@@ -19,7 +20,25 @@ Priority order: Glutes → Shoulders → Legs → Core
 - **Setup gap between exercises: 2:00.** Take up to 2 minutes to set up before each new exercise (plates, bench, dumbbells, band). The last rest of the previous exercise counts toward it, so after your final set you have the full 2:00 before the next exercise starts.
 - **Unilateral work (marked "ea"):** do every rep on the left, rest 30 seconds, then every rep on the right. That is one set. Then take the set rest. Core holds marked "ea" (Copenhagen, Pallof): one side, then the other, no extra rest.
 - **1RM test weeks (5 and 11):** every accessory runs 2 sets and the finisher is skipped, so the session fits in 60 minutes.
-- Time estimates are rough (about 45 seconds per side per set) and include the setup gaps. After week 1, tell the coach which sessions ran over.
+- Time estimates are rough (about 45 seconds per side per set) and include the setup gaps and the warm-up sets. After week 1, tell the coach which sessions ran over.
+
+---
+
+## Warm-Up Sets and Effort (RPE)
+
+**Warm-up sets (Back Squat, Bench Press, Cyclist Squat, Barbell RDL, Push Press):** these are part of the exercise and are listed with it. Each of those lifts has 3 warm-up sets before the working sets: 5 reps at RPE 3, 3 reps at RPE 4, then 1-2 reps at RPE 5 (RPE 3 feels like nothing, RPE 5 is quick and crisp with plenty left). Rest 45-60s between warm-up sets. The set count on each lift's line is the total: the Back Squat is 3 warm-up sets plus 4 working sets, so 7 sets. "4 × 6" always means working sets only. No empty-bar set. Hip Thrust, Bent Over Row, and all dumbbell and accessory work get no warm-up sets: the general warm-up is enough, and the first working set starts at the load. On 1RM test days, use the test warm-up instead (see the 1RM section).
+
+**Effort (RPE):** every exercise shows an RPE target. RPE is how many reps you had left when the set ended, so no 1RM is needed and it works the same for barbells and dumbbells.
+
+| RPE | Reps left | Where it's used |
+|---|---|---|
+| 6 | about 4 | Deload weeks |
+| 7 | about 3 | Core moves, the push press reps |
+| 8 | about 2 | Most sets |
+| 9 | about 1 | Last set of a main lift, last set of isolation work |
+| 10 | none | 1RM tests and Friday sprints only |
+
+If you can't get the written reps at the written RPE, drop the weight. If you hit the top of the range at RPE 8 or easier on every set, go up. When the next dumbbell is too big a jump, stay at your weight and add reps. Never go to RPE 10 outside test days and sprints.
 
 ---
 
@@ -28,7 +47,7 @@ Priority order: Glutes → Shoulders → Legs → Core
 Two different rules apply depending on the equipment, because dumbbells jump in bigger increments than barbells do.
 
 ### Barbell main lifts — straight weight progression
-(Back Squat, Hip Thrust, Bench Press, Bent Over Row, Push Press/Jerk, Cyclist Squat)
+(Back Squat, Hip Thrust, Bench Press, Bent Over Row, Push Press/Jerk, Cyclist Squat, Barbell RDL)
 
 Add small plates (2.5-5 lb per side) whenever you hit **all sets at the top of the rep range with 2+ reps still left in the tank** (RPE ≤ 8). If a set was genuinely hard (RPE 9+), repeat that weight next week before adding. If you miss reps two sessions in a row, drop 10% and rebuild from there.
 
@@ -56,7 +75,7 @@ Two loading blocks: Weeks 1-5 and Weeks 7-11. The table runs twice, resetting at
 
 If the next dumbbell is too big a jump (you hit 12 and the heavier weight only gets 4-5 reps), stay at the current weight one more block and push reps past 12, or use a smaller increment if your dumbbells allow it.
 
-**Higher-rep isolation wave** (DB Lateral Raise, Seated Rear Delt Fly, GHD Hip Extension, Slider Hamstring Curl):
+**Higher-rep isolation wave** (DB Lateral Raise, GHD Hip Extension, Slider Hamstring Curl):
 
 | Week in block | Target reps |
 |---|---|
@@ -79,10 +98,10 @@ Each 6-week cycle builds toward a max, then deloads.
 | 1 | Weeks 1-4 | **Week 5 (Dec 7-13)** | Week 6 |
 | 2 | Weeks 7-10 | **Week 11 (Jan 18-24)** | Week 12 |
 
-**Lifts tested:** Back Squat (Monday), Bench Press (Tuesday), Barbell Hip Thrust (Saturday, replaces the light hip thrust).
+**Lifts tested:** Back Squat (Monday), Bench Press (Tuesday), Barbell Hip Thrust (Saturday, replaces that day's hip thrust sets).
 
 **How the test works (replaces that lift's usual sets):**
-1. Warm up: empty bar × 10, then roughly 40% × 5, 60% × 3, 75% × 2, 85% × 1, 92% × 1.
+1. Warm up: 5 reps at RPE 3, 3 reps at RPE 4, 2 reps at RPE 5, 1 rep at RPE 6, then 1 rep at RPE 7-8.
 2. Work up to a max in at most 3 attempts, in 2.5-5 lb jumps. Rest 3-4 minutes between heavy attempts.
 3. Every rep must be clean: full depth on squat, a pause on the chest for bench, a 2-second lockout on hip thrust. A missed rep or form break ends the test; the last good rep is your max.
 4. No back-off sets. Do the rest of the day's work as normal, with every accessory at 2 sets and no finisher.
@@ -96,15 +115,15 @@ Each 6-week cycle builds toward a max, then deloads.
 
 | Day | Focus | Est. time |
 |---|---|---|
-| Monday | Lower A — Glute Focus (Back Squat, Hip Thrust) | ~58 min |
+| Monday | Lower A — Glute Focus (Back Squat, Hip Thrust) | ~57 min |
 | Tuesday | Upper A — Chest + Back (Bench Press) | ~58 min |
-| Wednesday | Lower B — Quads + Hamstrings (Cyclist Squat) | ~50 min |
-| Thursday | Upper B — Shoulders + Chest (Push Press) | ~57 min |
+| Wednesday | Lower B — Quads + Hamstrings (Cyclist Squat, RDL) | ~56 min |
+| Thursday | Upper B — Shoulders + Chest (Push Press) | ~58 min |
 | Friday | Conditioning — 15-second sprints | ~30-36 min |
-| Saturday | Full Body — Pull + Glutes (Bent Over Row) | ~55 min |
+| Saturday | Full Body — Glute Focus (Hip Thrust, Row, Step-Up) | ~55 min |
 | Sunday | Rest | — |
 
-**Deload weeks:** Week 6 and Week 12. Volume -40%, intensity -15%, stop 2-4 reps shy of failure on everything. You are not detraining. You're letting accumulated fatigue clear so the next block hits harder. Hold the same weights from the week before. Don't add, don't test failure, and don't skip it because you feel fine.
+**Deload weeks:** Week 6 and Week 12. Volume -40%, intensity -15%, RPE 6 on everything (about 4 reps left). You are not detraining. You're letting accumulated fatigue clear so the next block hits harder. Hold the same weights from the week before. Don't add, don't test failure, and don't skip it because you feel fine.
 
 **Holidays:** train as normal. Thanksgiving (Thu Nov 26) is Upper B in Week 3. Christmas (Fri Dec 25) and New Year's Day (Fri Jan 1) are conditioning days in Weeks 7 and 8.
 
@@ -112,34 +131,38 @@ Each 6-week cycle builds toward a max, then deloads.
 
 ## MONDAY — Lower A (Glute Focus)
 
-**Estimated time: ~58 min**
+**Estimated time: ~57 min**
 
-**Warm-up** (~4 min)
+**Warm-up** (~2 min)
 - World's Greatest Stretch — 30s each side
 - Glute Bridge March — 30s
-- Hip Circles — 30s each side
-- Posterior Hip Capsule Stretch — 45s each side
 - Squat to Stand — 30s
 
-1. **Barbell Back Squat** — 4×6 · 2 min rest
+1. **Barbell Back Squat** — 7 sets · 2 min rest between working sets
+   - Warm-up 1: 5 reps · RPE 3 · 45-60s rest
+   - Warm-up 2: 3 reps · RPE 4 · 45-60s rest
+   - Warm-up 3: 1-2 reps · RPE 5 · 45-60s rest
+   - Working sets: 4 × 6 · RPE 8 (last set RPE 9)
+
 *Straight weight progression. Your heaviest lower-body lift of the week. Week 5 and Week 11: 1RM test.*
 
-2. **Barbell Hip Thrust** — 4×10 (2s hold) · 2 min rest
-*Your #1 priority movement. The 2-second hold keeps tension on the glute at peak contraction.*
+2. **Barbell Hip Thrust** — 4×10 (2s hold) · RPE 8 · 2 min rest
+*Your #1 priority movement. The 2-second hold keeps tension on the glute at peak contraction. No warm-up sets.*
 
-3. **Single-leg DB RDL** — 3 sets ea (left, 30s, right) · 90s rest
+3. **Single-leg DB RDL** — 3 sets ea (left, 30s, right) · RPE 8 (last set 8-9) · 90s rest
 *Standard wave, 8→12.*
 
-4. **Curtsy Lunge** — 3 sets ea (left, 30s, right) · 90s rest
+4. **Curtsy Lunge** — 3 sets ea (left, 30s, right) · RPE 8 (last set 8-9) · 90s rest
 *Standard wave, 8→12. Replaces the lateral lunge.*
 
-5. **Weighted Dead Bug** — 3 sets × 8 ea · 60s rest
-*Light DB in the extended arm. DR-safe core.*
+5. **Weighted Dead Bug** — 2 sets × 8 ea · RPE 7 · 60s rest
+*Light DB in the extended arm. Slow and controlled, stop 2 reps before your ribs flare or your low back lifts. DR-safe core.*
 
 **Finisher** — Every 2 min × 3 rounds
 10 KB Swings + 8 Walking Lunges ea
+*RPE 8 pace. Hard but repeatable: every round finishes inside the 2:00.*
 
-*Deload week: 3×6 squat, 3×10 hip thrust, 2 sets of each accessory, skip finisher. Hold last week's weights.*
+*Deload week: squat 3×6 (6 sets with the 3 warm-up sets), 3×10 hip thrust, 2 sets of each accessory, skip finisher. Hold last week's weights.*
 
 ---
 
@@ -147,113 +170,130 @@ Each 6-week cycle builds toward a max, then deloads.
 
 **Estimated time: ~58 min, no finisher**
 
-**Warm-up** (~4 min)
+**Warm-up** (~2 min)
 - Cat Cow — 30s
-- Child's Pose Thread the Needle — 30s each side
 - Scapular Push-up — 30s
 - Push-up to Down Dog — 30s
 - Band Pull-Apart ×15 — rotator cuff prep before pressing
 
-1. **Barbell Bench Press** — 4×8 · 2 min rest
+1. **Barbell Bench Press** — 7 sets · 2 min rest between working sets
+   - Warm-up 1: 5 reps · RPE 3 · 45-60s rest
+   - Warm-up 2: 3 reps · RPE 4 · 45-60s rest
+   - Warm-up 3: 1-2 reps · RPE 5 · 45-60s rest
+   - Working sets: 4 × 8 · RPE 8 (last set RPE 9)
+
 *Straight weight progression. Week 5 and Week 11: 1RM test.*
 
-2. **Chest-Supported DB Row** — 4 sets · 90s rest
-*Standard wave, 8→12. Go heavy. Your back-thickness builder on Tuesday, with zero lower-back load.*
+2. **Chest-Supported DB Row** — 4 sets · 8→12 · RPE 8 (last set 8-9) · 90s rest
+*Standard wave. Go heavy. Your back-thickness builder on Tuesday, with zero lower-back load.*
 
-3. **DB Squeeze Press** — 2 sets · 75s rest
-*Standard wave, 8→12.*
+3. **DB Squeeze Press** — 2 sets · 8→12 · RPE 8 (last set 8-9) · 75s rest
+*Standard wave.*
 
-4. **Arnold Press** — 3 sets · 75s rest
-*Standard wave, 8→12.*
+4. **Arnold Press** — 3 sets · 8→12 · RPE 8 (last set 8-9) · 75s rest
+*Standard wave.*
 
-5. **DB Rear Delt Fly** — 3 sets · 60s rest
-*Standard wave, 8→12.*
+5. **DB Rear Delt Fly** — 3 sets · 8→12 · RPE 8 (last set 8-9) · 60s rest
+*Standard wave.*
 
-6. **DB Lateral Raise** — 3 sets · 60s rest
-*Higher-rep wave, 10→14.*
+6. **DB Lateral Raise** — 3 sets · 10→14 · RPE 8 (last set 9) · 60s rest
+*Higher-rep wave.*
 
-7. **Incline DB Curl** — 3 sets · 60s rest
-*Standard wave, 8→12.*
+7. **Incline DB Curl** — 3 sets · 8→12 · RPE 8 (last set 8-9) · 60s rest
+*Standard wave.*
 
-8. **Weighted Copenhagen Plank** — 2 sets × 20s ea · 45s rest
-*DR-safe core rotation. Progress slowly.*
+8. **Weighted Copenhagen Plank** — 2 sets × 20s ea · RPE 7 · 45s rest
+*Hips high, stop the set when form breaks. DR-safe core rotation. Progress slowly.*
 
-*Deload week: 3×8 bench, 3 sets chest-supported row, 2 sets of each other accessory. Hold last week's weights.*
+*Deload week: bench 3×8 (6 sets with the 3 warm-up sets), 3 sets chest-supported row, 2 sets of each other accessory. Hold last week's weights.*
 
 ---
 
 ## WEDNESDAY — Lower B (Quads + Hamstrings)
 
-**Estimated time: ~50 min**
+**Estimated time: ~56 min**
 
-**Warm-up** (~4 min)
+**Warm-up** (~2 min)
 - World's Greatest Stretch — 30s each side
 - Glute Bridge March — 30s
-- Hip Circles — 30s each side
-- Posterior Hip Capsule Stretch — 45s each side
 - Squat to Stand — 30s
 
-1. **Barbell Cyclist Squat** (front squat position, heels elevated) — 4×10 · 2 min rest
-*Straight weight progression. More upright, more quad, less posterior chain than Monday's back squat.*
+1. **Barbell Cyclist Squat** (front squat position, heels elevated) — 7 sets · 2 min rest between working sets
+   - Warm-up 1: 5 reps · RPE 3 · 45-60s rest
+   - Warm-up 2: 3 reps · RPE 4 · 45-60s rest
+   - Warm-up 3: 1-2 reps · RPE 5 · 45-60s rest
+   - Working sets: 4 × 6 · RPE 8 (last set RPE 9)
 
-2. **Bulgarian Split Squat** — 3 sets ea (left, 30s, right) · 90s rest
-*Standard wave, 8→12.*
+*Straight weight progression: add 2.5-5 lb per side once all four sets hit 6 clean with 2 in the tank. Normal controlled lowering. More upright, more quad, less posterior chain than Monday's back squat. Brace on every rep, and if your breathing is the limit, take two breaths at the top before the next rep.*
 
-3. **GHD Hip Extension** — 3 sets · 75s rest
-*Higher-rep wave, 10→14. Squeeze glutes at the top.*
+2. **Barbell RDL** — 6 sets · 2 min rest between working sets
+   - Warm-up 1: 5 reps · RPE 3 · 45-60s rest
+   - Warm-up 2: 3 reps · RPE 4 · 45-60s rest
+   - Warm-up 3: 1-2 reps · RPE 5 · 45-60s rest
+   - Working sets: 3 × 8, 3-second lowering · RPE 8 (last set RPE 9)
 
-4. **Slider Hamstring Curl** — 3 sets · 75s rest
-*Higher-rep wave, 10→14. Slow on the way out.*
+*Straight weight progression. 3-second lowering, hips back, bar close to your legs, stop when the hamstrings are fully stretched. If your lower back flares, switch to the single-leg DB RDL and tell the coach.*
 
-5. **Bird Dog** — 3 sets × 8 ea · 45s rest
-*DR-safe core rotation.*
+3. **Bulgarian Split Squat** — 3 sets ea (left, 30s, right) · 8→12 · RPE 8 (last set 8-9) · 90s rest
+*Standard wave. A regular working set, no warm-up.*
+
+4. **Slider Hamstring Curl** — 3 sets · 10→14 · RPE 8 (last set 9) · 75s rest
+*Higher-rep wave. 3-second lowering. Move to single-leg once 14 reps feel easy. The slow lowering is what makes it hard.*
+
+5. **Bird Dog** — 3 sets × 8 ea · RPE 7 · 45s rest
+*Smooth, no failure. DR-safe core rotation.*
 
 **Finisher** — Every 2 min × 3 rounds
 12 cal Bike + 8 Goblet Squats
-*The bike keeps leg soreness low so Friday stays fresh. Keep the goblet squats moderate and controlled. If your legs are wrecked, swap the squats for 10 Glute Bridges.*
+*RPE 8 pace. Hard but repeatable: every round finishes inside the 2:00. The bike keeps leg soreness low so Friday stays fresh. Keep the goblet squats moderate and controlled. If your legs are wrecked, swap the squats for 10 Glute Bridges.*
 
-*This is a shorter session on purpose. After week 1, tell the coach how it felt and whether there is room to add more.*
+*After this week, tell the coach whether Wednesday fit in 60 minutes and how your quads and hamstrings felt.*
 
-*Deload week: 3×10 cyclist squat, 2 sets of each accessory, skip finisher. Hold last week's weights.*
+*Deload week: cyclist squat 3×6 (6 sets with the 3 warm-up sets), RDL 2×8 (5 sets with the 3 warm-up sets), 2 sets of each accessory, skip finisher. Hold last week's weights.*
 
 ---
 
 ## THURSDAY — Upper B (Shoulders + Chest)
 
-**Estimated time: ~57 min**
+**Estimated time: ~58 min**
 
-**Warm-up** (~4 min)
+**Warm-up** (~2 min)
 - Cat Cow — 30s
-- Child's Pose Thread the Needle — 30s each side
 - Scapular Push-up — 30s
 - Push-up to Down Dog — 30s
-- Band Pull-Apart ×15
+- Band Pull-Apart ×15 — rotator cuff prep before pressing
 
-1. **Push Press / Push Jerk Drop Set** — 5 × (2 Push Press + 4 Push Jerk) · 2 min rest
+1. **Push Press / Push Jerk Drop Set** — 8 sets · 2 min rest between working sets
+   - Warm-up 1: 5 Push Press reps · RPE 3 · 45-60s rest
+   - Warm-up 2: 3 Push Press reps · RPE 4 · 45-60s rest
+   - Warm-up 3: 2 Push Press reps · RPE 5 · 45-60s rest
+   - Working sets: 5 × (2 Push Press + 4 Push Jerk) · RPE 7-8 on the press reps
+
 *Straight weight progression on the Push Press portion. Load it at a weight you can strict press for roughly 4-5 reps. The Push Jerk reps should feel easier since you're already primed.*
 
-2. **DB Shoulder Press** — 3 sets · 75s rest
-*Standard wave, 8→12.*
+2. **DB Shoulder Press** — 3 sets · 8→12 · RPE 8 (last set 8-9) · 75s rest
+*Standard wave.*
 
-3. **DB Floor Press** — 3 sets · 75s rest
-*Standard wave, 8→12.*
+3. **DB Floor Press** — 3 sets · 8→12 · RPE 8 (last set 8-9) · 75s rest
+*Standard wave.*
 
-4. **Dips** — 3 sets × 8-10 · 75s rest
-*Add weight once bodyweight hits the top of the range.*
+4. **Dips** — 3 sets × 8-10 · RPE 8 (last set 8-9) · 75s rest
+*Bodyweight. Add weight once bodyweight hits the top of the range.*
 
-5. **Overhead Tricep Extension** — 3 sets · 60s rest
-*Standard wave, 8→12.*
+5. **Overhead Tricep Extension** — 3 sets · 8→12 · RPE 8 (last set 8-9) · 60s rest
+*Standard wave.*
 
-6. **DB Lateral Raise** — 3 sets · 60s rest
-*Higher-rep wave, 10→14.*
+6. **DB Lateral Raise** — 3 sets · 10→14 · RPE 8 (last set 9) · 60s rest
+*Higher-rep wave.*
 
-7. **Pallof Hold** — 2 sets × 20s ea · 45s rest
+7. **Pallof Hold** — 2 sets × 20s ea · RPE 7 · 45s rest
 *Band tension, not load. Core control.*
 
 **Finisher** — For time, 6 min cap
 10-8-6-4-2: DB Snatch ea arm + Push-ups
+*RPE 8 pace. Hard but repeatable pace.*
 
-*Deload week: 3 rounds drop set (not 5), 2 sets of each accessory, skip finisher. Hold last week's weights.*
+*Deload week: 3 rounds drop set plus the 3 warm-up sets (6 sets), 2 sets of each accessory, skip finisher. Hold last week's weights.*
 
 ---
 
@@ -271,7 +311,7 @@ Short, sharp and cyclical, so there is almost no muscle soreness and Saturday st
 
 **On the machine, one continuous block**
 1. Easy cardio — 3 min, building gradually
-2. Builds — 3 × 10 seconds at about 70%, with 50s easy between
+2. Builds — 3 × 10 seconds at RPE 7, with 50s easy between
 3. Main set — see the table
 4. Cool-down — 5 min easy, then light stretching
 
@@ -302,6 +342,7 @@ Pogos and skips are impact. If you feel any leaking, pressure or heaviness, drop
 | 11 | Benchmark (1RM week, hold back) | Bike | 10 × 15/45, compare to Wk 5 and 7 | 10 |
 | 12 | Deload | | 20 min easy | |
 
+- **Effort:** easy cardio is RPE 3-4 (conversational), builds are RPE 7, sprints are RPE 10 for 15 seconds, easy between sprints is RPE 3-4, cool-down is RPE 3.
 - **Progress by output:** record calories on the bike and meters on the row for every sprint. Sprints 1-3 set your number. Next time on the same format, beat your average.
 - **Quality rule:** if a sprint drops more than about 10-15% below your best, the main set is over. Cool down.
 - **Skip rule:** skip it (or take an easy 20-minute walk or bike) if your legs are wrecked, you slept badly, or anything feels off with your pelvic floor.
@@ -309,40 +350,39 @@ Pogos and skips are impact. If you feel any leaking, pressure or heaviness, drop
 
 ---
 
-## SATURDAY — Full Body (Pull + Glutes)
+## SATURDAY — Full Body (Glute Focus)
 
 **Estimated time: ~55 min**
 
-**Warm-up** (~4 min)
+**Warm-up** (~2 min)
 - Cat Cow — 30s
-- Child's Pose Thread the Needle — 30s each side
 - Scapular Push-up — 30s
 - Glute Bridge March — 30s
 - Push-up to Down Dog — 30s
 
-1. **Barbell Bent Over Row** — 4×8 · 2 min rest
-*Straight weight progression.*
+1. **Barbell Hip Thrust** — 3×12 (2s hold) · RPE 8 · 2 min rest
+*Leads the day so the glutes are fresh. Regular working weight with its own progression, separate from Monday. Straight weight progression. No warm-up sets. Week 5 and Week 11: 1RM test instead.*
 
-2. **Barbell Hip Thrust** — 3×12 (2s hold) · 90s rest
-*About 60% of Monday's working weight, RPE 7 or below. Glutes are priority #1, and this adds frequency without taxing the legs. Don't progress it weekly; it follows Monday. Week 5 and Week 11: 1RM test instead.*
+2. **Barbell Bent Over Row** — 4×8 · RPE 8 (last set RPE 9) · 2 min rest
+*Straight weight progression. No warm-up sets: the first set starts at the working load.*
 
-3. **DB Pullover** — 3 sets × 8-12 · 90s rest
-*Working weight 45 lb; extend the rep ceiling before jumping to 55 lb. Lying flat, arms tracking close together, arc from above the chest to behind the head. Lats and rib cage stretch.*
+3. **DB Step-Up** (high bench) — 3 sets ea (left, 30s, right) · 8→12 · RPE 8 (last set 8-9) · 90s rest
+*Standard wave. Lean slightly forward, drive through the front heel, control the way down. A high step loads the glute as much as the quad.*
 
-4. **DB Row (tripod)** — 2 sets ea (left, 30s, right) · 60s rest
-*Standard wave, 8→12.*
+4. **DB Bicep Curl** — 3 sets · 8→12 · RPE 8 (last set 8-9) · 60s rest
+*Standard wave. Replaces the spider curl.*
 
-5. **Seated Rear Delt Fly** — 2 sets · 60s rest
-*Higher-rep wave, 10→14.*
+5. **GHD Hip Extension** — 3 sets · 10→14 · RPE 8 (last set 9) · 75s rest
+*Higher-rep wave. Glute version: round the upper back slightly, squeeze the glutes hard at the top, and don't over-arch your lower back.*
 
-6. **DB Bicep Curl** — 3 sets · 60s rest
-*Standard wave, 8→12. Replaces the spider curl.*
+6. **Clamshell** (no band) — 3 sets ea × 15-20 (left, 30s, right) · RPE 8 · 60s rest
+*Slow and controlled. You should feel it in the side of the glute. Once 20 reps feel easy, hold a dumbbell or ankle weight on the top hip. The finishing glute piece, after the heavy work.*
 
 **Finisher** — Every 2 min × 3 rounds
 20m Suitcase Carry ea + 8 KB Swings
-*The carries are your DR-safe core move for the day.*
+*RPE 8 pace. Hard but repeatable: every round finishes inside the 2:00. The carries are your DR-safe core move for the day.*
 
-*Deload week: 3×8 row, 2 sets hip thrust, 3 sets pullover, 2 sets of each accessory, skip finisher. Hold last week's weights.*
+*Deload week: 2 sets hip thrust, 3×8 row, 2 sets of each accessory, skip finisher. Hold last week's weights.*
 
 ---
 
@@ -389,5 +429,5 @@ Pogos and skips are impact. If you feel any leaking, pressure or heaviness, drop
 - **Autoregulated deload:** if Squat Set 1 feels RPE 8+ when the target is RPE 6-7, make it a deload day. The same applies to a 1RM test day.
 - **Copenhagen Plank:** progress slowly and watch for pubic symphysis discomfort.
 - **Overhead pressing:** if the shoulder feels loose, reduce load and do extra band pull-aparts first.
-- **Lower back:** Barbell RDL stays out of the program. Single-leg DB RDL is the hinge pattern.
+- **Lower back:** Barbell RDL is in on Wednesday. If your lower back flares, switch that day to the single-leg DB RDL and tell the coach.
 - **Pain:** sharp or joint pain means stop, swap, and reassess.

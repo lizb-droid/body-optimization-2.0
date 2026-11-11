@@ -70,3 +70,71 @@ Requested by Liz. Previous versions are in `superseded/` at the repo root.
 | 10 | Coach script | Rewritten: quieter, conversational, no "10 seconds left", cues only on hard moves, effort guidance, session intros | Liz's request |
 
 Still to do: update `WORKOUTS` and `WEEKS` in `app/index.html` and wire in the new script (Claude Code).
+
+## 2026-11-11 — Wednesday rebuilt, warm-up ramps, effort numbers on every exercise
+
+Requested by Liz after the first Wednesday session. Previous version kept as `superseded/12-week-hypertrophy-program.NOV-7-VERSION.md`.
+
+| # | Category | Change | Why |
+|---|---|---|---|
+| 1 | Wednesday | Barbell RDL (3×8, 3s lowering) added as a second main lift, right after the Cyclist Squat. GHD Hip Extension removed | Wednesday had no heavy hamstring work; GHD hip extension is mostly glutes and lower back |
+| 2 | Wednesday | Cyclist Squat changed from 4×10 to 4×6-8, add weight once all sets hit 8 | At 10 reps cardio gave out before the quads |
+| 3 | Wednesday | Slider Hamstring Curl gets a 3-second lowering, single-leg once 14 reps are easy | Bodyweight curls were too light to create a pump |
+| 4 | Warm-up sets | Ramp of 50% × 5, 65% × 3, 80% × 1-2 (of working weight, no empty bar) before Back Squat, Bench, Cyclist Squat, RDL and Push Press. None for Hip Thrust, Bent Over Row or dumbbell work | Easier to jump into heavy working weight |
+| 5 | Effort numbers | Every exercise now shows an approximate % of 1RM and reps in the tank (2, last set of a main lift 1). Core and bodyweight moves get an effort cue | Removes the guess between "easy tens" and real work |
+| 6 | Time | General warm-up cut to about 2 minutes on every lifting day; Weighted Dead Bug cut from 3 to 2 sets on Monday | Makes room for the warm-up ramps inside 60 minutes |
+| 7 | Guardrail | Barbell RDL allowed again; single-leg DB RDL is the fallback if the lower back flares | Liz's RDLs do not bother her back |
+
+Still to do: update `WORKOUTS` and `WEEKS` in `app/index.html` and the warm-up lines in `app/COACH-SCRIPT.md` (Claude Code).
+
+### Later the same day (Nov 11): whole-number percentages and a glute-focused Saturday
+Previous version kept as `superseded/12-week-hypertrophy-program.NOV-11-MORNING-VERSION.md`.
+
+| # | Category | Change | Why |
+|---|---|---|---|
+| 1 | Effort numbers | Percentages are now whole tens, one starting number per exercise: 80% heavy barbell lifts, 70% moderate work and the 8→12 dumbbell wave, 60% the 10→14 isolation wave. Ranges removed | Liz's call; easier to use. Reps in the tank still decides the set, and the % gets recalibrated after the Week 5 tests |
+| 2 | Wednesday | Cyclist Squat changed from 4×6-8 to a plain 4×6, add weight once all sets hit 6 clean | One number, same rule as the other barbell lifts |
+| 3 | Saturday | Hip Thrust drops the "60% of Monday" rule: 3×12 at regular working weight with its own progression | Liz can be strong on it and benefits from real load |
+| 4 | Saturday | Seated Rear Delt Fly and DB Row (tripod) removed. GHD Hip Extension (3 sets, 10→14, glute version) and Banded Clamshell (3 sets ea × 15-20) added | Saturday did not feel glute focused; Liz does not feel the rear delt fly |
+| 5 | Profile | Saturday now described as glute-focused; Wednesday lists the Barbell RDL | Keeps the profile in line with the program |
+
+Still to do: update `WORKOUTS` and `WEEKS` in `app/index.html` and the exercise and warm-up lines in `app/COACH-SCRIPT.md` (Claude Code).
+
+### Later the same day (Nov 11): RPE replaces percentages
+Previous version kept as `superseded/12-week-hypertrophy-program.NOV-11-PERCENT-VERSION.md`. This replaces the whole-number percentage change above.
+
+| # | Category | Change | Why |
+|---|---|---|---|
+| 1 | Effort | Every exercise now shows an RPE target instead of a % of 1RM. RPE 8 on most sets, last set of a main lift RPE 9, isolation work last set RPE 9, core RPE 7, deload RPE 6, Friday sprints RPE 10 | Liz's call; no 1RM needed, works for dumbbells, ends the % confusion |
+| 2 | Warm-up sets | Ramp stays at 50% × 5, 65% × 3, 80% × 1-2 of that day's working weight | The only percentages left, and they need no max |
+| 3 | Friday | Easy cardio RPE 3-4, builds RPE 7, sprints RPE 10 | Same scale everywhere |
+
+Still to do: update `WORKOUTS` and `WEEKS` in `app/index.html` and the exercise and warm-up lines in `app/COACH-SCRIPT.md` (Claude Code).
+
+### Later the same day (Nov 11): warm-up sets listed inside each exercise, no percentages
+Previous version kept as `superseded/12-week-hypertrophy-program.NOV-11-RAMP-PERCENT-VERSION.md`.
+
+| # | Category | Change | Why |
+|---|---|---|---|
+| 1 | Warm-up sets | Back Squat, Bench Press, Cyclist Squat, Barbell RDL and Push Press now list their warm-up sets as part of the exercise: 5 reps RPE 3, 3 reps RPE 4, 1-2 reps RPE 5, then the working sets. Set counts are totals (for example Back Squat is 7 sets: 3 warm-up + 4 working) | Easier to read and to carry into the app; "4 × 6" now always means working sets |
+| 2 | Percentages | All percentages removed, including the 1RM test warm-up (5 reps RPE 3, 3 reps RPE 4, 2 reps RPE 5, 1 rep RPE 6, 1 rep RPE 7-8) | Liz wants RPE only |
+
+Still to do: update `WORKOUTS` and `WEEKS` in `app/index.html` (warm-up sets as their own set rows) and the exercise and warm-up lines in `app/COACH-SCRIPT.md` (Claude Code).
+
+### Later the same day (Nov 11): set counts include warm-up sets
+| # | Category | Change | Why |
+|---|---|---|---|
+| 1 | Set counts | The set count on every warm-up lift is the total including warm-up sets (Back Squat, Bench, Cyclist Squat 7; RDL 6; Push Press 8), each warm-up set with its own rest. Deload lines updated the same way | The app times the whole session start to finish, so warm-up sets need their own time |
+
+### Later the same day (Nov 11): Saturday rebuilt as full body with glute focus
+Previous version kept as `superseded/12-week-hypertrophy-program.NOV-11-SAT-V1-VERSION.md`.
+
+| # | Category | Change | Why |
+|---|---|---|---|
+| 1 | Saturday order | Hip Thrust moved to first, then Bent Over Row | Glute focus: the glute lift gets the fresh slot |
+| 2 | Saturday | DB Step-Up (high bench, 3 ea × 8→12) added; DB Pullover removed | Adds a leg and glute movement so the day feels full body; back is already covered by the row and Tuesday |
+| 3 | Saturday | Banded Clamshell changed to plain Clamshell (no band), with a weight on the hip once 20 reps feel easy | Liz's call |
+| 4 | Saturday | DB Bicep Curl and GHD Hip Extension kept; finisher unchanged. About 55 minutes | |
+| 5 | Profile | Saturday row now reads "Full body — glute focus" | Keeps the profile in line with the program |
+
+Still to do: update `WORKOUTS` and `WEEKS` in `app/index.html` and the Saturday exercise lines in `app/COACH-SCRIPT.md` (Claude Code).
