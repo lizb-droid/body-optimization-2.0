@@ -2592,8 +2592,9 @@ function gsHush(){
   try{ if(gsAudio){ gsAudio.onended=gsAudio.onerror=null; gsAudio.pause(); } }catch(e){}
   try{ speechSynthesis.cancel(); }catch(e){}
 }
+function gsEnsureAudio(cb){ if(!gsAC) return; if(gsAC.state==='running'){ cb(); return; } gsAC.resume().then(cb).catch(()=>{}); }
 function gsUnlockAudio(){
-  try{ gsAC=gsAC||new (window.AudioContext||window.webkitAudioContext)(); gsAC.resume(); }catch(e){}
+  try{ gsAC=gsAC||new (window.AudioContext||window.webkitAudioContext)(); gsAC.onstatechange=()=>{ if(gsAC&&gsAC.state!=='running') gsAC.resume().catch(()=>{}); }; gsAC.resume(); }catch(e){}
   try{ if(gsAudio&&!gsAudio.dataset.unlocked){ gsAudio.dataset.unlocked='1'; gsAudio.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='; const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(()=>{}); } }catch(e){}
 }
 // Every line the coach can say — used by tools/record-coach-voice.py via tools/coach-lines.mjs
@@ -2636,7 +2637,7 @@ const GS_CHIMES={
   ding:{lbl:'Ding-dong',play:()=>{ gsTone(784,0,.7,'sine',.32); gsTone(622,.38,1,'sine',.32); }}
 };
 function gsChimeId(){ try{ const c=localStorage.getItem('betalizgschime'); return GS_CHIMES[c]?c:'rising'; }catch(e){ return 'rising'; } }
-function gsChime(id){ if(!G||G.audio==='off'||!gsAC) return; if(gsAC.state==='suspended'){ gsAC.resume().then(()=>gsChime(id)); return; } try{ GS_CHIMES[id||gsChimeId()].play(); }catch(e){} }
+function gsChime(id){ if(!G||G.audio==='off'||!gsAC) return; gsEnsureAudio(()=>{ try{ GS_CHIMES[id||gsChimeId()].play(); }catch(e){} }); }
 function gsChimeRaw(id){ gsUnlockAudio(); try{ GS_CHIMES[id||gsChimeId()].play(); }catch(e){} }
 function gsSetChime(id){ try{ localStorage.setItem('betalizgschime',id); }catch(e){} gsChimeRaw(id); sdRender(); }
 function gsAnnounce(){ const st=G&&G.steps[G.idx]; if(st) gsSay(st.say); }
@@ -2976,18 +2977,16 @@ function gsCommitLog(checkPR){
 
 function gsBeep(freq,ms){
   if(!G||G.audio==='off'||!gsAC) return;
-  if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(()=>gsBeep(freq,ms),80)); return; }
-  try{
+  gsEnsureAudio(()=>{ try{
     const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+0.04;
     o.frequency.value=freq; o.connect(g); g.connect(gsAC.destination);
     g.gain.setValueAtTime(.7,t); g.gain.exponentialRampToValueAtTime(.001,t+ms/1000);
     o.start(t); o.stop(t+ms/1000);
-  }catch(e){}
+  }catch(e){} });
 }
 function gsCountdownEnd(){
   if(!G||G.audio==='off'||!gsAC) return;
-  if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(gsCountdownEnd,80)); return; }
-  try{
+  gsEnsureAudio(()=>{ try{
     const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+0.02;
     o.frequency.value=880; o.type='sine'; o.connect(g); g.connect(gsAC.destination);
     g.gain.setValueAtTime(0,t);
@@ -2995,17 +2994,15 @@ function gsCountdownEnd(){
     g.gain.setValueAtTime(.6,t+0.6);
     g.gain.linearRampToValueAtTime(0,t+0.7);
     o.start(t); o.stop(t+0.75);
-  }catch(e){}
+  }catch(e){} });
 }
 function gsTripleClick(){
   if(!G||G.audio==='off'||!gsAC) return;
-  if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(gsTripleClick,80)); return; }
-  try{ [0,0.14,0.28].forEach(at=>gsTone(1200,at,.1,'square',.35)); }catch(e){}
+  gsEnsureAudio(()=>{ try{ [0,0.14,0.28].forEach(at=>gsTone(1200,at,.1,'square',.35)); }catch(e){} });
 }
 function gsHighPing(){
   if(!G||G.audio==='off'||!gsAC) return;
-  if(gsAC.state==='suspended'){ gsAC.resume().then(()=>setTimeout(gsHighPing,80)); return; }
-  try{
+  gsEnsureAudio(()=>{ try{
     [0,0.11,0.22].forEach(at=>{
       const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+at+0.02;
       o.frequency.value=2000; o.type='sine'; o.connect(g); g.connect(gsAC.destination);
@@ -3013,7 +3010,7 @@ function gsHighPing(){
       g.gain.exponentialRampToValueAtTime(.001,t+0.05);
       o.start(t); o.stop(t+0.06);
     });
-  }catch(e){}
+  }catch(e){} });
 }
 
 async function gsWake(on){
