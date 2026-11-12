@@ -2337,23 +2337,25 @@ function gsBuild(day,withWarmup){
       }
       lastRest=b.rest; tagThis();
     } else {
-      const {ex,ei}=b.exs[0], n=parseNumSets(ex[1]), restSecs=Math.min(120,REST_TIMES[ex[0]]||120);
+      const {ex,ei}=b.exs[0], n=parseNumSets(ex[1]), restSecs=REST_TIMES[ex[0]]||120;
       const isUni=/\bea\b/.test(ex[1]);
       const isDeload=/↓/.test(WEEKS[S.weekIdx]?.label||''), isMax=/★/.test(WEEKS[S.weekIdx]?.label||'');
-      if(WU_LIFTS.has(ex[0])){
-        const wuReps=ex[0].includes('Push Press')?WU_REPS_PP:WU_REPS;
-        wuReps.forEach((wr,wi)=>{
-          steps.push({kind:'warmup',title:ex[0],sub:`Warm-up ${wi+1} · ${wr}`,
-            dur:WU_DUR[wi],block:blockName,note:'',
-            say:`${gsSpoken(ex[0])}. Warm-up set ${wi+1}. ${wr.split(' · ')[0]}.`,
-            exId:`${day.id}-ex${ei}`,si:-(wuReps.length-wi),exName:ex[0],setsStr:ex[1]});
-          pushPause({kind:'rest',title:'Rest',
-            sub:`45 sec · ${wi<wuReps.length-1?'Warm-up '+(wi+2)+' next':'Working sets next'}`,
-            dur:45,block:blockName,say:'Rest. 45 seconds.'});
-        });
-      }
+      const wuReps=WU_LIFTS.has(ex[0])?(ex[0].includes('Push Press')?WU_REPS_PP:WU_REPS):[];
+      const wuCount=wuReps.length, totalSets=n+wuCount;
+      wuReps.forEach((wr,wi)=>{
+        const parts=wr.split(' · '), repPart=parts[0], rpePart=parts[1];
+        const repMax=repPart.includes('-')?parseInt(repPart.split('-')[1]):parseInt(repPart);
+        pending.push({exId:`${day.id}-ex${ei}`,exName:ex[0],si:wi,setsStr:ex[1]});
+        steps.push({kind:'work',title:ex[0],sub:`Set ${wi+1} of ${totalSets} · ${rpePart} · ${repPart}`,
+          dur:30,block:blockName,note:'',
+          say:`${gsSpoken(ex[0])}. Warm-up set ${wi+1}. ${repPart}.`,
+          exId:`${day.id}-ex${ei}`,si:wi,exName:ex[0],setsStr:`1×${repMax}`});
+        pushPause({kind:'rest',title:'Rest',
+          sub:`${fmtTime(restSecs)} · ${wi<wuReps.length-1?'Warm-up set '+(wi+2)+' next':'Working sets next'}`,
+          dur:restSecs,block:blockName,say:`Rest. ${gsDurSpoken(restSecs)}.`});
+      });
       for(let si=0;si<n;si++){
-        const pct=isDeload?'50-60%':isMax?'85%':(si===0?'60%':'80%');
+        const rpe=isDeload?'RPE 6':isMax?'RPE 9':'RPE 8';
         if(isUni){
           const exId=`${day.id}-ex${ei}`, exName=ex[0];
           const holdMatch=ex[1].match(/×(\d+)s\b/);
@@ -2367,7 +2369,7 @@ function gsBuild(day,withWarmup){
             const isFirst=si===0&&side==='Left';
             const roundTag=n===1?'':si===n-1?' Last round.':(side==='Left'&&si>0)?` Round ${si+1} of ${n}.`:'';
             steps.push({kind:'work',title:exName,
-              sub:`${si===0?'Set 1':'Round '+(si+1)} · ${pct} · ${side} side · ${gsRepsLbl(ex[1]).replace(/\s*ea\b/,'')}`,
+              sub:`${si===0?'Set 1':'Round '+(si+1)} · ${rpe} · ${side} side · ${gsRepsLbl(ex[1]).replace(/\s*ea\b/,'')}`,
               dur:sideDur,block:blockName,note:EXERCISE_NOTES[exName]||'',
               say:`${isFirst?gsSpoken(exName)+'. ':''}${side} side. ${repsSpoken}.${roundTag}`,
               exId,si:ssi,exName,setsStr:ex[1],side});
@@ -2379,9 +2381,9 @@ function gsBuild(day,withWarmup){
           if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Round ${si+2} of ${n} next`,dur:restSecs,block:blockName,
             say:`Rest. ${gsDurSpoken(restSecs)}.`});
         } else {
-          work(ex,ei,si,`Set ${si+1} of ${n} · ${pct} · ${gsRepsLbl(ex[1])}`,blockName,
+          work(ex,ei,wuCount+si,`Set ${wuCount+si+1} of ${totalSets} · ${rpe} · ${gsRepsLbl(ex[1])}`,blockName,
             `${gsSpoken(ex[0])}. ${gsRepsSpoken(ex[1])}.${n>1?' '+(si===n-1?'Last set.':gsOrdinal(si+1)+' set.'):''}`);
-          if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Set ${si+2} of ${n} next`,dur:restSecs,block:blockName,
+          if(si<n-1) rest({kind:'rest',title:'Rest',sub:`Set ${wuCount+si+2} of ${totalSets} next`,dur:restSecs,block:blockName,
             say:`Rest. ${gsDurSpoken(restSecs)}.`});
         }
       }
@@ -3178,7 +3180,11 @@ function gsShown(w){
   else if(cur.w) wVal=cur.w;
   else {
     const pr=parseFloat(S.prs[w.exName])||0;
-    if(pr){ const pct=w.si===0?.60:.80; wVal=String(Math.round(pr*pct/2.5)*2.5); }
+    if(pr){
+      const wuPcts=[.50,.65,.75];
+      const pct=(WU_LIFTS.has(w.exName)&&w.si<3)?wuPcts[w.si]:w.si===0?.60:.80;
+      wVal=String(Math.round(pr*pct/2.5)*2.5);
+    }
   }
   const r=d.r!==undefined?d.r:(cur.r||parseTargetReps(w.setsStr)||'');
   return {w:wVal,r};
