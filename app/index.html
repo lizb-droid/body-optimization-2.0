@@ -458,7 +458,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:'Robo
 .ss-side .plus{width:58px;height:58px;border-radius:50%;background:rgba(40,40,40,.85);border:1px solid #474747;font-size:32px;font-weight:300;display:flex;align-items:center;justify-content:center;line-height:1}
 .ss-side .k{display:flex;align-items:center;gap:3px;font-size:var(--cta-size);font-weight:var(--cta-weight);color:#aaa}
 .ss-side .k svg{width:16px;height:16px;stroke:#aaa;stroke-width:2;fill:none}
-.ss-arc{position:relative;width:min(52vw,220px)}.sx-arc-sm{margin:0 auto;width:min(40vw,160px)}
+.ss-arc{position:relative;width:min(52vw,220px)}.sx-ov{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 0 8px;max-height:55vh;min-height:0}
 .ss-arc svg{display:block;width:100%;height:auto}
 .ss-t{position:absolute;left:0;right:0;bottom:2px;text-align:center}
 .ss-t #gs-t{font-family:'Barlow Condensed','Roboto',sans-serif;font-weight:800;font-size:clamp(52px,16vw,68px);line-height:.9;letter-spacing:-1px;font-variant-numeric:tabular-nums}
@@ -3115,13 +3115,14 @@ function gsRender(){
       <button class="sx-skip" onclick="gsExSegJump(1)">${GS_IC.next}Skip exercise</button>
     </div>
     <div class="sx-tl">${G.steps.exSegs.map((x,i)=>`<div class="sx-seg${st.block===x.block?' cur':''}" style="flex:${x.dur}" onclick="gsExJump(${x.startIdx})" title="${escH(x.name)}"><i id="sx-xf${i}"></i></div>`).join('')}</div>
-    ${st.kind==='preview'?`<div class="sx-main" id="sx-main">
+    ${st.kind==='preview'?`<div class="sx-ov" id="sx-main">
       <div class="sx-title">${escH(sec.title)}</div>
       ${sec.sub?`<span class="sx-chip">${escH(sec.sub)}</span>`:''}
       ${sec.rows.map((r,i)=>`<div class="sx-row${gsPvRow()===i?' on':''}" id="sx-r${i}">
         <div class="nm">${r.n?`<b>${escH(r.n)}</b>`:''}${escH(r.name)}</div><div class="sb">${escH(r.sub)}</div></div>`).join('')}
     </div>
-    <div class="sx-now"><div class="ss-arc sx-arc-sm"><svg viewBox="0 0 200 140" aria-hidden="true"><defs><mask id="ss-mask"><path d="M24.8 127.4 A80 80 0 1 1 175.2 127.4" stroke="#fff" stroke-width="22" fill="none" id="ss-arc-m" stroke-dasharray="0 ${GS_ARC_L}"/></mask></defs><path d="M24.8 127.4 A80 80 0 1 1 175.2 127.4" stroke="rgba(255,255,255,.22)" stroke-width="16" fill="none" stroke-dasharray="3 4.2"/><path d="M24.8 127.4 A80 80 0 1 1 175.2 127.4" stroke="rgba(255,255,255,.7)" stroke-width="16" fill="none" stroke-dasharray="3 4.2" mask="url(#ss-mask)"/></svg><div class="ss-t"><div id="gs-t">0:00</div></div></div></div>`:gsSetView(st)}
+    <div class="ss-fill"></div>
+    <div class="ss-ctrl"><span></span><div class="ss-arc"><svg viewBox="0 0 200 140" aria-hidden="true"><defs><mask id="ss-mask"><path d="M24.8 127.4 A80 80 0 1 1 175.2 127.4" stroke="#fff" stroke-width="22" fill="none" id="ss-arc-m" stroke-dasharray="0 ${GS_ARC_L}"/></mask></defs><path d="M24.8 127.4 A80 80 0 1 1 175.2 127.4" stroke="rgba(255,255,255,.22)" stroke-width="16" fill="none" stroke-dasharray="3 4.2"/><path d="M24.8 127.4 A80 80 0 1 1 175.2 127.4" stroke="${sec.kind==='str'?'var(--pink)':sec.kind==='fin'?'var(--yel)':'var(--ind)'}" stroke-width="16" fill="none" stroke-dasharray="3 4.2" mask="url(#ss-mask)"/></svg><div class="ss-t"><div id="gs-t">0:00</div><small>overview</small></div></div><span></span></div>`:gsSetView(st)}
     <div class="sx-journal">
       <button class="l" onclick="pgOpen()" aria-label="Journal: personal records">${JR_IC.book}Journal</button>
       <button class="r" onclick="jrOpen(G.day.id)">Track results${JR_IC.up}</button>
