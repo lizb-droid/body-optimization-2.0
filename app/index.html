@@ -2473,7 +2473,7 @@ function sdAudio(){ try{ return localStorage.getItem('betalizgsaudio')||'coach';
 function sdSetAudio(m){
   try{ localStorage.setItem('betalizgsaudio',m); }catch(e){}
   if(G){ G.audio=m; if(m!=='coach') gsHush(); }
-  if(m==='coach') gsSpeak('Coach on.'); else if(m==='beeps') gsChimeRaw(); else gsHush();
+  if(m==='coach') gsSpeak('Coach on.'); else if(m==='beeps') gsChime(); else gsHush();
   sdRender(); if(G) gsRender();
 }
 function sdOpen(){
@@ -2492,13 +2492,11 @@ function sdOpen(){
 }
 function sdRender(){
   const b=document.getElementById('jr-body'); if(!b||!JR||JR.mode!=='sound') return;
-  const a=sdAudio(), vs=gsVoices(), chime=gsChimeId();
+  const a=sdAudio(), vs=gsVoices();
   b.innerHTML=`
     <div class="sd-sec"><div class="sd-h">During the workout</div>
       <div class="sd-seg">${[['coach','Coach voice'],['beeps','Sounds only'],['off','Muted']].map(([k,l])=>`<button class="${a===k?'on':''}" onclick="sdSetAudio('${k}')">${l}</button>`).join('')}</div>
-      <p class="sd-note">${a==='coach'?'The coach talks you through each exercise and rest. A click at 10 seconds left.':a==='beeps'?'A chime at each change, a click at 10 seconds left. No talking.':'No sound at all.'}</p></div>
-    <div class="sd-sec"><div class="sd-h">10-second sound <small>Tap to hear</small></div>
-      <div class="sd-list">${Object.entries(GS_CHIMES).map(([id,c])=>`<button class="sd-opt${chime===id?' on':''}" onclick="gsSetChime('${id}')"><span>${c.lbl}</span>${chime===id?HM_CHECK:''}</button>`).join('')}</div></div>
+      <p class="sd-note">${a==='coach'?'The coach talks you through each exercise and rest. A beep at each change, a click at 10 seconds left.':a==='beeps'?'A beep at each change, a click at 10 seconds left. No talking.':'No sound at all.'}</p></div>
     <div class="sd-sec"><div class="sd-h">Coach voice <small>Tap to hear</small></div>
       ${vs.length?`<div class="sd-list">${vs.slice(0,12).map(v=>`<button class="sd-opt${gsVoice&&gsVoice.voiceURI===v.voiceURI?' on':''}" data-uri="${escH(v.voiceURI)}" onclick="gsSetVoice(this.dataset.uri)">
         <span>${escH(v.name.replace(/\s*\((Premium|Enhanced)\)/i,''))}${gsVoiceRank(v)<2?` <em>${/premium/i.test(v.name)?'Premium':'Enhanced'}</em>`:''}</span>${gsVoice&&gsVoice.voiceURI===v.voiceURI?HM_CHECK:`<small>${escH(v.lang)}</small>`}</button>`).join('')}</div>`
@@ -2594,6 +2592,7 @@ function gsHush(){
 }
 function gsEnsureAudio(cb){ if(!gsAC) return; if(gsAC.state==='running'){ cb(); return; } gsAC.resume().then(cb).catch(()=>{}); }
 function gsUnlockAudio(){
+  gsInitSfx();
   try{ gsAC=gsAC||new (window.AudioContext||window.webkitAudioContext)(); gsAC.onstatechange=()=>{ if(gsAC&&gsAC.state!=='running') gsAC.resume().catch(()=>{}); }; gsAC.resume(); }catch(e){}
   try{ if(gsAudio&&!gsAudio.dataset.unlocked){ gsAudio.dataset.unlocked='1'; gsAudio.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='; const pr=gsAudio.play(); if(pr&&pr.catch) pr.catch(()=>{}); } }catch(e){}
 }
@@ -2628,18 +2627,14 @@ function gsTone(freq,at,dur,type,vol){
   g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||.3,t+.008); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
   o.start(t); o.stop(t+dur+.02); return o;
 }
-const GS_CHIMES={
-  rising:{lbl:'Rising chime',play:()=>{ gsTone(660,0,.25); gsTone(990,.19,.45); }},
-  bell:{lbl:'Boxing bell',play:()=>{ [0,.42].forEach(at=>[1,2.76,5.4,8.93].forEach((m,i)=>gsTone(520*m,at,1.4/(i+1),'sine',.22/(i+1)))); }},
-  whistle:{lbl:'Coach whistle',play:()=>{ [0,.32].forEach(at=>{ const o=gsTone(2300,at,.24,'sine',.18); o.frequency.setValueAtTime(2300,gsAC.currentTime+at); o.frequency.linearRampToValueAtTime(2550,gsAC.currentTime+at+.2); }); }},
-  marimba:{lbl:'Soft marimba',play:()=>{ [523,659,784].forEach((f,i)=>{ gsTone(f,i*.13,.5,'triangle',.35); gsTone(f*4,i*.13,.08,'sine',.05); }); }},
-  digital:{lbl:'Digital beep-beep',play:()=>{ gsTone(1050,0,.12,'square',.08); gsTone(1050,.18,.12,'square',.08); }},
-  ding:{lbl:'Ding-dong',play:()=>{ gsTone(784,0,.7,'sine',.32); gsTone(622,.38,1,'sine',.32); }}
-};
-function gsChimeId(){ try{ const c=localStorage.getItem('betalizgschime'); return GS_CHIMES[c]?c:'rising'; }catch(e){ return 'rising'; } }
-function gsChime(id){ if(!G||G.audio==='off'||!gsAC) return; gsEnsureAudio(()=>{ try{ GS_CHIMES[id||gsChimeId()].play(); }catch(e){} }); }
-function gsChimeRaw(id){ gsUnlockAudio(); try{ GS_CHIMES[id||gsChimeId()].play(); }catch(e){} }
-function gsSetChime(id){ try{ localStorage.setItem('betalizgschime',id); }catch(e){} gsChimeRaw(id); sdRender(); }
+let gsSfxBeep=null, gsSfxClick=null;
+function gsInitSfx(){
+  if(!gsSfxBeep){ gsSfxBeep=new Audio('audio/sfx/timer-beep.wav'); gsSfxBeep.preload='auto'; }
+  if(!gsSfxClick){ gsSfxClick=new Audio('audio/sfx/triple-click.wav'); gsSfxClick.preload='auto'; }
+}
+function gsPlaySfx(el){ if(!el) return; try{ el.currentTime=0; const p=el.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} }
+function gsChime(){ if(!G||G.audio==='off') return; gsPlaySfx(gsSfxBeep); }
+function gsChimeRaw(){ gsInitSfx(); gsPlaySfx(gsSfxBeep); }
 function gsAnnounce(){ const st=G&&G.steps[G.idx]; if(st) gsSay(st.say); }
 
 function gsStart(){
@@ -3000,18 +2995,7 @@ function gsTripleClick(){
   if(!G||G.audio==='off'||!gsAC) return;
   gsEnsureAudio(()=>{ try{ [0,0.14,0.28].forEach(at=>gsTone(1200,at,.1,'square',.35)); }catch(e){} });
 }
-function gsHighPing(){
-  if(!G||G.audio==='off'||!gsAC) return;
-  gsEnsureAudio(()=>{ try{
-    [0,0.11,0.22].forEach(at=>{
-      const o=gsAC.createOscillator(), g=gsAC.createGain(), t=gsAC.currentTime+at+0.02;
-      o.frequency.value=2000; o.type='sine'; o.connect(g); g.connect(gsAC.destination);
-      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.6,t+0.005);
-      g.gain.exponentialRampToValueAtTime(.001,t+0.05);
-      o.start(t); o.stop(t+0.06);
-    });
-  }catch(e){} });
-}
+function gsHighPing(){ if(!G||G.audio==='off') return; gsPlaySfx(gsSfxClick); }
 
 async function gsWake(on){
   try{
@@ -3082,9 +3066,7 @@ function gsRender(){
         <div class="gs-sub">Every set, rest and transition on one clock. Hit start and follow along.</div>
         ${gsWarmupType(day.workout)?`<div class="gs-toggle" onclick="gsToggleWarm()"><span>Include warm-up</span><div class="gs-sw${G.warm?' on':''}"></div></div>`:''}
         <div class="gs-set">
-          <div class="gs-set-hdr">10-second sound <small>tap to hear</small></div>
-          <div class="gs-chips">${Object.entries(GS_CHIMES).map(([id,c])=>`<button class="gs-chip-btn${gsChimeId()===id?' on':''}" onclick="gsSetChime('${id}')">${c.lbl}</button>`).join('')}</div>
-          ${gsVoices().length?`<div class="gs-set-hdr" style="margin-top:14px">Coach voice <small>tap to hear</small></div>
+          ${gsVoices().length?`<div class="gs-set-hdr">Coach voice <small>tap to hear</small></div>
           <div class="gs-voices">${gsVoices().slice(0,12).map(v=>`<button class="gs-voice${gsVoice&&gsVoice.voiceURI===v.voiceURI?' on':''}" data-uri="${escH(v.voiceURI)}" onclick="gsSetVoice(this.dataset.uri)">
             <span>${escH(v.name.replace(/\s*\((Premium|Enhanced)\)/i,''))}</span>${gsVoiceRank(v)<2?`<em>${/premium/i.test(v.name)?'Premium':'Enhanced'}</em>`:''}<small>${escH(v.lang)}</small></button>`).join('')}</div>
           ${gsVoices().every(v=>gsVoiceRank(v)>0)?`<div class="gs-tip">For a natural voice on iPhone: Settings → Accessibility → Spoken Content → Voices → English. Download a <b>Premium</b> voice (Ava or Zoe sound most natural), then reopen this screen.</div>`:''}`:''}
