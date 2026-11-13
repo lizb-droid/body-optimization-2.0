@@ -1401,7 +1401,7 @@ function hmCardInfo(day){
   let [name,...rest]=clean.split(' — '); let sub=rest.join(' — ');
   let mins=null;
   if(day.type==='lift'&&WORKOUTS[day.workout]) mins=Math.round(gsTotal(gsBuild(day,true))/60);
-  if(day.type==='run'&&day.conditioning) mins=Math.round(gsTotal(gcBuild(day).steps)/60);
+  if(day.type==='run'&&day.conditioning) mins=Math.round(gsTotal(gcBuild(day))/60);
   const m=clean.match(/(\d+)(?:[–-](\d+))?\s*min/);
   if(m&&mins===null){ mins=parseInt(m[2]||m[1]); sub=sub.replace(/,?\s*\d+(?:[–-]\d+)?\s*min/,'').trim(); }
   if(day.type==='rest'){ sub=sub||'Recovery day'; }
@@ -1511,7 +1511,7 @@ function woRender(){
   const isLift=day.type==='lift'&&WORKOUTS[day.workout];
   const isCond=day.type==='run'&&day.conditioning;
   const saved=gsSaved(), resuming=saved&&saved.dayId===day.id;
-  const secs=isLift?woSections(day):isCond?gcBuild(day).secs:[];
+  const secs=isLift?woSections(day):isCond?gcBuild(day).secs||[]:[];
   el.innerHTML=`
     <div class="wo-top">
       <button class="wo-x" onclick="woClose()" aria-label="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -2325,13 +2325,21 @@ function gcBuild(day){
   }
   // Cool-down
   if(!isEasy) steps.push({kind:'work',title:`Cool-down · ${ml}`,sub:'5 min · Zone 1',dur:300,block:'Cool-down'});
-  // Fill in machine section sub now that we know total time
+  // Fill in section sub times now that all steps are built
   const machineSteps=steps.filter(s=>s.block!=='Active Prep');
   machineSec.sub=fmtDur(gsTotal(machineSteps));
   if(!isEasy&&secs[0]&&secs[0].kind==='gc-prep') secs[0].sub=`2 rounds · ${fmtDur(gsTotal(steps.filter(s=>s.block==='Active Prep')))}`;
-  // Tag each step with its section index
+  // Tag each step with its section index (same pattern as gsBuild)
   steps.forEach(st=>{ st.sec=secs.findIndex(s=>st.block==='Active Prep'?s.kind==='gc-prep':s.kind==='gc-machine'); });
-  return {steps,secs};
+  // Attach secs and exSegs directly onto steps array (matches gsBuild return shape)
+  steps.secs=secs;
+  const exSegs=[]; steps.forEach((st,i)=>{
+    if(!exSegs.length||exSegs[exSegs.length-1].block!==st.block) exSegs.push({name:st.block,block:st.block,startIdx:i,startOffset:0,dur:0,endIdx:i});
+    const seg=exSegs[exSegs.length-1]; seg.dur+=st.dur; seg.endIdx=i;
+  });
+  let _offs=0; exSegs.forEach(x=>{ x.startOffset=_offs; _offs+=x.dur; });
+  steps.exSegs=exSegs;
+  return steps;
 }
 
 function gsBuild(day,withWarmup){
@@ -2535,7 +2543,7 @@ function gsOpen(dayId){
   const day=WEEKS[S.weekIdx].days.find(d=>d.id===dayId);
   const isCond=day&&day.type==='run'&&day.conditioning;
   if(!day||(isCond?false:!WORKOUTS[day.workout])) return;
-  const buildSteps=(d,warm)=>isCond?gcBuild(d).steps:gsBuild(d,warm);
+  const buildSteps=(d,warm)=>isCond?gcBuild(d):gsBuild(d,warm);
   const saved=gsSaved();
   let audio='coach'; try{ audio=localStorage.getItem('betalizgsaudio')||'coach'; }catch(e){}
   G={day,warm:true,audio,phase:'plan',idx:0,endAt:0,pausedLeft:null,startedAt:0,tick:null,wl:null,beepAt:null,halfAt:null,endBeepAt:null,prs:0};
@@ -2563,7 +2571,7 @@ function gsClose(force){
   if(S.activeDayId) renderDayDetail(S.activeDayId);
 }
 
-function gsToggleWarm(){ G.warm=!G.warm; G.steps=(G.day.type==='run'&&G.day.conditioning)?gcBuild(G.day).steps:gsBuild(G.day,G.warm); gsRender(); }
+function gsToggleWarm(){ G.warm=!G.warm; G.steps=(G.day.type==='run'&&G.day.conditioning)?gcBuild(G.day):gsBuild(G.day,G.warm); gsRender(); }
 const GS_AUDIO_NEXT={coach:'beeps',beeps:'off',off:'coach'};
 const GS_AUDIO_LBL={coach:'Coach',beeps:'Beeps',off:'Muted'};
 function sdAudio(){ try{ return localStorage.getItem('betalizgsaudio')||'coach'; }catch(e){ return 'coach'; } }
