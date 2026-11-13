@@ -3330,8 +3330,8 @@ function gsSetView(st){
         </svg>
         <div class="ss-t"><div id="gs-t">0:00</div><small>${lbl}</small></div>
       </div>`;
-  // Rest / set-up / switch: next movement in a card up top, label and timer below
-  if(prep) return `<div class="rs-card">
+  // Rest / set-up / switch: next movement in a card up top, label and timer below (lift only)
+  if(prep && w && w.exName) return `<div class="rs-card">
       <div class="rs-txt">
         <div class="rs-kicker">${escH((w.sub||'').replace(/ · [^·]*$/,''))}</div>
         <div class="rs-title">${title}</div>
