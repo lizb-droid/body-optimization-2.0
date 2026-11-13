@@ -2259,7 +2259,7 @@ function gcBuild(day){
   const isEasy=c.format==='easy';
   // Active prep (all weeks except deload)
   if(!isEasy){
-    secs.push({title:'Active Prep',sub:'2 rounds',kind:'gc-prep',rows:GC_ACTIVE_PREP.map(m=>({name:m.name,t:m.sub}))});
+    secs.push({title:'Active Prep',sub:'2 rounds',kind:'gc-prep',rows:GC_ACTIVE_PREP.map(m=>({name:m.name,sub:m.sub,t:m.sub}))});
     for(let round=0;round<2;round++){
       GC_ACTIVE_PREP.forEach((move,mi)=>{
         steps.push({kind:'work',title:move.name,sub:`Round ${round+1} of 2 · ${move.sub}`,dur:move.dur,block:'Active Prep'});
@@ -2274,20 +2274,21 @@ function gcBuild(day){
   // Machine block
   const ml=gcMachineName(c.machine||'bike');
   const machineRows=[];
+  const mr=(name,desc)=>({name,sub:desc,t:desc});
   if(!isEasy){
-    machineRows.push({name:`Easy Cardio · ${ml}`,t:'3 min · Zone 2'});
-    machineRows.push({name:'Builds',t:'3 × 10s RPE 7'});
+    machineRows.push(mr(`Easy Cardio · ${ml}`,'3 min · Zone 2'));
+    machineRows.push(mr('Builds','3 × 10s RPE 7'));
   }
   // Determine main set rows for overview
   if(isEasy){
-    machineRows.push({name:`Easy · ${ml}`,t:'20 min · Zone 2'});
+    machineRows.push(mr(`Easy · ${ml}`,'20 min · Zone 2'));
   } else if(c.format==='classic'||c.format==='benchmark'||c.format==='density'){
-    machineRows.push({name:`Sprints · ${ml}`,t:`${c.sprints} × ${c.sprintSecs}s / ${c.restSecs}s easy`});
+    machineRows.push(mr(`Sprints · ${ml}`,`${c.sprints} × ${c.sprintSecs}s / ${c.restSecs}s easy`));
   } else if(c.format==='sets'||c.format==='mixed'){
     const mNames=(c.machines||[]).map(gcMachineName).join(' → ') || ml;
-    machineRows.push({name:`Sprint Sets · ${mNames}`,t:`${c.sets} sets × ${c.sprintsPerSet} sprints · 2:00 between`});
+    machineRows.push(mr(`Sprint Sets · ${mNames}`,`${c.sets} sets × ${c.sprintsPerSet} sprints · 2:00 between`));
   }
-  if(!isEasy) machineRows.push({name:`Cool-down · ${ml}`,t:'5 min · Zone 1'});
+  if(!isEasy) machineRows.push(mr(`Cool-down · ${ml}`,'5 min · Zone 1'));
   const machineSec={title:isEasy?'Easy Cardio':'Machine',sub:'',kind:'gc-machine',rows:machineRows};
   secs.push(machineSec);
   // Build steps for machine block
