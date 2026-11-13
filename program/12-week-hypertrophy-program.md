@@ -263,10 +263,10 @@ Each 6-week cycle builds toward a max, then deloads.
 - Push-up to Down Dog — 30s
 - Band Pull-Apart ×15 — rotator cuff prep before pressing
 
-1. **Push Press / Push Jerk Drop Set** — 8 sets · 2 min rest between working sets
-   - Warm-up 1: 5 Push Press reps · RPE 3 · 45-60s rest
-   - Warm-up 2: 3 Push Press reps · RPE 4 · 45-60s rest
-   - Warm-up 3: 2 Push Press reps · RPE 5 · 45-60s rest
+1. **Push Press / Push Jerk Drop Set** — 8 sets · 2 min work window + 2 min rest on every set
+   - Warm-up 1: 2 Push Press + 4 Push Jerk · RPE 3 · 2 min rest
+   - Warm-up 2: 2 Push Press + 4 Push Jerk · RPE 4 · 2 min rest
+   - Warm-up 3: 2 Push Press + 4 Push Jerk · RPE 5 · 2 min rest
    - Working sets: 5 × (2 Push Press + 4 Push Jerk) · RPE 7-8 on the press reps
 
 *Straight weight progression on the Push Press portion. Load it at a weight you can strict press for roughly 4-5 reps. The Push Jerk reps should feel easier since you're already primed.*

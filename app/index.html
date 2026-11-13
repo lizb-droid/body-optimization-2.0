@@ -859,7 +859,7 @@ const WARMUPS = {
 
 const WU_LIFTS = new Set(["Barbell Back Squat","Barbell Bench Press","Barbell Cyclist Squat","Barbell RDL","Push Press / Push Jerk"]);
 const WU_REPS     = ["5 reps · RPE 3","3 reps · RPE 4","1-2 reps · RPE 5"];
-const WU_REPS_PP  = ["5 reps · RPE 3","3 reps · RPE 4","2 reps · RPE 5"];
+const WU_REPS_PP  = ["2 + 4 · RPE 3","2 + 4 · RPE 4","2 + 4 · RPE 5"];
 const WU_DUR      = [25, 15, 10];
 
 const EXERCISE_NOTES = {
@@ -1821,7 +1821,7 @@ function renderExRow(ex,ei,day,prev,inSS=false,isSSEnd=false,ssRest=60){
   </div>`;
 
   const workingReps=parseTargetReps(setsStr);
-  const WU_TARGET=['5','3',exName.includes('Push Press')?'2':'1'];
+  const WU_TARGET=exName.includes('Push Press')?[workingReps,workingReps,workingReps]:['5','3','1'];
 
   const setRowsHtml=Array.from({length:numSets},(_,si)=>{
     const stored=sets[si]||{};
@@ -2197,6 +2197,7 @@ function gsWorkSecs(setsStr){
   if(hold) return parseInt(hold[1])*(ea?2:1)+(ea?10:5);
   if(/×\d+m\b/.test(s)) return ea?60:40;
   const combo=s.match(/×\((\d+)\+(\d+)\)/);
+  if(combo) return 120;
   const range=s.match(/×(\d+)(?:[–-](\d+))?/);
   const reps=combo?parseInt(combo[1])+parseInt(combo[2]):range?parseInt(range[2]||range[1]):10;
   return Math.min(90,Math.max(30,Math.round((reps*(ea?2:1)*3.5+10)/5)*5));
@@ -2246,30 +2247,44 @@ function gsDurSpoken(sec){
 }
 
 // ── Conditioning (Friday) session builder ──
-const GC_ACTIVE_PREP=[
-  {name:'Pogo Jumps',sub:'×20',dur:40},
-  {name:'Skips',sub:'×20m',dur:50},
+const GC_STRETCHES=[
+  {name:"World's Greatest Stretch",secs:30},
+  {name:'Hip Circles',secs:30},
+  {name:'Posterior Hip Capsule Stretch',secs:45},
+];
+const GC_LUNGES=[
   {name:'Twisting Reverse Lunge',sub:'6 each side',dur:55},
   {name:'Walking Lunge',sub:'6 each side',dur:45},
 ];
+// Pogos and skips progress by week; deload weeks keep the lunges only
+function gcActivePrep(day,isEasy){
+  if(isEasy) return GC_LUNGES;
+  const wk=parseInt((day.id.match(/^w(\d+)/)||[])[1])||1;
+  const lvl=wk<=3?{pogo:'Small and quiet · ×15',pd:30,skip:'Marching skips · ×20m'}
+    :wk<=8?{pogo:'×20',pd:40,skip:'Full skips · ×20m'}
+    :{pogo:'×30',pd:55,skip:'Fast skips · ×20m'};
+  return [{name:'Pogo Jumps',sub:lvl.pogo,dur:lvl.pd},{name:'Skips',sub:lvl.skip,dur:50},...GC_LUNGES];
+}
 function gcMachineName(m){ return m==='row'?'Rower':'Bike'; }
 function gcBuild(day){
   const c=day.conditioning||{};
   const steps=[], secs=[];
   const isEasy=c.format==='easy';
-  // Active prep (all weeks except deload)
-  if(!isEasy){
-    secs.push({title:'Active Prep',sub:'2 rounds',kind:'gc-prep',rows:GC_ACTIVE_PREP.map(m=>({name:m.name,sub:m.sub,t:m.sub}))});
-    for(let round=0;round<2;round++){
-      GC_ACTIVE_PREP.forEach((move,mi)=>{
-        steps.push({kind:'work',title:move.name,sub:`Round ${round+1} of 2 · ${move.sub}`,dur:move.dur,block:'Active Prep'});
-        if(mi<GC_ACTIVE_PREP.length-1){
-          steps.push({kind:'rest',title:'Rest',sub:`10 sec · Next: ${GC_ACTIVE_PREP[mi+1].name}`,dur:10,block:'Active Prep'});
-        } else if(round===0){
-          steps.push({kind:'rest',title:'Rest',sub:'30 sec · Round 2 next',dur:30,block:'Active Prep'});
-        }
-      });
-    }
+  const stretches=[];
+  GC_STRETCHES.forEach(m=>['Left','Right'].forEach(side=>stretches.push({name:`${m.name} · ${side}`,secs:m.secs})));
+  secs.push({title:'Warm Up',sub:'',kind:'gc-wu',rows:stretches.map(w=>({name:w.name,sub:`${w.secs} secs`,t:`${w.secs} secs`}))});
+  stretches.forEach((w,row)=>steps.push({kind:'warmup',title:w.name,sub:`${w.secs} secs`,dur:w.secs,block:'Warm-up',row}));
+  const prep=gcActivePrep(day,isEasy);
+  secs.push({title:'Active Prep',sub:'2 rounds',kind:'gc-prep',rows:prep.map(m=>({name:m.name,sub:m.sub,t:m.sub}))});
+  for(let round=0;round<2;round++){
+    prep.forEach((move,mi)=>{
+      steps.push({kind:'work',title:move.name,sub:`Round ${round+1} of 2 · ${move.sub}`,dur:move.dur,block:'Active Prep'});
+      if(mi<prep.length-1){
+        steps.push({kind:'rest',title:'Rest',sub:`10 sec · Next: ${prep[mi+1].name}`,dur:10,block:'Active Prep'});
+      } else if(round===0){
+        steps.push({kind:'rest',title:'Rest',sub:'30 sec · Round 2 next',dur:30,block:'Active Prep'});
+      }
+    });
   }
   // Machine block
   const ml=gcMachineName(c.machine||'bike');
@@ -2327,11 +2342,12 @@ function gcBuild(day){
   // Cool-down
   if(!isEasy) steps.push({kind:'work',title:`Cool-down · ${ml}`,sub:'5 min · Zone 1',dur:300,block:'Cool-down'});
   // Fill in section sub times now that all steps are built
-  const machineSteps=steps.filter(s=>s.block!=='Active Prep');
+  const machineSteps=steps.filter(s=>s.block!=='Active Prep'&&s.block!=='Warm-up');
   machineSec.sub=fmtDur(gsTotal(machineSteps));
-  if(!isEasy&&secs[0]&&secs[0].kind==='gc-prep') secs[0].sub=`2 rounds · ${fmtDur(gsTotal(steps.filter(s=>s.block==='Active Prep')))}`;
+  secs[0].sub=fmtDur(gsTotal(steps.filter(s=>s.block==='Warm-up')));
+  secs[1].sub=`2 rounds · ${fmtDur(gsTotal(steps.filter(s=>s.block==='Active Prep')))}`;
   // Tag each step with its section index (same pattern as gsBuild)
-  steps.forEach(st=>{ st.sec=secs.findIndex(s=>st.block==='Active Prep'?s.kind==='gc-prep':s.kind==='gc-machine'); });
+  steps.forEach(st=>{ st.sec=secs.findIndex(s=>s.kind===(st.block==='Warm-up'?'gc-wu':st.block==='Active Prep'?'gc-prep':'gc-machine')); });
   // Attach secs and exSegs directly onto steps array (matches gsBuild return shape)
   steps.secs=secs;
   const exSegs=[]; steps.forEach((st,i)=>{
@@ -2445,11 +2461,12 @@ function gsBuild(day,withWarmup){
       wuReps.forEach((wr,wi)=>{
         const parts=wr.split(' · '), repPart=parts[0], rpePart=parts[1];
         const repMax=repPart.includes('-')?parseInt(repPart.split('-')[1]):parseInt(repPart);
+        const isPP=ex[0].includes('Push Press');
         pending.push({exId:`${day.id}-ex${ei}`,exName:ex[0],si:wi,setsStr:ex[1]});
-        steps.push({kind:'work',title:ex[0],sub:`Set ${wi+1} of ${totalSets} · ${rpePart} · ${repPart}`,
-          dur:30,block:blockName,note:'',
-          say:`${gsSpoken(ex[0])}. Warm-up set ${wi+1}. ${repPart}.`,
-          exId:`${day.id}-ex${ei}`,si:wi,exName:ex[0],setsStr:`1×${repMax}`});
+        steps.push({kind:'work',title:ex[0],sub:`Set ${wi+1} of ${totalSets} · ${rpePart} · ${isPP?'2 Push Press + 4 Push Jerk':repPart}`,
+          dur:isPP?120:30,block:blockName,note:'',
+          say:`${gsSpoken(ex[0])}. Warm-up set ${wi+1}. ${isPP?'2 push press, then 4 push jerk':repPart}.`,
+          exId:`${day.id}-ex${ei}`,si:wi,exName:ex[0],setsStr:isPP?'1×(2+4)':`1×${repMax}`});
         pushPause({kind:'rest',title:'Rest',
           sub:`${fmtTime(restSecs)} · ${wi<wuReps.length-1?'Warm-up set '+(wi+2)+' next':'Working sets next'}`,
           dur:restSecs,block:blockName,say:`Rest. ${gsDurSpoken(restSecs)}.`});
