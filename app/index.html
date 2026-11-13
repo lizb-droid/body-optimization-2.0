@@ -1020,7 +1020,7 @@ const WEEKS = [
     {id:"w1d1",day:"Tuesday",type:"lift",session:"Upper A — Chest + Back",workout:"hypertrophyTuesday"},
     {id:"w1d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w1d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w1d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Bike · 8 × 15s all-out / 45s easy. Active prep first (pogo jumps, skips, lunges). One block on the machine: easy cardio → builds → main set → cool-down."},
+    {id:"w1d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Bike · 8 × 15s all-out / 45s easy. Active prep first (pogo jumps, skips, lunges). One block on the machine: easy cardio → builds → main set → cool-down.",conditioning:{format:'classic',machine:'bike',sprints:8,sprintSecs:15,restSecs:45}},
     {id:"w1d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w1d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1029,7 +1029,7 @@ const WEEKS = [
     {id:"w2d1",day:"Tuesday",type:"lift",session:"Upper A — Chest + Back",workout:"hypertrophyTuesday"},
     {id:"w2d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w2d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w2d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 2 sets × 5 sprints (15s on / 45s easy, 2:00 between sets). Active prep first."},
+    {id:"w2d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 2 sets × 5 sprints (15s on / 45s easy, 2:00 between sets). Active prep first.",conditioning:{format:'sets',machine:'row',sets:2,sprintsPerSet:5,sprintSecs:15,restSecs:45,setRest:120}},
     {id:"w2d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday",note:"Progress photos today — same spot and lighting as baseline (Oct 24)."},
     {id:"w2d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1038,7 +1038,7 @@ const WEEKS = [
     {id:"w3d1",day:"Tuesday",type:"lift",session:"Upper A — Chest + Back",workout:"hypertrophyTuesday"},
     {id:"w3d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w3d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday",note:"Thanksgiving — train as normal."},
-    {id:"w3d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Mixed machines · 3 sets × 4 sprints (15s on / 45s easy), swap machine in the 2:00 between sets. Active prep first."},
+    {id:"w3d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Mixed machines · 3 sets × 4 sprints (15s on / 45s easy), swap machine in the 2:00 between sets. Active prep first.",conditioning:{format:'mixed',machines:['bike','row','bike'],sets:3,sprintsPerSet:4,sprintSecs:15,restSecs:45,setRest:120}},
     {id:"w3d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w3d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1047,7 +1047,7 @@ const WEEKS = [
     {id:"w4d1",day:"Tuesday",type:"lift",session:"Upper A — Chest + Back",workout:"hypertrophyTuesday"},
     {id:"w4d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w4d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w4d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 12 × 15s all-out / 30s easy. Density week. Active prep first."},
+    {id:"w4d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 12 × 15s all-out / 30s easy. Density week. Active prep first.",conditioning:{format:'density',machine:'row',sprints:12,sprintSecs:15,restSecs:30}},
     {id:"w4d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w4d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1056,7 +1056,7 @@ const WEEKS = [
     {id:"w5d1",day:"Tuesday",type:"lift",session:"Upper A — 1RM Test",workout:"hypertrophyTuesday",note:"1RM test week. Work up to your Bench Press max. Pause on the chest. Accessories at 2 sets each."},
     {id:"w5d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w5d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w5d4",day:"Friday",type:"run",session:"Conditioning — Benchmark",info:"Bike · 10 × 15s all-out / 45s easy. Hold back a little — compare to Week 1."},
+    {id:"w5d4",day:"Friday",type:"run",session:"Conditioning — Benchmark",info:"Bike · 10 × 15s all-out / 45s easy. Hold back a little — compare to Week 1.",conditioning:{format:'benchmark',machine:'bike',sprints:10,sprintSecs:15,restSecs:45}},
     {id:"w5d5",day:"Saturday",type:"lift",session:"Full Body — 1RM Test",workout:"hypertrophySaturday",note:"1RM test week. Work up to your Barbell Hip Thrust max. 2-second lockout on every rep. Other work at 2 sets each."},
     {id:"w5d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1065,7 +1065,7 @@ const WEEKS = [
     {id:"w6d1",day:"Tuesday",type:"lift",session:"Upper A — Deload",workout:"hypertrophyTuesdayDeload",note:"Deload: hold loads, 2 sets of accessories."},
     {id:"w6d2",day:"Wednesday",type:"lift",session:"Lower B — Deload",workout:"hypertrophyWednesdayDeload",note:"Deload: hold loads, 2 sets of accessories, skip finisher."},
     {id:"w6d3",day:"Thursday",type:"lift",session:"Upper B — Deload",workout:"hypertrophyThursdayDeload",note:"Deload: hold loads, skip finisher."},
-    {id:"w6d4",day:"Friday",type:"run",session:"Conditioning — Easy",info:"Deload: 20 min easy on the bike or row. Zone 2, conversational pace."},
+    {id:"w6d4",day:"Friday",type:"run",session:"Conditioning — Easy",info:"Deload: 20 min easy on the bike or row. Zone 2, conversational pace.",conditioning:{format:'easy',machine:'bike',duration:1200}},
     {id:"w6d5",day:"Saturday",type:"lift",session:"Full Body — Deload",workout:"hypertrophySaturdayDeload",note:"Deload: hold loads, skip finisher."},
     {id:"w6d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1074,7 +1074,7 @@ const WEEKS = [
     {id:"w7d1",day:"Tuesday",type:"lift",session:"Upper A — Chest + Back",workout:"hypertrophyTuesday"},
     {id:"w7d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w7d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w7d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Christmas Day — train as normal. Bike · 10 × 15s all-out / 45s easy. Active prep first."},
+    {id:"w7d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Christmas Day — train as normal. Bike · 10 × 15s all-out / 45s easy. Active prep first.",conditioning:{format:'classic',machine:'bike',sprints:10,sprintSecs:15,restSecs:45}},
     {id:"w7d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w7d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1083,7 +1083,7 @@ const WEEKS = [
     {id:"w8d1",day:"Tuesday",type:"lift",session:"Upper A — Chest + Back",workout:"hypertrophyTuesday"},
     {id:"w8d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w8d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w8d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"New Year's Day — train as normal. Row · 3 sets × 4 sprints (15s on / 45s easy, 2:00 between sets)."},
+    {id:"w8d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"New Year's Day — train as normal. Row · 3 sets × 4 sprints (15s on / 45s easy, 2:00 between sets).",conditioning:{format:'sets',machine:'row',sets:3,sprintsPerSet:4,sprintSecs:15,restSecs:45,setRest:120}},
     {id:"w8d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w8d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1092,7 +1092,7 @@ const WEEKS = [
     {id:"w9d1",day:"Tuesday",type:"lift",session:"Upper A — Chest + Back",workout:"hypertrophyTuesday"},
     {id:"w9d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w9d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w9d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Mixed machines · 3 sets × 5 sprints (15s on / 45s easy), swap machine in the 2:00 between. Active prep first."},
+    {id:"w9d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Mixed machines · 3 sets × 5 sprints (15s on / 45s easy), swap machine in the 2:00 between. Active prep first.",conditioning:{format:'mixed',machines:['bike','row','bike'],sets:3,sprintsPerSet:5,sprintSecs:15,restSecs:45,setRest:120}},
     {id:"w9d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w9d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1101,7 +1101,7 @@ const WEEKS = [
     {id:"w10d1",day:"Tuesday",type:"lift",session:"Upper A — Chest + Back",workout:"hypertrophyTuesday"},
     {id:"w10d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w10d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w10d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 14 × 15s all-out / 30s easy. Peak density week. Active prep first."},
+    {id:"w10d4",day:"Friday",type:"run",session:"Conditioning — Sprints",info:"Row · 14 × 15s all-out / 30s easy. Peak density week. Active prep first.",conditioning:{format:'density',machine:'row',sprints:14,sprintSecs:15,restSecs:30}},
     {id:"w10d5",day:"Saturday",type:"lift",session:"Full Body — Glute Focus",workout:"hypertrophySaturday"},
     {id:"w10d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1110,7 +1110,7 @@ const WEEKS = [
     {id:"w11d1",day:"Tuesday",type:"lift",session:"Upper A — 1RM Test",workout:"hypertrophyTuesday",note:"1RM test week. Work up to your Bench Press max. Accessories at 2 sets each."},
     {id:"w11d2",day:"Wednesday",type:"lift",session:"Lower B — Quads + Hamstrings",workout:"hypertrophyWednesday"},
     {id:"w11d3",day:"Thursday",type:"lift",session:"Upper B — Shoulders + Chest",workout:"hypertrophyThursday"},
-    {id:"w11d4",day:"Friday",type:"run",session:"Conditioning — Benchmark",info:"Bike · 10 × 15s all-out / 45s easy. Hold back a little. Compare to Week 5 and Week 7."},
+    {id:"w11d4",day:"Friday",type:"run",session:"Conditioning — Benchmark",info:"Bike · 10 × 15s all-out / 45s easy. Hold back a little. Compare to Week 5 and Week 7.",conditioning:{format:'benchmark',machine:'bike',sprints:10,sprintSecs:15,restSecs:45}},
     {id:"w11d5",day:"Saturday",type:"lift",session:"Full Body — 1RM Test",workout:"hypertrophySaturday",note:"1RM test week. Work up to your Barbell Hip Thrust max. 2-second lockout. Other work at 2 sets each."},
     {id:"w11d6",day:"Sunday",type:"rest",session:"Rest"},
   ]},
@@ -1119,7 +1119,7 @@ const WEEKS = [
     {id:"w12d1",day:"Tuesday",type:"lift",session:"Upper A — Deload",workout:"hypertrophyTuesdayDeload",note:"Deload: hold loads, 2 sets of accessories."},
     {id:"w12d2",day:"Wednesday",type:"lift",session:"Lower B — Deload",workout:"hypertrophyWednesdayDeload",note:"Deload: hold loads, 2 sets of accessories, skip finisher."},
     {id:"w12d3",day:"Thursday",type:"lift",session:"Upper B — Deload",workout:"hypertrophyThursdayDeload",note:"Deload: hold loads, skip finisher."},
-    {id:"w12d4",day:"Friday",type:"run",session:"Conditioning — Easy",info:"Deload: 20 min easy. Block complete after tomorrow."},
+    {id:"w12d4",day:"Friday",type:"run",session:"Conditioning — Easy",info:"Deload: 20 min easy. Block complete after tomorrow.",conditioning:{format:'easy',machine:'bike',duration:1200}},
     {id:"w12d5",day:"Saturday",type:"lift",session:"Full Body — Deload",workout:"hypertrophySaturdayDeload",note:"Final session of the block. Hold loads, skip finisher."},
     {id:"w12d6",day:"Sunday",type:"rest",session:"Rest — Block complete 🎉"},
   ]},
@@ -1401,6 +1401,7 @@ function hmCardInfo(day){
   let [name,...rest]=clean.split(' — '); let sub=rest.join(' — ');
   let mins=null;
   if(day.type==='lift'&&WORKOUTS[day.workout]) mins=Math.round(gsTotal(gsBuild(day,true))/60);
+  if(day.type==='run'&&day.conditioning) mins=Math.round(gsTotal(gcBuild(day).steps)/60);
   const m=clean.match(/(\d+)(?:[–-](\d+))?\s*min/);
   if(m&&mins===null){ mins=parseInt(m[2]||m[1]); sub=sub.replace(/,?\s*\d+(?:[–-]\d+)?\s*min/,'').trim(); }
   if(day.type==='rest'){ sub=sub||'Recovery day'; }
@@ -1508,13 +1509,14 @@ function woRender(){
   if(!WO){ el.innerHTML=''; return; }
   const day=WO.day, info=hmCardInfo(day), done=!!S.done[day.id];
   const isLift=day.type==='lift'&&WORKOUTS[day.workout];
+  const isCond=day.type==='run'&&day.conditioning;
   const saved=gsSaved(), resuming=saved&&saved.dayId===day.id;
-  const secs=isLift?woSections(day):[];
+  const secs=isLift?woSections(day):isCond?gcBuild(day).secs:[];
   el.innerHTML=`
     <div class="wo-top">
       <button class="wo-x" onclick="woClose()" aria-label="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       <div class="wo-time">${info.mins?info.mins+' min':''}</div>
-      ${isLift?`<button class="wo-x" onclick="sdOpen()" aria-label="Sound and coach">${GS_IC.snd}</button>`:'<span></span>'}
+      ${(isLift||isCond)?`<button class="wo-x" onclick="sdOpen()" aria-label="Sound and coach">${GS_IC.snd}</button>`:'<span></span>'}
     </div>
     <div class="wo-body">
       <div class="wo-hero">
@@ -1522,7 +1524,7 @@ function woRender(){
         <h1>${escH(info.name)}</h1>
         ${info.sub&&isLift?`<p>${escH(info.sub)}</p>`:''}
         ${day.note?`<p>${escH(day.note)}</p>`:''}
-        ${!isLift&&day.info?`<p>${escH(day.info)}</p>`:''}
+        ${!isLift&&!isCond&&day.info?`<p>${escH(day.info)}</p>`:''}
       </div>
       ${secs.map(sec=>`<div class="wo-sec${sec.rows.length>1?' grouped':''}${sec.kind==='fin'?' fin':''}">
         <div class="wo-sec-hdr"><h2>${escH(sec.title)}</h2>${sec.sub?`<span>${escH(sec.sub)}</span>`:''}</div>
@@ -1534,7 +1536,7 @@ function woRender(){
       ${isLift?`<button class="wo-manual" onclick="woManual()">Track results without the timer</button>`:''}
     </div>
     ${day.type==='rest'?'':`<div class="wo-foot">
-      ${isLift?`<button class="wo-start" onclick="woStart()">${resuming?'Resume workout':'Start workout'}</button>`
+      ${(isLift||isCond)?`<button class="wo-start" onclick="woStart()">${resuming?'Resume session':'Start session'}</button>`
         :`<button class="wo-start${done?' done':''}" onclick="woToggleDone()">${done?'✓ Completed':'Mark complete'}</button>`}
     </div>`}`;
   el.querySelector('.wo-body').scrollTop=0;
@@ -2243,6 +2245,96 @@ function gsDurSpoken(sec){
   return `${m} minute${m>1?'s':''}${r?' '+r:''}`;
 }
 
+// ── Conditioning (Friday) session builder ──
+const GC_ACTIVE_PREP=[
+  {name:'Pogo Jumps',sub:'×20',dur:40,say:'Pogo jumps. 20 reps.'},
+  {name:'Skips',sub:'×20m',dur:50,say:'Skips. 20 meters.'},
+  {name:'Twisting Reverse Lunge',sub:'6 each side',dur:55,say:'Twisting reverse lunge. 6 each side.'},
+  {name:'Walking Lunge',sub:'6 each side',dur:45,say:'Walking lunge. 6 each side.'},
+];
+function gcMachineName(m){ return m==='row'?'Rower':'Bike'; }
+function gcBuild(day){
+  const c=day.conditioning||{};
+  const steps=[], secs=[];
+  const isEasy=c.format==='easy';
+  // Active prep (all weeks except deload)
+  if(!isEasy){
+    secs.push({title:'Active Prep',sub:'2 rounds',kind:'gc-prep',rows:GC_ACTIVE_PREP.map(m=>({name:m.name,t:m.sub}))});
+    for(let round=0;round<2;round++){
+      GC_ACTIVE_PREP.forEach((move,mi)=>{
+        steps.push({kind:'work',title:move.name,sub:`Round ${round+1} of 2 · ${move.sub}`,dur:move.dur,block:'Active Prep',say:round===0&&mi===0?`Let's go. Active prep. ${move.say}`:move.say});
+        if(mi<GC_ACTIVE_PREP.length-1){
+          steps.push({kind:'rest',title:'Rest',sub:`10 sec · Next: ${GC_ACTIVE_PREP[mi+1].name}`,dur:10,block:'Active Prep',say:'Move on.'});
+        } else if(round===0){
+          steps.push({kind:'rest',title:'Rest',sub:'30 sec · Round 2 next',dur:30,block:'Active Prep',say:'Rest 30 seconds. Round 2 coming.'});
+        }
+      });
+    }
+  }
+  // Machine block
+  const ml=gcMachineName(c.machine||'bike');
+  const machineRows=[];
+  if(!isEasy){
+    machineRows.push({name:`Easy Cardio · ${ml}`,t:'3 min · Zone 2'});
+    machineRows.push({name:'Builds',t:'3 × 10s RPE 7'});
+  }
+  // Determine main set rows for overview
+  if(isEasy){
+    machineRows.push({name:`Easy · ${ml}`,t:'20 min · Zone 2'});
+  } else if(c.format==='classic'||c.format==='benchmark'||c.format==='density'){
+    machineRows.push({name:`Sprints · ${ml}`,t:`${c.sprints} × ${c.sprintSecs}s / ${c.restSecs}s easy`});
+  } else if(c.format==='sets'||c.format==='mixed'){
+    const mNames=(c.machines||[]).map(gcMachineName).join(' → ') || ml;
+    machineRows.push({name:`Sprint Sets · ${mNames}`,t:`${c.sets} sets × ${c.sprintsPerSet} sprints · 2:00 between`});
+  }
+  if(!isEasy) machineRows.push({name:`Cool-down · ${ml}`,t:'5 min · Zone 1'});
+  const machineSec={title:isEasy?'Easy Cardio':'Machine',sub:'',kind:'gc-machine',rows:machineRows};
+  secs.push(machineSec);
+  // Build steps for machine block
+  if(!isEasy){
+    steps.push({kind:'work',title:`Easy Cardio · ${ml}`,sub:'3 min · Zone 2',dur:180,block:'Machine',say:`On the ${c.machine==='row'?'rower':'bike'}. Easy cardio, 3 minutes. Zone 2 pace.`});
+    for(let i=0;i<3;i++){
+      steps.push({kind:'work',title:'Build',sub:`Build ${i+1} of 3 · 10s RPE 7`,dur:10,block:'Machine',say:`Build ${i+1}. 10 seconds hard.`});
+      steps.push({kind:'rest',title:'Easy',sub:`50 sec · ${i<2?'Build '+(i+2)+' next':'Main set next'}`,dur:50,block:'Machine',say:'50 seconds easy.'});
+    }
+  }
+  // Main set steps
+  if(isEasy){
+    steps.push({kind:'work',title:`Easy · ${ml}`,sub:'20 min · Zone 2',dur:c.duration||1200,block:'Main Set',say:'20 minutes easy. Zone 2. Conversational pace.'});
+  } else if(c.format==='classic'||c.format==='benchmark'||c.format==='density'){
+    const n=c.sprints;
+    for(let i=0;i<n;i++){
+      steps.push({kind:'work',title:`Sprint · ${ml}`,sub:`Sprint ${i+1} of ${n} · ${c.sprintSecs}s all-out`,dur:c.sprintSecs,block:'Main Set',say:i===0?`Main set. Sprint 1 of ${n}.`:`Sprint ${i+1}.`});
+      if(i<n-1) steps.push({kind:'rest',title:'Easy',sub:`${c.restSecs} sec · Sprint ${i+2} of ${n} next`,dur:c.restSecs,block:'Main Set',say:`${gsDurSpoken(c.restSecs)} easy.`});
+    }
+  } else if(c.format==='sets'||c.format==='mixed'){
+    const machines=c.machines||Array(c.sets).fill(c.machine||'bike');
+    for(let si=0;si<c.sets;si++){
+      const m=machines[si]||c.machine||'bike';
+      const mLabel=gcMachineName(m);
+      const n=c.sprintsPerSet;
+      if(si===0) steps.push({kind:'rest',title:'Ready',sub:`Set 1 of ${c.sets} · ${mLabel}`,dur:5,block:'Main Set',say:`Main set. ${c.sets} sets of ${n} sprints. Set 1 on the ${m==='row'?'rower':'bike'}.`});
+      for(let i=0;i<n;i++){
+        steps.push({kind:'work',title:`Sprint · ${mLabel}`,sub:`Set ${si+1} of ${c.sets} · Sprint ${i+1} of ${n} · ${c.sprintSecs}s all-out`,dur:c.sprintSecs,block:'Main Set',say:`Sprint ${i+1}.`});
+        if(i<n-1) steps.push({kind:'rest',title:'Easy',sub:`${c.restSecs} sec · Sprint ${i+2} next`,dur:c.restSecs,block:'Main Set',say:`${gsDurSpoken(c.restSecs)} easy.`});
+      }
+      if(si<c.sets-1){
+        const nextM=gcMachineName(machines[si+1]||c.machine||'bike');
+        steps.push({kind:'rest',title:'Rest between sets',sub:`2 min · Set ${si+2} next${c.format==='mixed'?' · Switch machine':''}`,dur:c.setRest||120,block:'Main Set',say:`2 minutes rest. Set ${si+2} coming.${c.format==='mixed'?' Switch machine.':''}`});
+      }
+    }
+  }
+  // Cool-down
+  if(!isEasy) steps.push({kind:'work',title:`Cool-down · ${ml}`,sub:'5 min · Zone 1',dur:300,block:'Cool-down',say:'Cool down. 5 minutes easy.'});
+  // Fill in machine section sub now that we know total time
+  const machineSteps=steps.filter(s=>s.block!=='Active Prep');
+  machineSec.sub=fmtDur(gsTotal(machineSteps));
+  if(!isEasy&&secs[0]&&secs[0].kind==='gc-prep') secs[0].sub=`2 rounds · ${fmtDur(gsTotal(steps.filter(s=>s.block==='Active Prep')))}`;
+  // Tag each step with its section index
+  steps.forEach(st=>{ st.sec=secs.findIndex(s=>st.block==='Active Prep'?s.kind==='gc-prep':s.kind==='gc-machine'); });
+  return {steps,secs};
+}
+
 function gsBuild(day,withWarmup){
   const items=WORKOUTS[day.workout]||[];
   const steps=[];
@@ -2442,15 +2534,17 @@ function gsPersist(){
 
 function gsOpen(dayId){
   const day=WEEKS[S.weekIdx].days.find(d=>d.id===dayId);
-  if(!day||!WORKOUTS[day.workout]) return;
+  const isCond=day&&day.type==='run'&&day.conditioning;
+  if(!day||(isCond?false:!WORKOUTS[day.workout])) return;
+  const buildSteps=(d,warm)=>isCond?gcBuild(d).steps:gsBuild(d,warm);
   const saved=gsSaved();
   let audio='coach'; try{ audio=localStorage.getItem('betalizgsaudio')||'coach'; }catch(e){}
   G={day,warm:true,audio,phase:'plan',idx:0,endAt:0,pausedLeft:null,startedAt:0,tick:null,wl:null,beepAt:null,halfAt:null,endBeepAt:null,prs:0};
   if(saved&&saved.dayId===dayId){
-    G.warm=saved.warm!==false; G.steps=gsBuild(day,G.warm);
+    G.warm=saved.warm!==false; G.steps=buildSteps(day,G.warm);
     G.phase='run'; G.idx=Math.min(saved.idx,G.steps.length-1); G.pausedLeft=saved.left; G.startedAt=saved.startedAt||Date.now();
     G.tick=setInterval(gsTick,250);
-  } else G.steps=gsBuild(day,G.warm);
+  } else G.steps=buildSteps(day,G.warm);
   document.getElementById('gs').classList.add('open');
   gsUnlockAudio();
   gsRender();
@@ -2470,7 +2564,7 @@ function gsClose(force){
   if(S.activeDayId) renderDayDetail(S.activeDayId);
 }
 
-function gsToggleWarm(){ G.warm=!G.warm; G.steps=gsBuild(G.day,G.warm); gsRender(); }
+function gsToggleWarm(){ G.warm=!G.warm; G.steps=(G.day.type==='run'&&G.day.conditioning)?gcBuild(G.day).steps:gsBuild(G.day,G.warm); gsRender(); }
 const GS_AUDIO_NEXT={coach:'beeps',beeps:'off',off:'coach'};
 const GS_AUDIO_LBL={coach:'Coach',beeps:'Beeps',off:'Muted'};
 function sdAudio(){ try{ return localStorage.getItem('betalizgsaudio')||'coach'; }catch(e){ return 'coach'; } }
@@ -2604,6 +2698,7 @@ function gsUnlockAudio(){
 function coachAllLines(){
   const out=new Set(['Coach on.']);
   WEEKS.forEach(w=>{ w.days.forEach(d=>{
+    if(d.type==='run'&&d.conditioning){ gcBuild(d).steps.forEach(st=>{ if(st.say) out.add(csNorm(st.say)); }); return; }
     if(d.type!=='lift'||!WORKOUTS[d.workout]) return;
     gsBuild(d,true).forEach(st=>{
       ['say','halfSay','say10','talk'].forEach(k=>{ if(st[k]) out.add(csNorm(st[k])); });
