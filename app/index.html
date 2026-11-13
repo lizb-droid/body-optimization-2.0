@@ -3162,12 +3162,12 @@ function gsRender(){
         <div class="gs-name">~${Math.round(total/60)} min</div>
         <div class="gs-sub">Every set, rest and transition on one clock. Hit start and follow along.</div>
         ${gsWarmupType(day.workout)?`<div class="gs-toggle" onclick="gsToggleWarm()"><span>Include warm-up</span><div class="gs-sw${G.warm?' on':''}"></div></div>`:''}
-        <div class="gs-set">
+        ${!(day.type==='run'&&day.conditioning)?`<div class="gs-set">
           ${gsVoices().length?`<div class="gs-set-hdr">Coach voice <small>tap to hear</small></div>
           <div class="gs-voices">${gsVoices().slice(0,12).map(v=>`<button class="gs-voice${gsVoice&&gsVoice.voiceURI===v.voiceURI?' on':''}" data-uri="${escH(v.voiceURI)}" onclick="gsSetVoice(this.dataset.uri)">
             <span>${escH(v.name.replace(/\s*\((Premium|Enhanced)\)/i,''))}</span>${gsVoiceRank(v)<2?`<em>${/premium/i.test(v.name)?'Premium':'Enhanced'}</em>`:''}<small>${escH(v.lang)}</small></button>`).join('')}</div>
           ${gsVoices().every(v=>gsVoiceRank(v)>0)?`<div class="gs-tip">For a natural voice on iPhone: Settings → Accessibility → Spoken Content → Voices → English. Download a <b>Premium</b> voice (Ava or Zoe sound most natural), then reopen this screen.</div>`:''}`:''}
-        </div>
+        </div>`:''}
         <div class="gs-plan">${rows.filter(r=>r.block!=='Get ready').map(r=>`<div class="gs-plan-row"><span>${escH(r.block)}</span><span>${Math.max(1,Math.round(r.dur/60))} min</span></div>`).join('')}</div>
         <button class="gs-big-btn" onclick="gsStart()">Start session</button>
         <div style="height:12px;flex-shrink:0"></div>
