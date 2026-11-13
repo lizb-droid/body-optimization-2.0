@@ -3308,7 +3308,7 @@ function gsSetView(st){
   const w=gsTargetWork(st), prep=st.kind!=='work'&&!!w;
   const col=st.kind==='work'?'var(--pink)':st.kind==='finisher'?'var(--yel)':st.kind==='rest'||st.kind==='warmup'?'var(--ind)':'#bbb';
   let kicker='', title='', sub='', extra='';
-  if(w){
+  if(w && w.exName){
     kicker=(prep?`Up next · `:'')+(w.sub||'').replace(/ · [^·]*$/,'');
     title=`<b>${escH(gsRepsPrefix(w.setsStr).replace(/\s*ea\b/,''))}</b> ${escH(w.exName)}${w.side?' · '+w.side+' side':/\bea\b/.test(w.setsStr)?' · each side':''}`;
 
@@ -3319,8 +3319,8 @@ function gsSetView(st){
   } else if(st.kind==='finisher'){
     kicker=`Finisher · ${st.sub}`; title=escH(st.title);
     extra=`<div class="gs-movs ss-movs">${st.movs.map(m=>`<div><span>${escH(m.name)}</span><span>${escH(m.reps)}</span></div>`).join('')}</div>`;
-  } else { kicker=GS_KIND_LBL[st.kind]||''; title=escH(st.title); }
-  const v=w?gsShown(w):null;
+  } else { kicker=GS_KIND_LBL[st.kind]||''; title=escH(st.title); sub=st.sub||''; }
+  const v=w&&w.exName?gsShown(w):null;
   const lbl={work:'work',rest:'rest',setup:'set up',switch:'switch',warmup:'warm-up',finisher:'finisher'}[st.kind]||'';
   const arc=`<div class="ss-arc">
         <svg viewBox="0 0 200 140" aria-hidden="true">
