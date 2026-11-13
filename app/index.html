@@ -2247,10 +2247,10 @@ function gsDurSpoken(sec){
 
 // ── Conditioning (Friday) session builder ──
 const GC_ACTIVE_PREP=[
-  {name:'Pogo Jumps',sub:'×20',dur:40,say:'Pogo jumps. 20 reps.'},
-  {name:'Skips',sub:'×20m',dur:50,say:'Skips. 20 meters.'},
-  {name:'Twisting Reverse Lunge',sub:'6 each side',dur:55,say:'Twisting reverse lunge. 6 each side.'},
-  {name:'Walking Lunge',sub:'6 each side',dur:45,say:'Walking lunge. 6 each side.'},
+  {name:'Pogo Jumps',sub:'×20',dur:40},
+  {name:'Skips',sub:'×20m',dur:50},
+  {name:'Twisting Reverse Lunge',sub:'6 each side',dur:55},
+  {name:'Walking Lunge',sub:'6 each side',dur:45},
 ];
 function gcMachineName(m){ return m==='row'?'Rower':'Bike'; }
 function gcBuild(day){
@@ -2262,11 +2262,11 @@ function gcBuild(day){
     secs.push({title:'Active Prep',sub:'2 rounds',kind:'gc-prep',rows:GC_ACTIVE_PREP.map(m=>({name:m.name,t:m.sub}))});
     for(let round=0;round<2;round++){
       GC_ACTIVE_PREP.forEach((move,mi)=>{
-        steps.push({kind:'work',title:move.name,sub:`Round ${round+1} of 2 · ${move.sub}`,dur:move.dur,block:'Active Prep',say:round===0&&mi===0?`Let's go. Active prep. ${move.say}`:move.say});
+        steps.push({kind:'work',title:move.name,sub:`Round ${round+1} of 2 · ${move.sub}`,dur:move.dur,block:'Active Prep'});
         if(mi<GC_ACTIVE_PREP.length-1){
-          steps.push({kind:'rest',title:'Rest',sub:`10 sec · Next: ${GC_ACTIVE_PREP[mi+1].name}`,dur:10,block:'Active Prep',say:'Move on.'});
+          steps.push({kind:'rest',title:'Rest',sub:`10 sec · Next: ${GC_ACTIVE_PREP[mi+1].name}`,dur:10,block:'Active Prep'});
         } else if(round===0){
-          steps.push({kind:'rest',title:'Rest',sub:'30 sec · Round 2 next',dur:30,block:'Active Prep',say:'Rest 30 seconds. Round 2 coming.'});
+          steps.push({kind:'rest',title:'Rest',sub:'30 sec · Round 2 next',dur:30,block:'Active Prep'});
         }
       });
     }
@@ -2292,20 +2292,20 @@ function gcBuild(day){
   secs.push(machineSec);
   // Build steps for machine block
   if(!isEasy){
-    steps.push({kind:'work',title:`Easy Cardio · ${ml}`,sub:'3 min · Zone 2',dur:180,block:'Machine',say:`On the ${c.machine==='row'?'rower':'bike'}. Easy cardio, 3 minutes. Zone 2 pace.`});
+    steps.push({kind:'work',title:`Easy Cardio · ${ml}`,sub:'3 min · Zone 2',dur:180,block:'Machine'});
     for(let i=0;i<3;i++){
-      steps.push({kind:'work',title:'Build',sub:`Build ${i+1} of 3 · 10s RPE 7`,dur:10,block:'Machine',say:`Build ${i+1}. 10 seconds hard.`});
-      steps.push({kind:'rest',title:'Easy',sub:`50 sec · ${i<2?'Build '+(i+2)+' next':'Main set next'}`,dur:50,block:'Machine',say:'50 seconds easy.'});
+      steps.push({kind:'work',title:'Build',sub:`Build ${i+1} of 3 · 10s RPE 7`,dur:10,block:'Machine'});
+      steps.push({kind:'rest',title:'Easy',sub:`50 sec · ${i<2?'Build '+(i+2)+' next':'Main set next'}`,dur:50,block:'Machine'});
     }
   }
   // Main set steps
   if(isEasy){
-    steps.push({kind:'work',title:`Easy · ${ml}`,sub:'20 min · Zone 2',dur:c.duration||1200,block:'Main Set',say:'20 minutes easy. Zone 2. Conversational pace.'});
+    steps.push({kind:'work',title:`Easy · ${ml}`,sub:'20 min · Zone 2',dur:c.duration||1200,block:'Main Set'});
   } else if(c.format==='classic'||c.format==='benchmark'||c.format==='density'){
     const n=c.sprints;
     for(let i=0;i<n;i++){
-      steps.push({kind:'work',title:`Sprint · ${ml}`,sub:`Sprint ${i+1} of ${n} · ${c.sprintSecs}s all-out`,dur:c.sprintSecs,block:'Main Set',say:i===0?`Main set. Sprint 1 of ${n}.`:`Sprint ${i+1}.`});
-      if(i<n-1) steps.push({kind:'rest',title:'Easy',sub:`${c.restSecs} sec · Sprint ${i+2} of ${n} next`,dur:c.restSecs,block:'Main Set',say:`${gsDurSpoken(c.restSecs)} easy.`});
+      steps.push({kind:'work',title:`Sprint · ${ml}`,sub:`Sprint ${i+1} of ${n} · ${c.sprintSecs}s all-out`,dur:c.sprintSecs,block:'Main Set'});
+      if(i<n-1) steps.push({kind:'rest',title:'Easy',sub:`${c.restSecs} sec · Sprint ${i+2} of ${n} next`,dur:c.restSecs,block:'Main Set'});
     }
   } else if(c.format==='sets'||c.format==='mixed'){
     const machines=c.machines||Array(c.sets).fill(c.machine||'bike');
@@ -2313,19 +2313,18 @@ function gcBuild(day){
       const m=machines[si]||c.machine||'bike';
       const mLabel=gcMachineName(m);
       const n=c.sprintsPerSet;
-      if(si===0) steps.push({kind:'rest',title:'Ready',sub:`Set 1 of ${c.sets} · ${mLabel}`,dur:5,block:'Main Set',say:`Main set. ${c.sets} sets of ${n} sprints. Set 1 on the ${m==='row'?'rower':'bike'}.`});
+      if(si===0) steps.push({kind:'rest',title:'Ready',sub:`Set 1 of ${c.sets} · ${mLabel}`,dur:5,block:'Main Set'});
       for(let i=0;i<n;i++){
-        steps.push({kind:'work',title:`Sprint · ${mLabel}`,sub:`Set ${si+1} of ${c.sets} · Sprint ${i+1} of ${n} · ${c.sprintSecs}s all-out`,dur:c.sprintSecs,block:'Main Set',say:`Sprint ${i+1}.`});
-        if(i<n-1) steps.push({kind:'rest',title:'Easy',sub:`${c.restSecs} sec · Sprint ${i+2} next`,dur:c.restSecs,block:'Main Set',say:`${gsDurSpoken(c.restSecs)} easy.`});
+        steps.push({kind:'work',title:`Sprint · ${mLabel}`,sub:`Set ${si+1} of ${c.sets} · Sprint ${i+1} of ${n} · ${c.sprintSecs}s all-out`,dur:c.sprintSecs,block:'Main Set'});
+        if(i<n-1) steps.push({kind:'rest',title:'Easy',sub:`${c.restSecs} sec · Sprint ${i+2} next`,dur:c.restSecs,block:'Main Set'});
       }
       if(si<c.sets-1){
-        const nextM=gcMachineName(machines[si+1]||c.machine||'bike');
-        steps.push({kind:'rest',title:'Rest between sets',sub:`2 min · Set ${si+2} next${c.format==='mixed'?' · Switch machine':''}`,dur:c.setRest||120,block:'Main Set',say:`2 minutes rest. Set ${si+2} coming.${c.format==='mixed'?' Switch machine.':''}`});
+        steps.push({kind:'rest',title:'Rest between sets',sub:`2 min · Set ${si+2} next${c.format==='mixed'?' · Switch machine':''}`,dur:c.setRest||120,block:'Main Set'});
       }
     }
   }
   // Cool-down
-  if(!isEasy) steps.push({kind:'work',title:`Cool-down · ${ml}`,sub:'5 min · Zone 1',dur:300,block:'Cool-down',say:'Cool down. 5 minutes easy.'});
+  if(!isEasy) steps.push({kind:'work',title:`Cool-down · ${ml}`,sub:'5 min · Zone 1',dur:300,block:'Cool-down'});
   // Fill in machine section sub now that we know total time
   const machineSteps=steps.filter(s=>s.block!=='Active Prep');
   machineSec.sub=fmtDur(gsTotal(machineSteps));
@@ -2698,7 +2697,6 @@ function gsUnlockAudio(){
 function coachAllLines(){
   const out=new Set(['Coach on.']);
   WEEKS.forEach(w=>{ w.days.forEach(d=>{
-    if(d.type==='run'&&d.conditioning){ gcBuild(d).steps.forEach(st=>{ if(st.say) out.add(csNorm(st.say)); }); return; }
     if(d.type!=='lift'||!WORKOUTS[d.workout]) return;
     gsBuild(d,true).forEach(st=>{
       ['say','halfSay','say10','talk'].forEach(k=>{ if(st[k]) out.add(csNorm(st[k])); });
