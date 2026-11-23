@@ -1305,6 +1305,8 @@ function getCurrentPhaseIdx(){
   return 0;
 }
 
+// Set entries only; skips counters like _extra stored alongside them
+function setVals(sets){ return Object.keys(sets||{}).filter(k=>k[0]!=='_').map(k=>sets[k]); }
 function buildPrevWeights(){
   const result={};
   WEEKS.forEach((wk,wi)=>{
@@ -1317,7 +1319,7 @@ function buildPrevWeights(){
         const sets=S.weights[exId];
         if(!sets) return;
         if(!result[ex[0]]) result[ex[0]]={};
-        Object.keys(sets).forEach(si=>{
+        Object.keys(sets).filter(si=>si[0]!=='_').forEach(si=>{
           const v=sets[si];
           if(!v) return;
           if(typeof v==='object'){if(v.w&&v.w.trim()) result[ex[0]][parseInt(si)]=v;}
@@ -1580,7 +1582,7 @@ function dayHasLoggedWeights(day){
     if(!Array.isArray(ex)) return false;
     const sets=S.weights[`${day.id}-ex${ei}`];
     if(!sets) return false;
-    return Object.values(sets).some(v=>typeof v==='object'?(v.w&&v.w.trim()):(v&&v.trim()));
+    return setVals(sets).some(v=>typeof v==='object'?(v.w&&v.w.trim()):(v&&v.trim()));
   });
 }
 
@@ -1798,7 +1800,7 @@ function renderExRow(ex,ei,day,prev,inSS=false,isSSEnd=false,ssRest=60){
   const numSets=baseSets+(sets._extra||0);
 
   // PR check
-  const vals=Object.values(sets).map(v=>{
+  const vals=setVals(sets).map(v=>{
     return typeof v==='object'?parseFloat(v.w):parseFloat(v);
   }).filter(n=>!isNaN(n)&&n>0);
   const isPR=vals.length>0&&S.prs[exName]&&Math.max(...vals)>=S.prs[exName];
@@ -2918,8 +2920,8 @@ function jrStats(){
   WORKOUTS[day.workout].forEach((it,ei)=>{
     if(!Array.isArray(it)) return;
     const sets=S.weights[`${day.id}-ex${ei}`]||{};
-    planned+=Math.max(parseNumSets(it[1]),Object.keys(sets).length);
-    Object.values(sets).forEach(v=>{ v=jrVal(v); if(v.w){ done++; reps+=parseFloat(v.r)||0; } });
+    planned+=Math.max(parseNumSets(it[1]),setVals(sets).length);
+    setVals(sets).forEach(v=>{ v=jrVal(v); if(v.w){ done++; reps+=parseFloat(v.r)||0; } });
   });
   return {pct:planned?Math.round(100*done/planned):0,done,reps};
 }
@@ -3203,7 +3205,7 @@ function gsRender(){
 
   if(G.phase==='done'){
     const mins=Math.round((G.endedAt-G.startedAt)/60000);
-    const sets=Object.keys(S.weights).filter(k=>k.startsWith(day.id+'-ex')).reduce((a,k)=>a+Object.values(S.weights[k]).filter(v=>v&&(typeof v==='object'?v.w:v)).length,0);
+    const sets=Object.keys(S.weights).filter(k=>k.startsWith(day.id+'-ex')).reduce((a,k)=>a+setVals(S.weights[k]).filter(v=>v&&(typeof v==='object'?v.w:v)).length,0);
     const fin=(WORKOUTS[day.workout]||[]).find(i=>i&&i._fin&&i._fin!=='interval');
     const resKey=`fin-${day.id}-result`, res=S.weights[resKey]?(S.weights[resKey].result||''):'';
     el.innerHTML=top('Complete')+`
