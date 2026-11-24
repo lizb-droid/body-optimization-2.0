@@ -2920,7 +2920,7 @@ function jrStats(){
   WORKOUTS[day.workout].forEach((it,ei)=>{
     if(!Array.isArray(it)) return;
     const sets=S.weights[`${day.id}-ex${ei}`]||{};
-    planned+=Math.max(parseNumSets(it[1]),setVals(sets).length);
+    planned+=Math.max(parseNumSets(it[1])+(WU_LIFTS.has(it[0])?3:0)+(sets._extra||0),setVals(sets).length);
     setVals(sets).forEach(v=>{ v=jrVal(v); if(v.w){ done++; reps+=parseFloat(v.r)||0; } });
   });
   return {pct:planned?Math.round(100*done/planned):0,done,reps};
@@ -2944,8 +2944,9 @@ function jrRender(){
       return;
     }
     const [name,setsStr]=it, exId=`${day.id}-ex${ei}`, sets=S.weights[exId]||{};
-    const n=parseNumSets(setsStr)+(sets._extra||0);
+    const wu=WU_LIFTS.has(name)?3:0, n=parseNumSets(setsStr)+wu+(sets._extra||0);
     const target=parseTargetReps(setsStr), pv=prev[name]||{};
+    const wuTarget=name.includes('Push Press')?['2+4','2+4','2+4']:['5','3','1-2'];
     const lastVals=Object.values(pv).map(x=>parseFloat(jrVal(x).w)).filter(x=>!isNaN(x));
     const isCur=cur&&cur.exId===exId;
     html+=lbl; lbl='';
@@ -2959,7 +2960,7 @@ function jrRender(){
         return `<div class="jr-grid jr-set${done?' done':''}${isCur&&cur.si===si?' active':''}" data-exid="${exId}" data-exname="${escH(name)}" data-si="${si}">
           <button class="jr-n" onclick="jrLog(this)" aria-label="Log set ${si+1}">${done?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':si+1}</button>
           <input data-field="w" inputmode="decimal" value="${escH(v.w)}" placeholder="${escH(phW||'lb')}" onfocus="this.select()" onchange="jrInput(this)">
-          <input data-field="r" inputmode="decimal" value="${escH(v.r)}" placeholder="${escH(target||'reps')}" onfocus="this.select()" onchange="jrInput(this)">
+          <input data-field="r" inputmode="decimal" value="${escH(v.r)}" placeholder="${escH((si<wu?wuTarget[si]:target)||'reps')}" onfocus="this.select()" onchange="jrInput(this)">
           <span class="jr-prev">${p.w?escH(p.w+(p.r?'×'+p.r:'')):'—'}</span>
         </div>`;
       }).join('')}
@@ -3028,10 +3029,11 @@ function jrInput(inp){
 function jrAddSet(exId){
   if(!S.weights[exId]) S.weights[exId]={};
   const ei=+exId.split('-ex')[1];
-  const base=parseNumSets(WORKOUTS[JR.day.workout][ei][1]);
+  const [name,setsStr]=WORKOUTS[JR.day.workout][ei];
+  const base=parseNumSets(setsStr)+(WU_LIFTS.has(name)?3:0);
   const extra=S.weights[exId]._extra||0;
   S.weights[exId]._extra=extra+1;
-  S.weights[exId][base+extra]={w:'',r:''};
+  if(!S.weights[exId][base+extra]) S.weights[exId][base+extra]={w:'',r:''};
   saveWorkout();
   const top=document.getElementById('jr-body').scrollTop; jrRender(); document.getElementById('jr-body').scrollTop=top;
 }
