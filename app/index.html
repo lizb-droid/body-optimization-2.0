@@ -1142,6 +1142,16 @@ function mergeKeys(k2,k3){
     return {...a,...b};
   }catch(e){ try{return JSON.parse(ls(k3)||ls(k2)||'{}')}catch(e2){return {};} }
 }
+// Removes sets saved on days after today (old-program data copied in at setup); days marked done are kept
+function pruneFutureSets(weights){
+  const daysIn=Math.round((new Date().setHours(0,0,0,0)-new Date(2026,10,9))/86400000);
+  Object.keys(weights||{}).forEach(k=>{
+    const m=k.match(/^(?:fin-)?w(\d+)d(\d)\b/); if(!m) return;
+    const wn=+m[1], dn=+m[2];
+    if((wn<1||wn>WEEKS.length||(wn-1)*7+dn>daysIn)&&!(S.done||{})[`w${wn}d${dn}`]) delete weights[k];
+  });
+  return weights;
+}
 function loadState(){
   try{
     // Clear done data from prior programs
@@ -1167,6 +1177,7 @@ function loadState(){
     const _wi=Math.min(Math.max(0,Math.floor(_daysIn/7)),WEEKS.length-1);
     const _di=Math.min(_daysIn%7,6);
     S.weekIdx=_wi; S.selDay={wi:_wi,di:_di};
+    if(!ls('betalizprune1')){ pruneFutureSets(S.weights); saveWorkout(); localStorage.setItem('betalizprune1','1'); }
     if(m) S.macros=JSON.parse(m);
     if(pr) S.progress=JSON.parse(pr);
   }catch(e){console.warn(e)}
@@ -3909,7 +3920,7 @@ async function tryLoadFromGitHub(){
     // Merge: backup fills any missing keys; localStorage data wins on conflict
     // done is intentionally excluded — completion state resets with each program block
     if(data.done) S.done={...data.done,...S.done};
-    if(data.weights) S.weights={...data.weights,...S.weights};
+    if(data.weights) S.weights={...pruneFutureSets({...data.weights}),...S.weights};
     if(data.notes) S.notes={...data.notes,...S.notes};
     if(data.prs) S.prs={...data.prs,...S.prs};
     // Never restore weekIdx from backup — always open on today's week
